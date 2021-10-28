@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8E026E71272A2DD600C183A6 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E026E70272A2DD600C183A6 /* Avatar.swift */; };
 		8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E502F772726F6FC003227AA /* WspollokatorApp.swift */; };
 		8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E502F792726F6FC003227AA /* ContentView.swift */; };
 		8E502F7C2726F6FE003227AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E502F7B2726F6FE003227AA /* Assets.xcassets */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8E026E70272A2DD600C183A6 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		8E502F742726F6FC003227AA /* Wspollokator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wspollokator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E502F772726F6FC003227AA /* WspollokatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WspollokatorApp.swift; sourceTree = "<group>"; };
 		8E502F792726F6FC003227AA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -51,8 +53,9 @@
 		8E502F762726F6FC003227AA /* Wspollokator */ = {
 			isa = PBXGroup;
 			children = (
-				8E502F772726F6FC003227AA /* WspollokatorApp.swift */,
+				8E026E70272A2DD600C183A6 /* Avatar.swift */,
 				8E502F792726F6FC003227AA /* ContentView.swift */,
+				8E502F772726F6FC003227AA /* WspollokatorApp.swift */,
 				8E502F7B2726F6FE003227AA /* Assets.xcassets */,
 				8E502F7D2726F6FE003227AA /* Preview Content */,
 			);
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E026E71272A2DD600C183A6 /* Avatar.swift in Sources */,
 				8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */,
 				8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */,
 			);
