@@ -10,7 +10,7 @@ import SwiftUI
 struct ListRow: View {
     @Environment(\.colorScheme) var colorScheme
     
-    let height: CGFloat = 100
+    let height: CGFloat = 60
     let padding: CGFloat = 10
     
     var images: [Image?]
@@ -21,10 +21,8 @@ struct ListRow: View {
     
     var body: some View {
         HStack(spacing: padding) {
-            let standardAvatarSize = height - 2 * padding
-            
             if images.count == 2 { // Group conversations.
-                let avatarSize = 2 * standardAvatarSize / 3
+                let avatarSize = 2 * height / 3
                 let outlineWidth: CGFloat = 3
                 
                 HStack(spacing: 0) {
@@ -37,9 +35,9 @@ struct ListRow: View {
                 .padding(.trailing, -0.5 * avatarSize)
                 .padding(.top, 0.5 * avatarSize)
             } else if images.count == 1 { // Single person avatar.
-                Avatar(image: images.first!, size: standardAvatarSize)
+                Avatar(image: images.first!, size: height)
             } else { // Default.
-                Avatar(size: standardAvatarSize)
+                Avatar(size: height)
             }
             
             VStack(alignment: .leading) {
@@ -58,14 +56,16 @@ struct ListRow: View {
             Spacer()
             
             if includesStarButton && isStarred != nil {
-                Button(action: { isStarred!.toggle() }) {
+                Button {
+                    isStarred!.toggle()
+                } label: {
                     Image(systemName: isStarred! ? "star.fill" : "star")
-                        .frame(width: 60, height: 60, alignment: .center)
+                        .frame(width: 50, height: 50, alignment: .center)
                         .foregroundColor(Appearance.buttonColor)
                 }
             }
         }
-        .padding(padding)
+        .padding(.vertical, padding)
     }
 }
 
@@ -75,6 +75,6 @@ struct ListRow_Previews: PreviewProvider {
             ListRow(images: [Image("avatar"), nil], headline: "John, Anna", caption: "Anna: lorem ipsum...", includesStarButton: false, isStarred: nil)
             ListRow(images: [Image("avatar")], headline: "John Appleseed", caption: "1,4 km", includesStarButton: true, isStarred: true)
         }
-        .previewLayout(.fixed(width: 400, height: 100))
+        .previewLayout(.fixed(width: 300, height: 80))
     }
 }
