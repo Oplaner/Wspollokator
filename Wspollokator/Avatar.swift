@@ -9,7 +9,6 @@ import SwiftUI
 
 struct Avatar: View {
     var image: Image?
-    var color: Color?
     var size: CGFloat
     
     var body: some View {
@@ -22,18 +21,19 @@ struct Avatar: View {
             Image(systemName: "person.circle.fill")
                 .resizable()
                 .frame(width: size, height: size, alignment: .center)
-                .foregroundColor(color ?? .gray)
+                .background(Color.white, in: Circle())
+                .foregroundColor(Appearance.fillColor)
         }
     }
 }
 
 struct Avatar_Previews: PreviewProvider {
-    static var previewSize: CGFloat = 300
+    static let previewSize: CGFloat = 100
     
     static var previews: some View {
         Group {
             Avatar(image: Image("avatar"), size: previewSize)
-            Avatar(color: .blue, size: previewSize)
+            Avatar(size: previewSize)
         }
         .previewLayout(.fixed(width: previewSize, height: previewSize))
     }
