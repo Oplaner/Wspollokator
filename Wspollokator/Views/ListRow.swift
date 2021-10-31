@@ -63,6 +63,7 @@ struct ListRow: View {
                         .frame(width: 50, height: 50, alignment: .center)
                         .foregroundColor(Appearance.buttonColor)
                 }
+                .buttonStyle(BorderlessButtonStyle())
             }
         }
         .padding(.vertical, padding)
