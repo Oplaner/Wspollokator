@@ -9,11 +9,11 @@ import SwiftUI
 
 struct User: Identifiable {
     let id = UUID()
-    
     var avatarImage: Image?
     var name: String
     var surname: String
     var distance: Float // Temporary!
+    var isSaved: Bool // Temporary!
     
     // TODO: Complete the model with user's preferences and description. Add distance calculation.
 }

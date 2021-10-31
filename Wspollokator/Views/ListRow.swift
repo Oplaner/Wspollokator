@@ -27,9 +27,9 @@ struct ListRow: View {
                 
                 HStack(spacing: 0) {
                     Avatar(image: images[0], size: avatarSize)
-                        .overlay(Circle().stroke(colorScheme == .dark ? Color.black : Color.white, lineWidth: outlineWidth))
+                        .overlay(Circle().stroke(colorScheme == .dark ? Color(uiColor: .secondarySystemBackground) : Color.white, lineWidth: outlineWidth))
                     Avatar(image: images[1], size: avatarSize)
-                        .overlay(Circle().stroke(colorScheme == .dark ? Color.black : Color.white, lineWidth: outlineWidth))
+                        .overlay(Circle().stroke(colorScheme == .dark ? Color(uiColor: .secondarySystemBackground) : Color.white, lineWidth: outlineWidth))
                         .offset(x: -0.5 * avatarSize, y: -0.5 * avatarSize)
                 }
                 .padding(.trailing, -0.5 * avatarSize)

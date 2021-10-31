@@ -35,8 +35,8 @@ struct SavedList: View {
 
 struct SavedList_Previews: PreviewProvider {
     static let users = [
-        User(avatarImage: Image("avatar"), name: "John", surname: "Appleseed", distance: 1.4),
-        User(avatarImage: nil, name: "Anna", surname: "Nowak", distance: 2)
+        User(avatarImage: Image("avatar"), name: "John", surname: "Appleseed", distance: 1.4, isSaved: true),
+        User(avatarImage: nil, name: "Anna", surname: "Nowak", distance: 2, isSaved: true)
     ]
     
     static var previews: some View {
