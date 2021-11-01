@@ -34,4 +34,17 @@ struct Appearance {
     static var alternateColor: Color {
         return Color(red: 51 / 255, green: 171 / 255, blue: 38 / 255)
     }
+    
+    static func setNavigationAppearance() {
+        let navigationAppearance = UINavigationBarAppearance()
+        navigationAppearance.configureWithOpaqueBackground()
+        navigationAppearance.backgroundColor = UIColor(backgroundColor)
+        navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor(textColor)]
+        navigationAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor(textColor)]
+        
+        UINavigationBar.appearance().standardAppearance = navigationAppearance
+        UINavigationBar.appearance().compactAppearance = navigationAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navigationAppearance
+        UINavigationBar.appearance().tintColor = UIColor(fillColor)
+    }
 }

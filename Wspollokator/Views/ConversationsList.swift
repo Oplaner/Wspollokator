@@ -62,7 +62,7 @@ struct ConversationsList: View {
                 } else {
                     ForEach(summaries) { summary in
                         // Temporary destination!
-                        NavigationLink(destination: UserProfile()) {
+                        NavigationLink(destination: ContentView()) {
                             let format = formatConversationSummary(summary)
                             ListRow(images: format.images, headline: format.headline, caption: format.caption, includesStarButton: format.includesStarButton, isStarred: format.isStarred)
                         }
@@ -74,20 +74,20 @@ struct ConversationsList: View {
                 }
             }
             .navigationTitle("Wiadomości")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
 
 struct ConversationsList_Previews: PreviewProvider {
-    static let users = [
-        User(avatarImage: Image("avatar"), name: "John", surname: "Appleseed", distance: 1.4, isSaved: true),
-        User(avatarImage: nil, name: "Anna", surname: "Nowak", distance: 2, isSaved: false)
-    ]
-    
-    static let summaries = [
-        ConversationSummary(conversationID: UUID(), participants: [users[0], users[1]], recentMessageAuthorID: users[1].id, recentMessageContent: "Lorem ipsum dolor sit amet!"),
-        ConversationSummary(conversationID: UUID(), participants: [users[0]], recentMessageAuthorID: UUID(), recentMessageContent: "altum, videtur 🎉")
-    ]
+    static var summaries: [ConversationSummary] {
+        let john = UserProfile_Previews.users[0]
+        let anna = UserProfile_Previews.users[1]
+        return [
+            ConversationSummary(conversationID: UUID(), participants: [john, anna], recentMessageAuthorID: anna.id, recentMessageContent: "Lorem ipsum dolor sit amet!"),
+            ConversationSummary(conversationID: UUID(), participants: [john], recentMessageAuthorID: UUID(), recentMessageContent: "altum, videtur 🎉")
+        ]
+    }
     
     static var previews: some View {
         ConversationsList(summaries: summaries)
