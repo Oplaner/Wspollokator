@@ -19,7 +19,7 @@ struct SavedList: View {
                         .foregroundColor(Appearance.textColor)
                 } else {
                     ForEach(savedUsers) { user in
-                        NavigationLink(destination: UserProfile()) {
+                        NavigationLink(destination: UserProfile(user: user)) {
                             ListRow(images: [user.avatarImage], headline: "\(user.name) \(user.surname)", caption: String.localizedStringWithFormat("%.1f km", user.distance), includesStarButton: false)
                         }
                     }
@@ -34,12 +34,7 @@ struct SavedList: View {
 }
 
 struct SavedList_Previews: PreviewProvider {
-    static let users = [
-        User(avatarImage: Image("avatar"), name: "John", surname: "Appleseed", distance: 1.4, isSaved: true),
-        User(avatarImage: nil, name: "Anna", surname: "Nowak", distance: 2, isSaved: true)
-    ]
-    
     static var previews: some View {
-        SavedList(savedUsers: users)
+        SavedList(savedUsers: UserProfile_Previews.users)
     }
 }
