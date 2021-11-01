@@ -74,6 +74,7 @@ struct ConversationsList: View {
                 }
             }
             .navigationTitle("Wiadomości")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

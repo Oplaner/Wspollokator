@@ -29,6 +29,7 @@ struct SavedList: View {
                 }
             }
             .navigationTitle("Zapisane osoby")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

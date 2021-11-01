@@ -53,10 +53,10 @@ struct UserProfile: View {
                 .font(.headline)
                 .tint(Appearance.buttonColor)
             }
+            .padding(padding)
         }
         .navigationTitle("Profil")
         .navigationBarTitleDisplayMode(.inline)
-        .padding(.horizontal, padding)
         .foregroundColor(Appearance.textColor)
     }
 }
