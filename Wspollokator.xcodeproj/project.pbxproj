@@ -96,6 +96,7 @@
 		8E89BCD2272D6D3000C707BB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C2610BCF2731446100C4C941 /* SearchViews */,
 				8E026E70272A2DD600C183A6 /* Avatar.swift */,
 				8E502F792726F6FC003227AA /* ContentView.swift */,
 				8E89BCDC272DFE1300C707BB /* ConversationsList.swift */,
@@ -113,6 +114,13 @@
 				8E89BCD3272D6D5400C707BB /* User.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		C2610BCF2731446100C4C941 /* SearchViews */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SearchViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
