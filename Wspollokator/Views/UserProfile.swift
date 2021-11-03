@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct UserProfile: View {
     @Environment(\.colorScheme) var colorScheme
@@ -63,8 +64,8 @@ struct UserProfile: View {
 
 struct UserProfile_Previews: PreviewProvider {
     static let users = [
-        User(avatarImage: Image("avatar"), name: "John", surname: "Appleseed", distance: 1.4, nearestLocationName: "ul. Marszałkowska", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut posuere tempor neque vitae fermentum. Cras in gravida massa, quis cursus massa. Integer pulvinar vel nisi sed pellentesque. Mauris egestas urna sed ipsum sodales, quis pharetra quam maximus. Nullam et leo id magna efficitur lacinia sed eget turpis. Fusce malesuada maximus maximus. Donec nec porttitor leo, a cursus magna.", isSaved: true),
-        User(avatarImage: nil, name: "Anna", surname: "Nowak", distance: 2, nearestLocationName: "ul. Foksal", description: "Etiam in euismod dui. Sed finibus aliquet ipsum gravida congue. Vestibulum vestibulum felis sodales orci ullamcorper tempus. Ut in tincidunt justo. Sed ac commodo dui. Morbi volutpat tincidunt commodo. Nulla tellus dui, iaculis vel nisi ornare, imperdiet consequat justo. Duis maximus, ligula ac viverra auctor, turpis velit hendrerit lorem, dapibus sagittis sapien eros vitae velit.", isSaved: false)
+        User(avatarImage: Image("avatar"), name: "John", surname: "Appleseed", distance: 1.4, nearestLocationName: "ul. Marszałkowska", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut posuere tempor neque vitae fermentum. Cras in gravida massa, quis cursus massa. Integer pulvinar vel nisi sed pellentesque. Mauris egestas urna sed ipsum sodales, quis pharetra quam maximus. Nullam et leo id magna efficitur lacinia sed eget turpis. Fusce malesuada maximus maximus. Donec nec porttitor leo, a cursus magna.", coordinate: CLLocationCoordinate2D(latitude: 52.2370, longitude: 21.0175), isSaved: true),
+        User(avatarImage: nil, name: "Anna", surname: "Nowak", distance: 2, nearestLocationName: "ul. Foksal", description: "Etiam in euismod dui. Sed finibus aliquet ipsum gravida congue. Vestibulum vestibulum felis sodales orci ullamcorper tempus. Ut in tincidunt justo. Sed ac commodo dui. Morbi volutpat tincidunt commodo. Nulla tellus dui, iaculis vel nisi ornare, imperdiet consequat justo. Duis maximus, ligula ac viverra auctor, turpis velit hendrerit lorem, dapibus sagittis sapien eros vitae velit.", coordinate: CLLocationCoordinate2D(latitude: 52.2378, longitude: 21.0275), isSaved: false)
     ]
     
     static var previews: some View {
