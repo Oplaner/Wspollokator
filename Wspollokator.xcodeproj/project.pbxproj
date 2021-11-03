@@ -19,6 +19,9 @@
 		8E89BCDD272DFE1300C707BB /* ConversationsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCDC272DFE1300C707BB /* ConversationsList.swift */; };
 		8ED4B715272BEF73007A0CCC /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED4B714272BEF73007A0CCC /* ListRow.swift */; };
 		8ED4B717272BF8A3007A0CCC /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED4B716272BF8A2007A0CCC /* Appearance.swift */; };
+		C2610BD127315D8A00C4C941 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2610BD027315D8A00C4C941 /* MapView.swift */; };
+		C2610BD327315DE700C4C941 /* ListMapSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2610BD227315DE700C4C941 /* ListMapSearchView.swift */; };
+		C2610BD72731B3E400C4C941 /* SearchedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2610BD62731B3E400C4C941 /* SearchedList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +38,9 @@
 		8E89BCDC272DFE1300C707BB /* ConversationsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsList.swift; sourceTree = "<group>"; };
 		8ED4B714272BEF73007A0CCC /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
 		8ED4B716272BF8A2007A0CCC /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
+		C2610BD027315D8A00C4C941 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		C2610BD227315DE700C4C941 /* ListMapSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListMapSearchView.swift; sourceTree = "<group>"; };
+		C2610BD62731B3E400C4C941 /* SearchedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +125,9 @@
 		C2610BCF2731446100C4C941 /* SearchViews */ = {
 			isa = PBXGroup;
 			children = (
+				C2610BD227315DE700C4C941 /* ListMapSearchView.swift */,
+				C2610BD027315D8A00C4C941 /* MapView.swift */,
+				C2610BD62731B3E400C4C941 /* SearchedList.swift */,
 			);
 			path = SearchViews;
 			sourceTree = "<group>";
@@ -194,9 +203,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				8ED4B717272BF8A3007A0CCC /* Appearance.swift in Sources */,
+				C2610BD327315DE700C4C941 /* ListMapSearchView.swift in Sources */,
 				8ED4B715272BEF73007A0CCC /* ListRow.swift in Sources */,
 				8E89BCDD272DFE1300C707BB /* ConversationsList.swift in Sources */,
+				C2610BD127315D8A00C4C941 /* MapView.swift in Sources */,
 				8E89BCD1272D62FE00C707BB /* UserProfile.swift in Sources */,
+				C2610BD72731B3E400C4C941 /* SearchedList.swift in Sources */,
 				8E026E71272A2DD600C183A6 /* Avatar.swift in Sources */,
 				8E89BCD4272D6D5400C707BB /* User.swift in Sources */,
 				8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */,
