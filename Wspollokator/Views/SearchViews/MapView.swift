@@ -46,7 +46,7 @@ struct MapView: View {
 
 enum MapDetails {
     static let startingLocation = CLLocationCoordinate2D(latitude: 52.237049, longitude: 21.01753)
-    static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+    static let defaultSpan = MKCoordinateSpan(latitudeDelta: 0.03, longitudeDelta: 0.03)
     static let regionInMeters = CLLocationDistance(2000)
 }
 

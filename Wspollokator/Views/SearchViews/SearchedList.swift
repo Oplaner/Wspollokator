@@ -22,9 +22,6 @@ struct SearchedList: View {
                         ListRow(images: [user.avatarImage], headline: "\(user.name) \(user.surname)", caption: String.localizedStringWithFormat("%.1f km", user.distance), includesStarButton: false)
                     }
                 }
-                .onDelete {
-                    searchedUsers.remove(atOffsets: $0)
-                }
             }
         }
     }
