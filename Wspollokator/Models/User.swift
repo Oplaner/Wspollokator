@@ -8,7 +8,7 @@
 import SwiftUI
 import MapKit
 
-class User: Identifiable, ObservableObject {
+class User: Identifiable {
     let id: UUID
     
     var avatarImage: Image?
@@ -18,7 +18,7 @@ class User: Identifiable, ObservableObject {
     var nearestLocationName: String // Temporary!
     var description: String
     var coordinate: CLLocationCoordinate2D
-    @Published var isSaved: Bool // Temporary!
+    var isSaved: Bool // Temporary!
     
     // TODO: Complete the model with user's preferences. Add distance calculation and nearest location name retrieval.
     

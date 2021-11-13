@@ -19,12 +19,16 @@
 		8E89BCDD272DFE1300C707BB /* ConversationsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCDC272DFE1300C707BB /* ConversationsList.swift */; };
 		8ED4B715272BEF73007A0CCC /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED4B714272BEF73007A0CCC /* ListRow.swift */; };
 		8ED4B717272BF8A3007A0CCC /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED4B716272BF8A2007A0CCC /* Appearance.swift */; };
+		C2170E82273FE82D0076ECBF /* MapViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */; };
+		C2170E85273FF5AD0076ECBF /* MapViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */; };
+		C2170E87274022890076ECBF /* GlobalHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2170E86274022890076ECBF /* GlobalHelpers.swift */; };
 		C25458BE2732EDEC00C5317F /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25458BD2732EDEC00C5317F /* FilterView.swift */; };
 		C25458C02732F0D400C5317F /* FilterRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25458BF2732F0D400C5317F /* FilterRow.swift */; };
 		C25458C227332ED300C5317F /* FilterRowOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25458C127332ED300C5317F /* FilterRowOptions.swift */; };
 		C2610BD127315D8A00C4C941 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2610BD027315D8A00C4C941 /* MapView.swift */; };
 		C2610BD327315DE700C4C941 /* ListMapSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2610BD227315DE700C4C941 /* ListMapSearchView.swift */; };
 		C2610BD72731B3E400C4C941 /* SearchedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2610BD62731B3E400C4C941 /* SearchedList.swift */; };
+		C2FD03B7273EFBD100A4B44E /* FilterViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FD03B6273EFBD100A4B44E /* FilterViewContainer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,12 +45,16 @@
 		8E89BCDC272DFE1300C707BB /* ConversationsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsList.swift; sourceTree = "<group>"; };
 		8ED4B714272BEF73007A0CCC /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
 		8ED4B716272BF8A2007A0CCC /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
+		C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewRepresentable.swift; sourceTree = "<group>"; };
+		C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewContainer.swift; sourceTree = "<group>"; };
+		C2170E86274022890076ECBF /* GlobalHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHelpers.swift; sourceTree = "<group>"; };
 		C25458BD2732EDEC00C5317F /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		C25458BF2732F0D400C5317F /* FilterRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterRow.swift; sourceTree = "<group>"; };
 		C25458C127332ED300C5317F /* FilterRowOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterRowOptions.swift; sourceTree = "<group>"; };
 		C2610BD027315D8A00C4C941 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		C2610BD227315DE700C4C941 /* ListMapSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListMapSearchView.swift; sourceTree = "<group>"; };
 		C2610BD62731B3E400C4C941 /* SearchedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedList.swift; sourceTree = "<group>"; };
+		C2FD03B6273EFBD100A4B44E /* FilterViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +108,7 @@
 		8E634960272F117D00244985 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				C2170E86274022890076ECBF /* GlobalHelpers.swift */,
 				8ED4B716272BF8A2007A0CCC /* Appearance.swift */,
 			);
 			path = Helpers;
@@ -108,6 +117,8 @@
 		8E89BCD2272D6D3000C707BB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */,
+				C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */,
 				C25458BC2732ECF200C5317F /* FilterViews */,
 				C2610BCF2731446100C4C941 /* SearchViews */,
 				8E026E70272A2DD600C183A6 /* Avatar.swift */,
@@ -132,6 +143,7 @@
 		C25458BC2732ECF200C5317F /* FilterViews */ = {
 			isa = PBXGroup;
 			children = (
+				C2FD03B6273EFBD100A4B44E /* FilterViewContainer.swift */,
 				C25458BD2732EDEC00C5317F /* FilterView.swift */,
 				C25458BF2732F0D400C5317F /* FilterRow.swift */,
 				C25458C127332ED300C5317F /* FilterRowOptions.swift */,
@@ -223,13 +235,17 @@
 				8ED4B717272BF8A3007A0CCC /* Appearance.swift in Sources */,
 				C2610BD327315DE700C4C941 /* ListMapSearchView.swift in Sources */,
 				8ED4B715272BEF73007A0CCC /* ListRow.swift in Sources */,
+				C2FD03B7273EFBD100A4B44E /* FilterViewContainer.swift in Sources */,
+				C2170E85273FF5AD0076ECBF /* MapViewContainer.swift in Sources */,
 				8E89BCDD272DFE1300C707BB /* ConversationsList.swift in Sources */,
 				C2610BD127315D8A00C4C941 /* MapView.swift in Sources */,
 				8E89BCD1272D62FE00C707BB /* UserProfile.swift in Sources */,
 				C2610BD72731B3E400C4C941 /* SearchedList.swift in Sources */,
+				C2170E82273FE82D0076ECBF /* MapViewRepresentable.swift in Sources */,
 				8E026E71272A2DD600C183A6 /* Avatar.swift in Sources */,
 				8E89BCD4272D6D5400C707BB /* User.swift in Sources */,
 				C25458C02732F0D400C5317F /* FilterRow.swift in Sources */,
+				C2170E87274022890076ECBF /* GlobalHelpers.swift in Sources */,
 				C25458C227332ED300C5317F /* FilterRowOptions.swift in Sources */,
 				8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */,
 				8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */,

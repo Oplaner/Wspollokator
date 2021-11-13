@@ -13,7 +13,7 @@ struct UserProfile: View {
     
     let padding: CGFloat = 20
     
-    @StateObject var user: User // @StateObject might be temporary.
+    var user: User // @StateObject might be temporary.
     
     var body: some View {
         ScrollView {
@@ -28,6 +28,7 @@ struct UserProfile: View {
                         Button {
                             user.isSaved.toggle()
                         } label: {
+                            // Fix depend on if user is in isSaved array for our current logged in user
                             Image(systemName: user.isSaved ? "star.fill" : "star")
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .font(.system(size: 25))

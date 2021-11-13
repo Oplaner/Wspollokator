@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct FilterView: View {
-    @State private var isChangable: Bool = false
-    @State private var distance: Double = 5.0
+    @State var isChangable: Bool = true // could be a computed property in future
+    @State var distance: Double = 5.0
+    
+    @Binding var showFilterView: Bool
 
     var body: some View {
         VStack {
@@ -28,9 +30,8 @@ struct FilterView: View {
                 Text("Ustaw zgodnie z moimi preferencjami")
                     .font(.headline)
                     .foregroundColor(Appearance.textColor)
-                
-                Spacer()
             }
+            .listStyle(PlainListStyle())
         }
     }
 }
@@ -38,6 +39,6 @@ struct FilterView: View {
 
 struct FilterView_Previews: PreviewProvider {
     static var previews: some View {
-        FilterView()
+        FilterView(showFilterView: .constant(true))
     }
 }
