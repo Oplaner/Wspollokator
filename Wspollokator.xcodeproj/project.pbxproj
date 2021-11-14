@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C5071CC2734239E005E5114 /* MyProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5071CB2734239E005E5114 /* MyProfile.swift */; };
+		1C6B2EDF2733F0A2000B96C1 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6B2EDE2733F0A2000B96C1 /* Login.swift */; };
+		1C6B2EE12733F10B000B96C1 /* SignUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6B2EE02733F10B000B96C1 /* SignUp.swift */; };
+		1C6B2EE32733F141000B96C1 /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6B2EE22733F141000B96C1 /* ConversationView.swift */; };
+		1C6B2EE52733F170000B96C1 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6B2EE42733F170000B96C1 /* Conversation.swift */; };
+		1C6B2EE72733F17E000B96C1 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6B2EE62733F17E000B96C1 /* Message.swift */; };
+		1C6B2EE92733F1ED000B96C1 /* ChatRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C6B2EE82733F1ED000B96C1 /* ChatRow.swift */; };
+		1C8716E72740251A00E0554B /* PasswordAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C8716E62740251A00E0554B /* PasswordAlert.swift */; };
+		1C8716E92740708500E0554B /* DescriptionAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C8716E82740708500E0554B /* DescriptionAlert.swift */; };
+		1CC36F18273E8A840092056B /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC36F17273E8A840092056B /* Settings.swift */; };
 		8E026E71272A2DD600C183A6 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E026E70272A2DD600C183A6 /* Avatar.swift */; };
 		8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E502F772726F6FC003227AA /* WspollokatorApp.swift */; };
 		8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E502F792726F6FC003227AA /* ContentView.swift */; };
@@ -28,6 +38,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1C5071CB2734239E005E5114 /* MyProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfile.swift; sourceTree = "<group>"; };
+		1C6B2EDE2733F0A2000B96C1 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
+		1C6B2EE02733F10B000B96C1 /* SignUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUp.swift; sourceTree = "<group>"; };
+		1C6B2EE22733F141000B96C1 /* ConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationView.swift; sourceTree = "<group>"; };
+		1C6B2EE42733F170000B96C1 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		1C6B2EE62733F17E000B96C1 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		1C6B2EE82733F1ED000B96C1 /* ChatRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRow.swift; sourceTree = "<group>"; };
+		1C8716E62740251A00E0554B /* PasswordAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordAlert.swift; sourceTree = "<group>"; };
+		1C8716E82740708500E0554B /* DescriptionAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionAlert.swift; sourceTree = "<group>"; };
+		1CC36F17273E8A840092056B /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		8E026E70272A2DD600C183A6 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		8E502F742726F6FC003227AA /* Wspollokator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wspollokator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E502F772726F6FC003227AA /* WspollokatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WspollokatorApp.swift; sourceTree = "<group>"; };
@@ -101,6 +121,8 @@
 			isa = PBXGroup;
 			children = (
 				8ED4B716272BF8A2007A0CCC /* Appearance.swift */,
+				1C8716E62740251A00E0554B /* PasswordAlert.swift */,
+				1C8716E82740708500E0554B /* DescriptionAlert.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -116,6 +138,12 @@
 				8ED4B714272BEF73007A0CCC /* ListRow.swift */,
 				8E89BCCE272D5C3500C707BB /* SavedList.swift */,
 				8E89BCD0272D62FE00C707BB /* UserProfile.swift */,
+				1C6B2EDE2733F0A2000B96C1 /* Login.swift */,
+				1C6B2EE02733F10B000B96C1 /* SignUp.swift */,
+				1C6B2EE22733F141000B96C1 /* ConversationView.swift */,
+				1C6B2EE82733F1ED000B96C1 /* ChatRow.swift */,
+				1C5071CB2734239E005E5114 /* MyProfile.swift */,
+				1CC36F17273E8A840092056B /* Settings.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -124,7 +152,9 @@
 			isa = PBXGroup;
 			children = (
 				8E89BCD8272DFC2E00C707BB /* ConversationSummary.swift */,
+				1C6B2EE42733F170000B96C1 /* Conversation.swift */,
 				8E89BCD3272D6D5400C707BB /* User.swift */,
+				1C6B2EE62733F17E000B96C1 /* Message.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -219,18 +249,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C6B2EE92733F1ED000B96C1 /* ChatRow.swift in Sources */,
 				C25458BE2732EDEC00C5317F /* FilterView.swift in Sources */,
+				1C6B2EDF2733F0A2000B96C1 /* Login.swift in Sources */,
 				8ED4B717272BF8A3007A0CCC /* Appearance.swift in Sources */,
+				1C8716E92740708500E0554B /* DescriptionAlert.swift in Sources */,
 				C2610BD327315DE700C4C941 /* ListMapSearchView.swift in Sources */,
+				1C5071CC2734239E005E5114 /* MyProfile.swift in Sources */,
+				1C6B2EE32733F141000B96C1 /* ConversationView.swift in Sources */,
 				8ED4B715272BEF73007A0CCC /* ListRow.swift in Sources */,
+				1CC36F18273E8A840092056B /* Settings.swift in Sources */,
+				1C6B2EE72733F17E000B96C1 /* Message.swift in Sources */,
 				8E89BCDD272DFE1300C707BB /* ConversationsList.swift in Sources */,
 				C2610BD127315D8A00C4C941 /* MapView.swift in Sources */,
+				1C6B2EE52733F170000B96C1 /* Conversation.swift in Sources */,
+				1C6B2EE12733F10B000B96C1 /* SignUp.swift in Sources */,
 				8E89BCD1272D62FE00C707BB /* UserProfile.swift in Sources */,
 				C2610BD72731B3E400C4C941 /* SearchedList.swift in Sources */,
 				8E026E71272A2DD600C183A6 /* Avatar.swift in Sources */,
 				8E89BCD4272D6D5400C707BB /* User.swift in Sources */,
 				C25458C02732F0D400C5317F /* FilterRow.swift in Sources */,
 				C25458C227332ED300C5317F /* FilterRowOptions.swift in Sources */,
+				1C8716E72740251A00E0554B /* PasswordAlert.swift in Sources */,
 				8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */,
 				8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */,
 				8E89BCD9272DFC2E00C707BB /* ConversationSummary.swift in Sources */,
@@ -365,7 +405,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wspollokator/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = JJR833L32B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Współlokator";
@@ -397,7 +437,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wspollokator/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = JJR833L32B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Współlokator";

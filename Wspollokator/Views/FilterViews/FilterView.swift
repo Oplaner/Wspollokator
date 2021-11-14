@@ -13,7 +13,6 @@ struct FilterView: View {
 
     var body: some View {
         VStack {
-            List {
                 VStack {
                     HStack {
                         Text("Odl. od mojego punktu")
@@ -28,10 +27,7 @@ struct FilterView: View {
                 Text("Ustaw zgodnie z moimi preferencjami")
                     .font(.headline)
                     .foregroundColor(Appearance.textColor)
-                
-                Spacer()
             }
-        }
     }
 }
 
