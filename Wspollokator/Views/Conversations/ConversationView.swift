@@ -80,23 +80,22 @@ struct ConversationView: View {
     }
 }
 struct Conversation_Previews: PreviewProvider {
-    static var conversation = Conversation(participants: [
-        UserProfile_Previews.users[0]]
-                                    , messages: [
-        Message(user: UserProfile_Previews.users[0], content: "Hi", time: Date()),
-        Message(user: UserProfile_Previews.users[1], content: "Hello", time: Date()),
-        Message(user: UserProfile_Previews.users[0], content: "How are you?", time: Date()),
-        Message(user: UserProfile_Previews.users[1], content: "I'm fine, thanks", time: Date()),
-        Message(user: UserProfile_Previews.users[0], content: "How are you?", time: Date()),
-        Message(user: UserProfile_Previews.users[1], content: "I'm fine, thanks", time: Date()),
-        Message(user: UserProfile_Previews.users[0], content: "How are you?", time: Date()),
-        Message(user: UserProfile_Previews.users[1], content: "I'm fine, thanks", time: Date()),
-        Message(user: UserProfile_Previews.users[0], content: "How are you?", time: Date()),
-        Message(user: UserProfile_Previews.users[1], content: "I'm fine, thanks", time: Date()),
-        Message(user: UserProfile_Previews.users[0], content: "How are you?", time: Date()),
-        Message(user: UserProfile_Previews.users[1], content: "I'm fine, thanks", time: Date()),
-        Message(user: UserProfile_Previews.users[1], content: "Last message!", time: Date())
-    ])
+    static var conversation = Conversation(
+        participants: [UserProfile_Previews.users[0]],
+        messages: [
+            Message(user: UserProfile_Previews.users[0], content: "Lorem ipsum dolor sit amet", time: Date()),
+            Message(user: UserProfile_Previews.users[1], content: "Donec et est magna 😜", time: Date()),
+            Message(user: UserProfile_Previews.users[0], content: "Nam sollicitudin orci urna", time: Date()),
+            Message(user: UserProfile_Previews.users[1], content: "Vestibulum ante ipsum primis in faucibus orci luctus", time: Date()),
+            Message(user: UserProfile_Previews.users[0], content: "Nunc ac ex lobortis, tempor lorem eu, consequat tellus 🐶", time: Date()),
+            Message(user: UserProfile_Previews.users[1], content: "Praesent", time: Date()),
+            Message(user: UserProfile_Previews.users[0], content: "Curabitur rhoncus at ex nec volutpat. Aenean eget purus et justo varius elementum.", time: Date()),
+            Message(user: UserProfile_Previews.users[1], content: "Ut consectetur tellus nibh, vel luctus massa fermentum quis. Nam et iaculis mi. Nunc sem nisl, tempus sed interdum consequat, pulvinar at nulla. 🍪", time: Date()),
+            Message(user: UserProfile_Previews.users[1], content: "Cras feugiat urna et", time: Date()),
+            Message(user: UserProfile_Previews.users[0], content: "Quisque! 🔥", time: Date()),
+            Message(user: UserProfile_Previews.users[1], content: "Suspendisse 🎉", time: Date())
+        ]
+    )
     static var previews: some View {
         ConversationView(conversation: conversation)
             //.environmentObject(observed())
