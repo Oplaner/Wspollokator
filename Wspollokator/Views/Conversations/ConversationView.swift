@@ -28,8 +28,8 @@ struct ConversationView: View {
     var body: some View {
         NavigationView {
             VStack {
-                ScrollView {
-                    ScrollViewReader { reader in
+                ScrollViewReader { reader in
+                    ScrollView {
                         VStack {
                             ForEach(conversation.messages) { msg in
                                 ChatRow(user: msg.user, message: msg.content, time: msg.time, numOfParticipants: conversation.participants.count)
@@ -44,13 +44,13 @@ struct ConversationView: View {
                                 }
                             }
                         }
+                        .padding()
                     }
                 }
-                .padding()
                 .navigationTitle(title)
                 .navigationBarTitleDisplayMode(.inline)
                 
-                TextField("Aa", text: $text)
+                TextField("Wpisz wiadomość", text: $text)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal, 15)
                 
