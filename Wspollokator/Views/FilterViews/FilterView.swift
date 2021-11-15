@@ -15,8 +15,7 @@ struct FilterView: View {
 
     var body: some View {
         VStack {
-            List {
-                VStack {
+               VStack {
                     HStack {
                         Text("Odl. od mojego punktu")
                         Spacer()
@@ -32,7 +31,6 @@ struct FilterView: View {
                     .foregroundColor(Appearance.textColor)
             }
             .listStyle(PlainListStyle())
-        }
     }
 }
 
