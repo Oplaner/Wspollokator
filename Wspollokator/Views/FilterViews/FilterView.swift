@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct FilterView: View {
-    @State private var isChangable: Bool = false
-    @State private var distance: Double = 5.0
+    @State var isChangable: Bool = true // could be a computed property in future
+    @State var distance: Double = 5.0
+    
+    @Binding var showFilterView: Bool
 
     var body: some View {
         VStack {
-                VStack {
+               VStack {
                     HStack {
                         Text("Odl. od mojego punktu")
                         Spacer()
@@ -28,12 +30,13 @@ struct FilterView: View {
                     .font(.headline)
                     .foregroundColor(Appearance.textColor)
             }
+            .listStyle(PlainListStyle())
     }
 }
 
 
 struct FilterView_Previews: PreviewProvider {
     static var previews: some View {
-        FilterView()
+        FilterView(showFilterView: .constant(true))
     }
 }
