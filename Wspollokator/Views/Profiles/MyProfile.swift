@@ -32,7 +32,7 @@ struct MyProfile: View {
                     NavigationLink(destination: ContentView()) {
                         Text("Mój punkt")
                     }
-                    FilterView()
+//                    FilterView()
                 }
             }
             .listStyle(.grouped)
