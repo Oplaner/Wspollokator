@@ -20,8 +20,8 @@ struct ListMapSearchView: View {
      Temporarily these two variables are marked as @State.
      Ultimately, they will be derived from an environment object.
      */
-    @State var distance: Double
-    @State var preferencesSource: [FilterOption: FilterAttitude]
+    @State var distance: Double = 5
+    @State var preferencesSource: [FilterOption: FilterAttitude] = [.animals: .positive, .smoking: .negative]
     
     var body: some View {
         NavigationView {
@@ -60,6 +60,6 @@ struct ListMapSearchView: View {
 
 struct ListMapSearchView_Previews: PreviewProvider {
     static var previews: some View {
-        ListMapSearchView(distance: 5, preferencesSource: [.animals: .positive, .smoking: .negative])
+        ListMapSearchView()
     }
 }

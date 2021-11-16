@@ -12,6 +12,7 @@ struct WspollokatorApp: App {
     init() {
         Appearance.setNavigationAppearance()
     }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
