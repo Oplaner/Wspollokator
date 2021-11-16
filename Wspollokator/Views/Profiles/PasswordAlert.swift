@@ -18,27 +18,20 @@ struct PasswordAlert: View {
     
         var body: some View {
             VStack {
-                HStack {
-                    Text("Stare hasło: ")
-                    SecureField("", text: $oldPass)
-                        .background(.white)
-                }
-                HStack {
-                    Text("Nowe hasło: ")
-                    SecureField("", text: $newPass)
-                        .background(.white)
-                }
-                HStack {
-                    Text("Powtórz hasło: ")
-                    SecureField("", text: $newPass)
-                        .background(.white)
-                }
+                Text("Zmiana hasła")
+                SecureField("Stare hasło", text: $oldPass)
+                    .background(.white)
+                SecureField("Nowe hasło", text: $newPass)
+                    .background(.white)
+                SecureField("Powtórz nowe hasło", text: $newPass)
+                    .background(.white)
                 Spacer()
                 HStack(spacing: 40) {
                     Button {
                         self.onDone()
                     } label : {
                         Text("Zmień hasło")
+                            .bold()
                     }
                     Button {
                         self.isShown = false
@@ -54,7 +47,7 @@ struct PasswordAlert: View {
                     .clipShape(RoundedRectangle(cornerRadius: 20.0, style: .continuous))
                     .offset(y: isShown ? 0 : screenSize.height)
 //                    .animation(.spring())
-                    .shadow(color: Color(#colorLiteral(red: 0.8596749902, green: 0.854565084, blue: 0.8636032343, alpha: 1)), radius: 6, x: -9, y: -9)
+                    .shadow(color: Color(#colorLiteral(red: 0.8596749902, green: 0.854565084, blue: 0.8636032343, alpha: 1)), radius: 4, x: 0, y: 0)
         }
 }
 struct PasswordAlert_Previews: PreviewProvider {

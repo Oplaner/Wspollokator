@@ -25,6 +25,7 @@ struct DescriptionAlert: View {
                     self.onDone()
                 } label : {
                     Text("Zmień opis")
+                        .bold()
                 }
                 Button {
                     self.isShown = false
@@ -37,10 +38,10 @@ struct DescriptionAlert: View {
         .padding()
         .frame(width: screenSize.width * 0.85, height: screenSize.height * 0.2)
         .background(Color(#colorLiteral(red: 0.9268686175, green: 0.9416290522, blue: 0.9456014037, alpha: 1)))
-                .clipShape(RoundedRectangle(cornerRadius: 20.0, style: .continuous))
-                .offset(y: isShown ? 0 : screenSize.height)
-//                .animation(.spring())
-                .shadow(color: Color(#colorLiteral(red: 0.8596749902, green: 0.854565084, blue: 0.8636032343, alpha: 1)), radius: 6, x: -9, y: -9)
+        .clipShape(RoundedRectangle(cornerRadius: 20.0, style: .continuous))
+        .offset(y: isShown ? 0 : screenSize.height)
+//        .animation(.spring())
+        .shadow(color: Color(#colorLiteral(red: 0.8596749902, green: 0.854565084, blue: 0.8636032343, alpha: 1)), radius: 4, x: 0, y: 0)
     }
 }
 
