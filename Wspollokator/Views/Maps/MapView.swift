@@ -18,8 +18,8 @@ struct MapView: View {
     
     // Temporary annotations placeholders
     let annotations = [
-        User(avatarImage: Image(systemName: "person.circle.fill"), name: "John", surname: "Appleseed", distance: 1.4, nearestLocationName: "ul. Marszałkowska", description: "placeholder", coordinate: CLLocationCoordinate2D(latitude: 52.2370, longitude: 21.0175), isSaved: false),
-        User(avatarImage: Image(systemName: "person.circle.fill"), name: "Anna", surname: "Nowak", distance: 2, nearestLocationName: "ul. Foksal", description: "placeholder", coordinate: CLLocationCoordinate2D(latitude: 52.2378, longitude: 21.0275), isSaved: false)
+        User(avatarImage: Image(systemName: "person.circle.fill"), name: "John", surname: "Appleseed", distance: 1.4, nearestLocationName: "ul. Marszałkowska", description: "placeholder", coordinate: CLLocationCoordinate2D(latitude: 52.2370, longitude: 21.0175), isSaved: false, preferences: [.animals: .positive, .smoking: .negative]),
+        User(avatarImage: Image(systemName: "person.circle.fill"), name: "Anna", surname: "Nowak", distance: 2, nearestLocationName: "ul. Foksal", description: "placeholder", coordinate: CLLocationCoordinate2D(latitude: 52.2378, longitude: 21.0275), isSaved: false, preferences: [.animals: .negative, .smoking: .neutral])
     ]
     
     var body: some View {

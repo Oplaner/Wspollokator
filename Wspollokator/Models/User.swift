@@ -8,7 +8,7 @@
 import SwiftUI
 import MapKit
 
-class User: Identifiable {
+struct User: Identifiable {
     let id: UUID
     
     var avatarImage: Image?
@@ -19,10 +19,11 @@ class User: Identifiable {
     var description: String
     var coordinate: CLLocationCoordinate2D
     var isSaved: Bool // Temporary!
+    var preferences: [FilterOption: FilterAttitude]
     
-    // TODO: Complete the model with user's preferences. Add distance calculation and nearest location name retrieval.
+    // TODO: Add distance calculation and nearest location name retrieval.
     
-    init(avatarImage: Image?, name: String, surname: String, distance: Float, nearestLocationName: String, description: String, coordinate: CLLocationCoordinate2D, isSaved: Bool) {
+    init(avatarImage: Image?, name: String, surname: String, distance: Float, nearestLocationName: String, description: String, coordinate: CLLocationCoordinate2D, isSaved: Bool, preferences: [FilterOption: FilterAttitude]) {
         id = UUID()
         self.avatarImage = avatarImage
         self.name = name
@@ -32,5 +33,6 @@ class User: Identifiable {
         self.description = description
         self.coordinate = coordinate
         self.isSaved = isSaved
+        self.preferences = preferences
     }
 }
