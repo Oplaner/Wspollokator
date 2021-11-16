@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct FilterView: View {
-    @State var isChangable: Bool = true // could be a computed property in future
-    @State var distance: Double = 5.0
+    @Binding var distance: Double
+    @Binding var preferencesSource: [FilterOption: FilterAttitude]
     
-    @Binding var showFilterView: Bool
-
     var body: some View {
-        VStack {
-           VStack {
+        Group {
+            VStack {
                 HStack {
                     Text("Odl. od mojego punktu")
                     Spacer()
@@ -23,22 +21,23 @@ struct FilterView: View {
                 }
                 Slider(value: $distance, in: 0...10)
             }
-            ForEach(FilterRowOptions.allCases, id: \.self) { filter in
-                FilterRow(icon: filter.icon, title: filter.title, isChangable: $isChangable)
-            }
-            Button {
-                // TODO: Reset filters according to user's preferences
-            } label: {
-                Text("Ustaw zgodnie z moimi preferencjami")
-                    .foregroundColor(Appearance.textColor)
+            .padding(.vertical)
+            
+            ForEach(FilterOption.allCases, id: \.self) { filter in
+                let binding = Binding<FilterAttitude>(
+                    get: { preferencesSource[filter]! },
+                    set: { preferencesSource[filter]! = $0 }
+                )
+                FilterRow(filter: filter, selection: binding)
             }
         }
     }
 }
 
-
 struct FilterView_Previews: PreviewProvider {
     static var previews: some View {
-        FilterView(showFilterView: .constant(true))
+        List {
+            FilterView(distance: .constant(5), preferencesSource: .constant([.animals: .positive, .smoking: .negative]))
+        }
     }
 }

@@ -10,9 +10,15 @@ import SwiftUI
 struct MyProfile: View {
     //@EnvironmentObject user
     var user : User
-    //in future this info will be prvided by vmodel User
-    @State private var isLFM: Bool = false
+    
+    /*
+     Temporarily these four variables are marked as @State.
+     Ultimately, they will be derived from an environment object.
+     */
+    @State var isLFM: Bool = false
     @State var showSettings: Bool = false
+    @State var distance: Double
+    @State var preferencesSource: [FilterOption: FilterAttitude]
     var body: some View {
         NavigationView{
             List {
@@ -30,7 +36,7 @@ struct MyProfile: View {
                     NavigationLink(destination: ContentView()) {
                         Text("Mój punkt")
                     }
-                    FilterView(showFilterView: .constant(true))
+                    FilterView(distance: $distance, preferencesSource: $preferencesSource)
                 } header: {
                     Text("Moje preferencje")
                 }
@@ -52,6 +58,6 @@ struct MyProfile: View {
 
 struct MyProfile_Previews: PreviewProvider {
     static var previews: some View {
-        MyProfile(user: UserProfile_Previews.users[0])
+        MyProfile(user: UserProfile_Previews.users[0], distance: 5, preferencesSource: [.animals: .positive, .smoking: .negative])
     }
 }

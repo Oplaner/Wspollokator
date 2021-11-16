@@ -8,44 +8,32 @@
 import SwiftUI
 
 struct FilterRow: View {
-    var icon: String
-    var title: String
-    //var size: CGFloat
-    @Binding var isChangable: Bool
-    @State private var selectedFilterType: SelectedFilterType = .neutral
-    
-    let screen = UIScreen.main.bounds
+    var filter: FilterOption
+    @Binding var selection: FilterAttitude
     
     var body: some View {
         HStack {
-            Text(icon)
+            Text(filter.icon)
                 .font(.title)
-            
-            Text(title)
-            
+            Text(filter.title)
             Spacer()
-            
-            Picker("Choose a type ", selection: $selectedFilterType) {
-                ForEach(SelectedFilterType.allCases, id: \.self) {
+            Picker("Dostosuj filtr", selection: $selection) {
+                ForEach(FilterAttitude.allCases, id: \.self) {
                     Text($0.rawValue)
                 }
             }
-            .frame(width: screen.width / 3.6)
-            .pickerStyle(SegmentedPickerStyle())
-            .disabled(!isChangable)
-            // ctrl cmd space for emotes
+            .frame(width: 0.3 * UIScreen.main.bounds.width)
+            .pickerStyle(.segmented)
         }
     }
 }
 
-enum SelectedFilterType: String, CaseIterable {
-    case negative = "🚫"
-    case neutral = "⚪️"
-    case positive = "✅"
-}
-
 struct FilterRow_Previews: PreviewProvider {
     static var previews: some View {
-        FilterRow(icon: "🐶", title: "Zwierzęta domowe", isChangable: .constant(true))
+        Group {
+            FilterRow(filter: .animals, selection: .constant(.positive))
+            FilterRow(filter: .smoking, selection: .constant(.negative))
+        }
+        .previewLayout(.fixed(width: 400, height: 50))
     }
 }

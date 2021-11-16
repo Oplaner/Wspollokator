@@ -34,7 +34,7 @@
 		C2170E87274022890076ECBF /* GlobalHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2170E86274022890076ECBF /* GlobalHelpers.swift */; };
 		C25458BE2732EDEC00C5317F /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25458BD2732EDEC00C5317F /* FilterView.swift */; };
 		C25458C02732F0D400C5317F /* FilterRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25458BF2732F0D400C5317F /* FilterRow.swift */; };
-		C25458C227332ED300C5317F /* FilterRowOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25458C127332ED300C5317F /* FilterRowOptions.swift */; };
+		C25458C227332ED300C5317F /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25458C127332ED300C5317F /* Filters.swift */; };
 		C2610BD127315D8A00C4C941 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2610BD027315D8A00C4C941 /* MapView.swift */; };
 		C2610BD327315DE700C4C941 /* ListMapSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2610BD227315DE700C4C941 /* ListMapSearchView.swift */; };
 		C2610BD72731B3E400C4C941 /* SearchedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2610BD62731B3E400C4C941 /* SearchedList.swift */; };
@@ -70,7 +70,7 @@
 		C2170E86274022890076ECBF /* GlobalHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHelpers.swift; sourceTree = "<group>"; };
 		C25458BD2732EDEC00C5317F /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		C25458BF2732F0D400C5317F /* FilterRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterRow.swift; sourceTree = "<group>"; };
-		C25458C127332ED300C5317F /* FilterRowOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterRowOptions.swift; sourceTree = "<group>"; };
+		C25458C127332ED300C5317F /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		C2610BD027315D8A00C4C941 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		C2610BD227315DE700C4C941 /* ListMapSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListMapSearchView.swift; sourceTree = "<group>"; };
 		C2610BD62731B3E400C4C941 /* SearchedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedList.swift; sourceTree = "<group>"; };
@@ -129,7 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				8ED4B716272BF8A2007A0CCC /* Appearance.swift */,
-				C25458C127332ED300C5317F /* FilterRowOptions.swift */,
+				C25458C127332ED300C5317F /* Filters.swift */,
 				C2170E86274022890076ECBF /* GlobalHelpers.swift */,
 			);
 			path = Helpers;
@@ -317,7 +317,7 @@
 				8E89BCD4272D6D5400C707BB /* User.swift in Sources */,
 				C25458C02732F0D400C5317F /* FilterRow.swift in Sources */,
 				C2170E87274022890076ECBF /* GlobalHelpers.swift in Sources */,
-				C25458C227332ED300C5317F /* FilterRowOptions.swift in Sources */,
+				C25458C227332ED300C5317F /* Filters.swift in Sources */,
 				1C8716E72740251A00E0554B /* PasswordAlert.swift in Sources */,
 				8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */,
 				8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */,

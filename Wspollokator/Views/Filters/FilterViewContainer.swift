@@ -8,34 +8,45 @@
 import SwiftUI
 
 struct FilterViewContainer: View {
-    @Binding var showFilterView: Bool
+    @Environment(\.dismiss) var dismiss
+    
+    @Binding var distance: Double
+    @Binding var preferencesSource: [FilterOption: FilterAttitude]
     
     var body: some View {
-        ZStack {
-            VStack {
-                HStack {
-                    
-                    Spacer()
-                    HStack {
-                        Button {
-                            showFilterView.toggle()
-                        } label: {
-                            Text("Gotowe")
-                        }
-                        .padding()
-                    }
-                    .foregroundColor(Appearance.textColor)
-                    
+        NavigationView {
+            List {
+                Section {
+                    FilterView(distance: $distance, preferencesSource: $preferencesSource)
                 }
-                FilterView(showFilterView: $showFilterView)
+                Section {
+                    Button {
+                        // TODO: Reset filters according to user's preferences
+                    } label: {
+                        Text("Ustaw zgodnie z moimi preferencjami")
+                            .foregroundColor(Appearance.textColor)
+                    }
+                }
+            }
+            .navigationTitle("Filtry")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Gotowe")
+                            .foregroundColor(Appearance.textColor)
+                            .bold()
+                    }
+                }
             }
         }
-        .background(.white)
     }
 }
 
 struct FilterContainerView_Previews: PreviewProvider {
     static var previews: some View {
-        FilterViewContainer(showFilterView: .constant(true))
+        FilterViewContainer(distance: .constant(5), preferencesSource: .constant([.animals: .positive, .smoking: .negative]))
     }
 }

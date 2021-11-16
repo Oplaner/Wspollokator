@@ -7,21 +7,27 @@
 
 import Foundation
 
-enum FilterRowOptions: Int, CaseIterable {
-    case animal
+enum FilterOption: Int, CaseIterable {
+    case animals
     case smoking
     
     var title: String {
         switch self {
-        case .animal: return "Zwierzęta domowe"
+        case .animals: return "Zwierzęta domowe"
         case .smoking: return "Osoby palące"
         }
     }
     
     var icon: String {
         switch self {
-        case .animal: return "🐶"
+        case .animals: return "🐶"
         case .smoking: return "🚬"
         }
     }
+}
+
+enum FilterAttitude: String, CaseIterable {
+    case negative = "🚫"
+    case neutral = "⚪️"
+    case positive = "✅"
 }
