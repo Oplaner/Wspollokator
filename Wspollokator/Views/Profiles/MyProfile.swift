@@ -20,32 +20,30 @@ struct MyProfile: View {
                     HStack {
                         Avatar(image: user.avatarImage, size: 80)
                         Text("\(user.name) \(user.surname)")
-                            .font(.system(size: 25))
-                            .fontWeight(.bold)
+                            .font(.title2)
                     }
                 }
                 Section {
                     Toggle("Szukam współlokatora", isOn: $isLFM)
                 }
-                Section(header: Text("MOJE PREFERENCJE")
-                            .foregroundColor(Color.black)) {
+                Section {
                     NavigationLink(destination: ContentView()) {
                         Text("Mój punkt")
                     }
-//                    FilterView()
+                    FilterView(showFilterView: .constant(true))
+                } header: {
+                    Text("Moje preferencje")
                 }
             }
             .listStyle(.grouped)
-            .navigationTitle("My Profile")
+            .navigationTitle("Mój profil")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {}, label: {
-                        NavigationLink(destination: Settings(user: user)) {
-                            Label("Ustawienia", systemImage: "gearshape")
-                                .foregroundColor(.gray)
-                        }
-                    })
+                    NavigationLink(destination: Settings(user: user)) {
+                        Label("Ustawienia", systemImage: "gearshape")
+                            .foregroundColor(Appearance.textColor)
+                    }
                 }
             }
         }

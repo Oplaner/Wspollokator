@@ -102,20 +102,20 @@ struct Settings: View {
                         }
                     }
                     Section {
-                            Button {
+                        HStack {
+                            Spacer()
+                            Button(role: .destructive) {
                                 if isLogOutButtonClickable {
                                     isLogOutAlertPresented = true
                                 }
                             } label: {
-                                Text("WYLOGUJ SIĘ")
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.black)
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .background(.red)
+                                Text("Wyloguj się")
                             }
+                            Spacer()
+                        }
                     }
                 }
-                .listStyle(.grouped)
+                .listStyle(.insetGrouped)
                 .navigationTitle("Ustawienia")
                 .navigationBarTitleDisplayMode(.inline)
                 
