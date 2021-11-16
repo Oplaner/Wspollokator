@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FilterRow: View {
-    var imageName: String
+    var icon: String
     var title: String
     //var size: CGFloat
     @Binding var isChangable: Bool
@@ -18,26 +18,21 @@ struct FilterRow: View {
     
     var body: some View {
         HStack {
-            Image(systemName: imageName)
-                .resizable()
-                .frame(width: 32, height: 32, alignment: .center)
-                .clipShape(Circle())
+            Text(icon)
+                .font(.title)
             
             Text(title)
-                .font(.headline)
-                .lineLimit(2)
-                .frame(alignment: .leading)
             
             Spacer()
             
-            Picker("Choose a type", selection: $selectedFilterType) {
+            Picker("Choose a type ", selection: $selectedFilterType) {
                 ForEach(SelectedFilterType.allCases, id: \.self) {
                     Text($0.rawValue)
                 }
             }
-            .frame(width: screen.width / 3.8 )
+            .frame(width: screen.width / 3.6)
             .pickerStyle(SegmentedPickerStyle())
-            .disabled(isChangable)
+            .disabled(!isChangable)
             // ctrl cmd space for emotes
         }
     }
@@ -51,6 +46,6 @@ enum SelectedFilterType: String, CaseIterable {
 
 struct FilterRow_Previews: PreviewProvider {
     static var previews: some View {
-        FilterRow(imageName: "hare.fill", title: "Zwierzęta domowe", isChangable: .constant(true))
+        FilterRow(icon: "🐶", title: "Zwierzęta domowe", isChangable: .constant(true))
     }
 }

@@ -20,7 +20,7 @@ struct FilterViewContainer: View {
                         Button {
                             showFilterView.toggle()
                         } label: {
-                            Text("Hide")
+                            Text("Gotowe")
                         }
                         .padding()
                     }

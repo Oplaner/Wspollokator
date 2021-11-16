@@ -15,22 +15,24 @@ struct FilterView: View {
 
     var body: some View {
         VStack {
-               VStack {
-                    HStack {
-                        Text("Odl. od mojego punktu")
-                        Spacer()
-                        Text("do \(String.localizedStringWithFormat("%.1f km", distance))")
-                    }
-                    Slider(value: $distance, in: 0...10)
+           VStack {
+                HStack {
+                    Text("Odl. od mojego punktu")
+                    Spacer()
+                    Text("do \(String.localizedStringWithFormat("%.1f km", distance))")
                 }
-                ForEach(FilterRowOptions.allCases, id: \.self) { filter in
-                    FilterRow(imageName: filter.imageName, title: filter.title, isChangable: $isChangable)
-                }
+                Slider(value: $distance, in: 0...10)
+            }
+            ForEach(FilterRowOptions.allCases, id: \.self) { filter in
+                FilterRow(icon: filter.icon, title: filter.title, isChangable: $isChangable)
+            }
+            Button {
+                // TODO: Reset filters according to user's preferences
+            } label: {
                 Text("Ustaw zgodnie z moimi preferencjami")
-                    .font(.headline)
                     .foregroundColor(Appearance.textColor)
             }
-            .listStyle(PlainListStyle())
+        }
     }
 }
 
