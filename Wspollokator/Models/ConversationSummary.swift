@@ -8,9 +8,10 @@
 import Foundation
 
 struct ConversationSummary: Identifiable {
-    let id = UUID()
-    let conversationID: UUID
-    let participants: [User] // Should not contain ourselves.
-    let recentMessageAuthorID: UUID
+    let id: UUID
+    let conversationID: Int
+    let participantsIDs: [Int]
+    let recentMessageAuthorID: Int
     let recentMessageContent: String
+    let recentMessageTimeSent: Date
 }

@@ -9,7 +9,7 @@ import Foundation
 
 struct Message: Identifiable {
     let id: Int
-    let author: User
+    let authorID: Int
     let content: String
     let timeSent: Date
 }
