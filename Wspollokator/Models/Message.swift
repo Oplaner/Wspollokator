@@ -7,14 +7,9 @@
 
 import Foundation
 
-struct Message: Identifiable, Equatable {
-    static func == (lhs: Message, rhs: Message) -> Bool {
-        return true
-    }
-    
-    let id = UUID()
-    
-    let user: User
+struct Message: Identifiable {
+    let id: Int
+    let author: User
     let content: String
-    let time: Date
+    let timeSent: Date
 }
