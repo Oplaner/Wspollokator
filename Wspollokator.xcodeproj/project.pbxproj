@@ -18,6 +18,7 @@
 		1C8716E92740708500E0554B /* DescriptionAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C8716E82740708500E0554B /* DescriptionAlert.swift */; };
 		1CC36F18273E8A840092056B /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CC36F17273E8A840092056B /* Settings.swift */; };
 		8E026E71272A2DD600C183A6 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E026E70272A2DD600C183A6 /* Avatar.swift */; };
+		8E17C2CB2745D26F006C2C9C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E17C2CA2745D26F006C2C9C /* ViewModel.swift */; };
 		8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E502F772726F6FC003227AA /* WspollokatorApp.swift */; };
 		8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E502F792726F6FC003227AA /* ContentView.swift */; };
 		8E502F7C2726F6FE003227AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E502F7B2726F6FE003227AA /* Assets.xcassets */; };
@@ -25,7 +26,6 @@
 		8E89BCCF272D5C3500C707BB /* SavedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCCE272D5C3500C707BB /* SavedList.swift */; };
 		8E89BCD1272D62FE00C707BB /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCD0272D62FE00C707BB /* UserProfile.swift */; };
 		8E89BCD4272D6D5400C707BB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCD3272D6D5400C707BB /* User.swift */; };
-		8E89BCD9272DFC2E00C707BB /* ConversationSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCD8272DFC2E00C707BB /* ConversationSummary.swift */; };
 		8E89BCDD272DFE1300C707BB /* ConversationsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCDC272DFE1300C707BB /* ConversationsList.swift */; };
 		8ED4B715272BEF73007A0CCC /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED4B714272BEF73007A0CCC /* ListRow.swift */; };
 		8ED4B717272BF8A3007A0CCC /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED4B716272BF8A2007A0CCC /* Appearance.swift */; };
@@ -53,6 +53,7 @@
 		1C8716E82740708500E0554B /* DescriptionAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionAlert.swift; sourceTree = "<group>"; };
 		1CC36F17273E8A840092056B /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		8E026E70272A2DD600C183A6 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
+		8E17C2CA2745D26F006C2C9C /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		8E502F742726F6FC003227AA /* Wspollokator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wspollokator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E502F772726F6FC003227AA /* WspollokatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WspollokatorApp.swift; sourceTree = "<group>"; };
 		8E502F792726F6FC003227AA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -61,7 +62,6 @@
 		8E89BCCE272D5C3500C707BB /* SavedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedList.swift; sourceTree = "<group>"; };
 		8E89BCD0272D62FE00C707BB /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		8E89BCD3272D6D5400C707BB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		8E89BCD8272DFC2E00C707BB /* ConversationSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSummary.swift; sourceTree = "<group>"; };
 		8E89BCDC272DFE1300C707BB /* ConversationsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsList.swift; sourceTree = "<group>"; };
 		8ED4B714272BEF73007A0CCC /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
 		8ED4B716272BF8A2007A0CCC /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
@@ -88,6 +88,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8E0F066F274541B700066B98 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8E17C2CA2745D26F006C2C9C /* ViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		8E502F6B2726F6FC003227AA = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +118,7 @@
 				8E502F772726F6FC003227AA /* WspollokatorApp.swift */,
 				8E634960272F117D00244985 /* Helpers */,
 				8E89BCD5272D6D6B00C707BB /* Models */,
+				8E0F066F274541B700066B98 /* ViewModel */,
 				8E89BCD2272D6D3000C707BB /* Views */,
 				8E502F7B2726F6FE003227AA /* Assets.xcassets */,
 				8E502F7D2726F6FE003227AA /* Preview Content */,
@@ -156,7 +165,6 @@
 			isa = PBXGroup;
 			children = (
 				1C6B2EE42733F170000B96C1 /* Conversation.swift */,
-				8E89BCD8272DFC2E00C707BB /* ConversationSummary.swift */,
 				1C6B2EE62733F17E000B96C1 /* Message.swift */,
 				8E89BCD3272D6D5400C707BB /* User.swift */,
 			);
@@ -315,13 +323,13 @@
 				C2170E82273FE82D0076ECBF /* MapViewRepresentable.swift in Sources */,
 				8E026E71272A2DD600C183A6 /* Avatar.swift in Sources */,
 				8E89BCD4272D6D5400C707BB /* User.swift in Sources */,
+				8E17C2CB2745D26F006C2C9C /* ViewModel.swift in Sources */,
 				C25458C02732F0D400C5317F /* FilterRow.swift in Sources */,
 				C2170E87274022890076ECBF /* GlobalHelpers.swift in Sources */,
 				C25458C227332ED300C5317F /* Filters.swift in Sources */,
 				1C8716E72740251A00E0554B /* PasswordAlert.swift in Sources */,
 				8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */,
 				8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */,
-				8E89BCD9272DFC2E00C707BB /* ConversationSummary.swift in Sources */,
 				8E89BCCF272D5C3500C707BB /* SavedList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

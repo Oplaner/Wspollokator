@@ -19,7 +19,7 @@ struct User: Identifiable {
     var targetDistance: Double
     var preferences: [FilterOption: FilterAttitude]
     var description: String
-    var savedUsers: [User]
+    var savedUsersIDs: [Int]
     var isSearchable: Bool
     
     /// Calculates distance, in kilometers, between the closest points in the receiver's area and the current user's area.
