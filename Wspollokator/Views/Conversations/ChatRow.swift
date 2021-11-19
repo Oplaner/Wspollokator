@@ -74,7 +74,7 @@ struct ChatRow: View {
 struct ChatRow_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ChatRow(message: ViewModel.sampleConversations[1].messages[9], isGroupConversation: false)
+            ChatRow(message: ViewModel.sampleConversations[1].messages[3], isGroupConversation: false)
             ChatRow(message: ViewModel.sampleConversations[1].messages[0], isGroupConversation: false)
             ChatRow(message: ViewModel.sampleConversations[0].messages[1], isGroupConversation: true)
         }
