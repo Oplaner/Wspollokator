@@ -7,9 +7,16 @@
 
 import Foundation
 
-struct Message: Identifiable {
+class Message: Identifiable {
     let id: Int
-    let authorID: Int
+    let author: User
     let content: String
     let timeSent: Date
+    
+    init(id: Int, author: User, content: String, timeSent: Date) {
+        self.id = id
+        self.author = author
+        self.content = content
+        self.timeSent = timeSent
+    }
 }

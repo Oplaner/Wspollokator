@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ListRow: View {
+    @EnvironmentObject var viewModel: ViewModel
     @Environment(\.colorScheme) var colorScheme
     
     let height: CGFloat = 60
@@ -17,7 +18,7 @@ struct ListRow: View {
     var headline: String
     var caption: String?
     var includesStarButton: Bool
-    @State var isStarred: Bool?
+    var relevantUser: User?
     
     var body: some View {
         HStack(spacing: padding) {
@@ -55,11 +56,19 @@ struct ListRow: View {
             
             Spacer()
             
-            if includesStarButton && isStarred != nil {
+            if includesStarButton && relevantUser != nil {
+                var savedUsers = viewModel.currentUser!.savedUsers
+                
                 Button {
-                    isStarred!.toggle()
+                    viewModel.objectWillChange.send()
+                    
+                    if let index = savedUsers.firstIndex(of: relevantUser!) {
+                        savedUsers.remove(at: index)
+                    } else {
+                        savedUsers.append(relevantUser!)
+                    }
                 } label: {
-                    Image(systemName: isStarred! ? "star.fill" : "star")
+                    Image(systemName: savedUsers.contains(relevantUser!) ? "star.fill" : "star")
                         .frame(width: 50, height: 50, alignment: .center)
                         .foregroundColor(Appearance.buttonColor)
                 }
@@ -73,9 +82,10 @@ struct ListRow: View {
 struct ListRow_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ListRow(images: [Image("avatar"), nil], headline: "John, Anna", caption: "Anna: lorem ipsum...", includesStarButton: false, isStarred: nil)
-            ListRow(images: [Image("avatar")], headline: "John Appleseed", caption: "1,4 km", includesStarButton: true, isStarred: true)
+            ListRow(images: [Image("avatar2"), nil], headline: "Anna, Carol", caption: "Anna: lorem ipsum...", includesStarButton: false)
+            ListRow(images: [Image("avatar3")], headline: "Mark Williams", caption: "1,4 km", includesStarButton: true, relevantUser: ViewModel.sampleUsers[2])
         }
+        .environmentObject(ViewModel.sample)
         .previewLayout(.fixed(width: 300, height: 80))
     }
 }

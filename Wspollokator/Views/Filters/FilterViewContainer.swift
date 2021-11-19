@@ -8,24 +8,27 @@
 import SwiftUI
 
 struct FilterViewContainer: View {
+    @EnvironmentObject var viewModel: ViewModel
     @Environment(\.dismiss) var dismiss
     
-    @Binding var distance: Double
+    @Binding var targetDistance: Double
     @Binding var preferencesSource: [FilterOption: FilterAttitude]
     
     var body: some View {
         NavigationView {
             List {
                 Section {
-                    FilterView(distance: $distance, preferencesSource: $preferencesSource)
+                    FilterView(targetDistance: $targetDistance, preferencesSource: $preferencesSource)
                 }
                 Section {
                     Button {
-                        // TODO: Reset filters according to user's preferences
+                        viewModel.searchTargetDistance = viewModel.currentUser!.targetDistance
+                        viewModel.searchPreferences = viewModel.currentUser!.preferences
                     } label: {
                         Text("Ustaw zgodnie z moimi preferencjami")
                             .foregroundColor(Appearance.textColor)
                     }
+                    .disabled(viewModel.searchTargetDistance == viewModel.currentUser!.targetDistance && viewModel.searchPreferences == viewModel.currentUser!.preferences)
                 }
             }
             .navigationTitle("Filtry")
@@ -47,6 +50,7 @@ struct FilterViewContainer: View {
 
 struct FilterContainerView_Previews: PreviewProvider {
     static var previews: some View {
-        FilterViewContainer(distance: .constant(5), preferencesSource: .constant([.animals: .positive, .smoking: .negative]))
+        FilterViewContainer(targetDistance: .constant(5), preferencesSource: .constant([.animals: .positive, .smoking: .negative]))
+            .environmentObject(ViewModel.sample)
     }
 }

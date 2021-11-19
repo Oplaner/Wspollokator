@@ -15,17 +15,17 @@ struct ContentView: View {
                     Label("Szukaj", systemImage: "magnifyingglass")
                 }
             
-            ConversationsList(summaries: ConversationsList_Previews.summaries)
+            ConversationsList()
                 .tabItem {
                     Label("Wiadomości", systemImage: "message.fill")
                 }
             
-            SavedList(savedUsers: UserProfile_Previews.users)
+            SavedList()
                 .tabItem {
                     Label("Zapisane", systemImage: "star.fill")
                 }
             
-            MyProfile(user: UserProfile_Previews.users[0], distance: 5, preferencesSource: [.animals: .positive, .smoking: .negative])
+            MyProfile()
                 .tabItem {
                     Label("Mój profil", systemImage: "person.fill")
                 }
@@ -36,5 +36,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(ViewModel.sample)
     }
 }

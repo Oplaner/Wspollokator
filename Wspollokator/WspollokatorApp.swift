@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct WspollokatorApp: App {
+    let viewModel = ViewModel.sample
+    
     init() {
         Appearance.setNavigationAppearance()
     }
@@ -16,6 +18,7 @@ struct WspollokatorApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(viewModel)
         }
     }
 }

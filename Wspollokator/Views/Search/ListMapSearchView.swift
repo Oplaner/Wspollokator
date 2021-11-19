@@ -13,15 +13,30 @@ enum SearchResultsViewMode: String, CaseIterable {
 }
 
 struct ListMapSearchView: View {
+    @EnvironmentObject var viewModel: ViewModel
     @State private var viewMode: SearchResultsViewMode = .list
     @State private var isShowingFilters = false
     
-    /*
-     Temporarily these two variables are marked as @State.
-     Ultimately, they will be derived from an environment object.
-     */
-    @State var distance: Double = 5
-    @State var preferencesSource: [FilterOption: FilterAttitude] = [.animals: .positive, .smoking: .negative]
+    /// Returns an array of users matching the filtering criteria or nil in case the current user has not set their point of interest.
+    private var filteredUsers: [User]? {
+        get {
+            let currentUser = viewModel.currentUser!
+            
+            guard currentUser.pointOfInterest != nil else { return nil }
+            
+            return viewModel.users.filter { user in
+                guard user != currentUser && user.isSearchable, let distance = user.getDistance(from: currentUser), distance <= currentUser.targetDistance else { return false }
+                
+                for option in FilterOption.allCases {
+                    if currentUser.preferences[option] != .neutral && user.preferences[option] != currentUser.preferences[option] {
+                        return false
+                    }
+                }
+                
+                return true
+            }
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -35,7 +50,7 @@ struct ListMapSearchView: View {
                 .padding(EdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8))
                 
                 if viewMode == .list {
-                    SearchedList(searchedUsers: UserProfile_Previews.users)
+                    SearchedList(searchedUsers: filteredUsers)
                 } else if viewMode == .map {
                     MapView()
                 }
@@ -50,7 +65,7 @@ struct ListMapSearchView: View {
                         Text("Filtry")
                     }
                     .sheet(isPresented: $isShowingFilters) {
-                        FilterViewContainer(distance: $distance, preferencesSource: $preferencesSource)
+                        FilterViewContainer(targetDistance: $viewModel.searchTargetDistance, preferencesSource: $viewModel.searchPreferences)
                     }
                 }
             }
@@ -61,5 +76,6 @@ struct ListMapSearchView: View {
 struct ListMapSearchView_Previews: PreviewProvider {
     static var previews: some View {
         ListMapSearchView()
+            .environmentObject(ViewModel.sample)
     }
 }

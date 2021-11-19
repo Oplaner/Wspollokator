@@ -8,19 +8,16 @@
 import SwiftUI
 
 struct MyProfile: View {
-    //@EnvironmentObject user
-    var user : User
+    @EnvironmentObject var viewModel: ViewModel
     
-    /*
-     Temporarily these four variables are marked as @State.
-     Ultimately, they will be derived from an environment object.
-     */
-    @State var isLFM: Bool = false
-    @State var showSettings: Bool = false
-    @State var distance: Double
-    @State var preferencesSource: [FilterOption: FilterAttitude]
+    private var user: User {
+        get {
+            viewModel.currentUser!
+        }
+    }
+    
     var body: some View {
-        NavigationView{
+        NavigationView {
             List {
                 Section {
                     HStack {
@@ -30,13 +27,27 @@ struct MyProfile: View {
                     }
                 }
                 Section {
-                    Toggle("Szukam współlokatora", isOn: $isLFM)
+                    let binding = Binding<Bool>(
+                        get: { viewModel.currentUser!.isSearchable },
+                        set: { viewModel.currentUser!.isSearchable = $0 }
+                    )
+                    Toggle("Szukam współlokatora", isOn: binding)
                 }
                 Section {
-                    NavigationLink(destination: ContentView()) {
+                    NavigationLink(destination: Text("Ustawianie punktu")) {
                         Text("Mój punkt")
                     }
-                    FilterView(distance: $distance, preferencesSource: $preferencesSource)
+                    
+                    let distanceBinding = Binding<Double>(
+                        get: { viewModel.currentUser!.targetDistance },
+                        set: { viewModel.currentUser!.targetDistance = $0 }
+                    )
+                    let preferencesBinding = Binding<[FilterOption: FilterAttitude]>(
+                        get: { viewModel.currentUser!.preferences },
+                        set: { viewModel.currentUser!.preferences = $0 }
+                    )
+                    
+                    FilterView(targetDistance: distanceBinding, preferencesSource: preferencesBinding)
                 } header: {
                     Text("Moje preferencje")
                 }
@@ -46,7 +57,7 @@ struct MyProfile: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: Settings(user: user)) {
+                    NavigationLink(destination: Settings()) {
                         Label("Ustawienia", systemImage: "gearshape")
                             .foregroundColor(Appearance.textColor)
                     }
@@ -58,6 +69,7 @@ struct MyProfile: View {
 
 struct MyProfile_Previews: PreviewProvider {
     static var previews: some View {
-        MyProfile(user: UserProfile_Previews.users[0], distance: 5, preferencesSource: [.animals: .positive, .smoking: .negative])
+        MyProfile()
+            .environmentObject(ViewModel.sample)
     }
 }

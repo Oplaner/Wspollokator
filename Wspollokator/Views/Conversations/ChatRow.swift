@@ -8,15 +8,7 @@
 import SwiftUI
 
 struct ChatRow: View {
-    var user : User
-    var message: String
-    var time: Date
-    var numOfParticipants: Int
-    private var groupedConv: Bool {
-        get {
-            return numOfParticipants > 1 ? true : false
-        }
-    }
+    @EnvironmentObject var viewModel: ViewModel
     
     let avatarSize: CGFloat = 60
     let spacerMinLength: CGFloat = 50
@@ -24,56 +16,51 @@ struct ChatRow: View {
     let padding: CGFloat = 8
     let cornerRadius: CGFloat = 10
     
-    func formatCurrentDate() -> String {
+    var message: Message
+    var isGroupConversation: Bool
+    
+    private func formatTimeString(from date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yy, hh:mm"
-        
-        return formatter.string(from: time)
+        return formatter.string(from: date)
     }
+    
     var body: some View {
-        HStack() {
-                        
-            //Temporary cuurent user ID
-            if user.id == UserProfile_Previews.users[0].id {
-                HStack {
-                    Spacer(minLength: spacerMinLength)
-                        VStack(alignment: .trailing, spacing: spacing) {
-                            Text(message)
-                                .foregroundColor(.white)
-                                .padding(padding)
-                                .background(Color(UIColor.lightGray))
-                                .cornerRadius(cornerRadius)
-                            Text(formatCurrentDate())
-                                .font(.caption2)
-                                .foregroundColor(.gray)
-                        }
-//                        Avatar(image: user.avatarImage, size: avatarSize)
+        HStack {
+            if message.author == viewModel.currentUser! {
+                Spacer(minLength: spacerMinLength)
+                VStack(alignment: .trailing, spacing: spacing) {
+                    Text(message.content)
+                        .foregroundColor(.white)
+                        .padding(padding)
+                        .background(Color(UIColor.lightGray))
+                        .cornerRadius(cornerRadius)
+                    Text(formatTimeString(from: message.timeSent))
+                        .font(.caption2)
+                        .foregroundColor(.gray)
                 }
-            }
-            else {
-                if groupedConv {
-                    HStack {
-                        Avatar(image: user.avatarImage, size: avatarSize)
-                        VStack(alignment: .leading, spacing: spacing) {
-                            Text(message)
-                                .foregroundColor(.white)
-                                .padding(padding)
-                                .background(Appearance.fillColor)
-                                .cornerRadius(cornerRadius)
-                            Text(formatCurrentDate())
-                                .font(.caption2)
-                                .foregroundColor(.gray)
-                        }
-                        Spacer(minLength: spacerMinLength)
-                    }
-                } else {
+            } else {
+                if isGroupConversation {
+                    Avatar(image: message.author.avatarImage, size: avatarSize)
                     VStack(alignment: .leading, spacing: spacing) {
-                        Text(message)
+                        Text(message.content)
                             .foregroundColor(.white)
                             .padding(padding)
                             .background(Appearance.fillColor)
                             .cornerRadius(cornerRadius)
-                        Text(formatCurrentDate())
+                        Text(formatTimeString(from: message.timeSent))
+                            .font(.caption2)
+                            .foregroundColor(.gray)
+                    }
+                    Spacer(minLength: spacerMinLength)
+                } else {
+                    VStack(alignment: .leading, spacing: spacing) {
+                        Text(message.content)
+                            .foregroundColor(.white)
+                            .padding(padding)
+                            .background(Appearance.fillColor)
+                            .cornerRadius(cornerRadius)
+                        Text(formatTimeString(from: message.timeSent))
                             .font(.caption2)
                             .foregroundColor(.gray)
                     }
@@ -87,10 +74,11 @@ struct ChatRow: View {
 struct ChatRow_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ChatRow(user: UserProfile_Previews.users[0], message: "Lorem ipsum", time: Date(), numOfParticipants: 1)
-            ChatRow(user: UserProfile_Previews.users[1], message: "Lorem ipsum dolor sit amen, Lorem ipsum dolor sit amen", time: Date(), numOfParticipants: 1)
-
+            ChatRow(message: ViewModel.sampleConversations[1].messages[9], isGroupConversation: false)
+            ChatRow(message: ViewModel.sampleConversations[1].messages[0], isGroupConversation: false)
+            ChatRow(message: ViewModel.sampleConversations[0].messages[1], isGroupConversation: true)
         }
+        .environmentObject(ViewModel.sample)
         .previewLayout(.fixed(width: 400, height: 100))
     }
 }

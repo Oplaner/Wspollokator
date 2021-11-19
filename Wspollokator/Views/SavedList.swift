@@ -8,22 +8,27 @@
 import SwiftUI
 
 struct SavedList: View {
-    // Temporarily @State, ultimately @StateObject.
-    @State var savedUsers: [User]
+    @EnvironmentObject var viewModel: ViewModel
     
     var body: some View {
         NavigationView {
             List {
+                var savedUsers = viewModel.currentUser!.savedUsers
+                
                 if savedUsers.count == 0 {
                     Text("Brak zapisanych osób")
                         .foregroundColor(Appearance.textColor)
                 } else {
                     ForEach(savedUsers) { user in
+                        let distance = user.getDistance(from: viewModel.currentUser!)
+                        let caption = distance != nil ? String.localizedStringWithFormat("%.1f km", Float(distance!)) : nil
+                        
                         NavigationLink(destination: UserProfile(user: user)) {
-                            ListRow(images: [user.avatarImage], headline: "\(user.name) \(user.surname)", caption: String.localizedStringWithFormat("%.1f km", user.distance), includesStarButton: false)
+                            ListRow(images: [user.avatarImage], headline: "\(user.name) \(user.surname)", caption: caption, includesStarButton: false, relevantUser: nil)
                         }
                     }
                     .onDelete {
+                        viewModel.objectWillChange.send()
                         savedUsers.remove(atOffsets: $0)
                     }
                 }
@@ -36,6 +41,7 @@ struct SavedList: View {
 
 struct SavedList_Previews: PreviewProvider {
     static var previews: some View {
-        SavedList(savedUsers: UserProfile_Previews.users)
+        SavedList()
+            .environmentObject(ViewModel.sample)
     }
 }

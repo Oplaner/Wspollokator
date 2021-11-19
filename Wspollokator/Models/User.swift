@@ -5,10 +5,10 @@
 //  Created by Kamil Chmielewski on 30/10/2021.
 //
 
-import MapKit
+import CoreLocation
 import SwiftUI
 
-struct User: Identifiable {
+class User: Identifiable, Equatable {
     let id: Int
     
     var avatarImage: Image?
@@ -19,24 +19,10 @@ struct User: Identifiable {
     var targetDistance: Double
     var preferences: [FilterOption: FilterAttitude]
     var description: String
-    var savedUsersIDs: [Int]
+    var savedUsers: [User]
     var isSearchable: Bool
     
-    /// Calculates distance, in kilometers, between the closest points in the receiver's area and the current user's area.
-    var distanceFromSelectedArea: Double? {
-        get {
-            let currentUserPoint: CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 52.1618325903034, longitude: 21.046584867271402) // WZIM, temporary. :)
-            let currentUserTargetDistance: Double = 5 // Temporary.
-            
-            guard pointOfInterest != nil && currentUserPoint != nil else { return nil }
-            
-            let receiverPointLocation = CLLocation(latitude: pointOfInterest!.latitude, longitude: pointOfInterest!.longitude)
-            let currentUserPointLocation = CLLocation(latitude: currentUserPoint!.latitude, longitude: currentUserPoint!.longitude)
-            return (receiverPointLocation.distance(from: currentUserPointLocation) - targetDistance - currentUserTargetDistance) / 1000
-        }
-    }
-    
-    /// Decodes name, street or city describing location of the receiver's point of interest, or an empty string in case of failure.
+    /// Decodes name, street or city describing location of the receiver's point of interest, or an empty string in case of failure. Returns nil if the point of interest has not been set.
     var nearestLocationName: String? {
         get {
             guard pointOfInterest != nil else { return "" }
@@ -53,5 +39,33 @@ struct User: Identifiable {
             
             return name
         }
+    }
+    
+    init(id: Int, avatarImage: Image? = nil, name: String, surname: String, email: String, pointOfInterest: CLLocationCoordinate2D? = nil, targetDistance: Double = ViewModel.defaultTargetDistance, preferences: [FilterOption: FilterAttitude] = ViewModel.defaultPreferences, description: String = "", savedUsers: [User] = [User](), isSearchable: Bool = false) {
+        self.id = id
+        self.avatarImage = avatarImage
+        self.name = name
+        self.surname = surname
+        self.email = email
+        self.pointOfInterest = pointOfInterest
+        self.targetDistance = targetDistance
+        self.preferences = preferences
+        self.description = description
+        self.savedUsers = savedUsers
+        self.isSearchable = isSearchable
+    }
+    
+    static func == (lhs: User, rhs: User) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    /// Calculates distance, in kilometers, between the receiver's and other user's points of interest.
+    func getDistance(from user: User) -> Double? {
+        guard pointOfInterest != nil && user.pointOfInterest != nil else { return nil }
+        
+        let receiverPointLocation = CLLocation(latitude: pointOfInterest!.latitude, longitude: pointOfInterest!.longitude)
+        let otherUserPointLocation = CLLocation(latitude: user.pointOfInterest!.latitude, longitude: user.pointOfInterest!.longitude)
+        
+        return receiverPointLocation.distance(from: otherUserPointLocation) / 1000
     }
 }

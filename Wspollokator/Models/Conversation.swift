@@ -7,13 +7,21 @@
 
 import Foundation
 
-struct Conversation: Identifiable {
+class Conversation: Identifiable {
     let id: Int
-    var participantsIDs: [Int]
+    
+    var participants: [User]
     var messages: [Message]
     
-    func generateSummary() -> ConversationSummary {
-        let recentMessage = messages.max(by: { $0.timeSent > $1.timeSent })!
-        return ConversationSummary(id: UUID(), conversationID: id, participantsIDs: participantsIDs, recentMessageAuthorID: recentMessage.authorID, recentMessageContent: recentMessage.content, recentMessageTimeSent: recentMessage.timeSent)
+    var recentMessage: Message {
+        get {
+            messages.max(by: { $0.timeSent > $1.timeSent })!
+        }
+    }
+    
+    init(id: Int, participants: [User], messages: [Message]) {
+        self.id = id
+        self.participants = participants
+        self.messages = messages
     }
 }

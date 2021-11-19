@@ -8,18 +8,22 @@
 import SwiftUI
 
 struct SearchedList: View {
-    // Temporarily @State, ultimately @StateObject.
-    @State var searchedUsers: [User]
+    @EnvironmentObject var viewModel: ViewModel
+    
+    var searchedUsers: [User]?
     
     var body: some View {
         List {
-            if searchedUsers.count == 0 {
-                Text("Nie znaleziono osób")
+            if searchedUsers == nil {
+                Text("Aby móc wyszukiwać współlokatorów, ustaw swój punkt")
+                    .foregroundColor(Appearance.textColor)
+            } else if searchedUsers!.isEmpty {
+                Text("Nie znaleziono osób spełniających zadane kryteria")
                     .foregroundColor(Appearance.textColor)
             } else {
-                ForEach(searchedUsers) { user in
+                ForEach(searchedUsers!) { user in
                     NavigationLink(destination: UserProfile(user: user)) {
-                        ListRow(images: [user.avatarImage], headline: "\(user.name) \(user.surname)", caption: String.localizedStringWithFormat("%.1f km", user.distance), includesStarButton: false)
+                        ListRow(images: [user.avatarImage], headline: "\(user.name) \(user.surname)", caption: String.localizedStringWithFormat("%.1f km", Float(user.getDistance(from: viewModel.currentUser!)!)), includesStarButton: true, relevantUser: user)
                     }
                 }
             }
@@ -29,6 +33,7 @@ struct SearchedList: View {
 
 struct SearchedList_Previews: PreviewProvider {
     static var previews: some View {
-        SearchedList(searchedUsers: UserProfile_Previews.users)
+        SearchedList(searchedUsers: ViewModel.sampleUsers)
+            .environmentObject(ViewModel.sample)
     }
 }

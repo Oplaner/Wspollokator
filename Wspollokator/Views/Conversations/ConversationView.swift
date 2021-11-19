@@ -8,20 +8,21 @@
 import SwiftUI
 
 struct ConversationView: View {
-    //@EnvironmentObject var obj: observed
-    @State private var text :  String = ""
-    @State private var value: CGFloat = 0
-    var conversation : Conversation
-    let title: String
-    init(conversation: Conversation)
-    {
-        self.conversation = conversation
-        if conversation.participants.count ==  1{
-            let user = conversation.participants[0]
-            title = "\(user.name) \(user.surname)"
-        }
-        else {
-            title = conversation.participants.map({ $0.name }).joined(separator: ", ")
+    @EnvironmentObject var viewModel: ViewModel
+    
+    var conversation: Conversation
+    
+    @State private var text: String = ""
+//    @State private var value: CGFloat = 0
+    
+    var title: String {
+        let participants = conversation.participants.filter { $0 != viewModel.currentUser! }
+        
+        if participants.count == 1 {
+            let user = participants.first!
+            return "\(user.name) \(user.surname)"
+        } else {
+            return participants.map({ $0.name }).joined(separator: ", ")
         }
     }
     
@@ -31,14 +32,16 @@ struct ConversationView: View {
                 ScrollViewReader { reader in
                     ScrollView {
                         VStack {
-                            ForEach(conversation.messages) { msg in
-                                ChatRow(user: msg.user, message: msg.content, time: msg.time, numOfParticipants: conversation.participants.count)
-                                    .id(msg.id)
-                            }.onChange(of: conversation.messages) { _ in
-                                withAnimation {
-                                    reader.scrollTo(conversation.messages.last?.id, anchor: .bottom)
-                                }
-                            }.onAppear {
+                            ForEach(conversation.messages.sorted(by: { $0.timeSent < $1.timeSent })) { message in
+                                ChatRow(message: message, isGroupConversation: conversation.participants.count > 2)
+                                    .id(message.id)
+                            }
+//                            .onChange(of: conversation.messages) { _ in
+//                                withAnimation {
+//                                    reader.scrollTo(conversation.messages.last?.id, anchor: .bottom)
+//                                }
+//                            }
+                            .onAppear {
                                 withAnimation {
                                     reader.scrollTo(conversation.messages.last?.id, anchor: .bottom)
                                 }
@@ -51,7 +54,7 @@ struct ConversationView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 
                 TextField("Wpisz wiadomość", text: $text)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .textFieldStyle(.roundedBorder)
                     .padding(.horizontal, 15)
                 
 //                MultiTextField()
@@ -76,28 +79,11 @@ struct ConversationView: View {
 //                    }
 //                }
         }
-        
     }
 }
 struct Conversation_Previews: PreviewProvider {
-    static var conversation = Conversation(
-        participants: [UserProfile_Previews.users[0]],
-        messages: [
-            Message(user: UserProfile_Previews.users[0], content: "Lorem ipsum dolor sit amet", time: Date()),
-            Message(user: UserProfile_Previews.users[1], content: "Donec et est magna 😜", time: Date()),
-            Message(user: UserProfile_Previews.users[0], content: "Nam sollicitudin orci urna", time: Date()),
-            Message(user: UserProfile_Previews.users[1], content: "Vestibulum ante ipsum primis in faucibus orci luctus", time: Date()),
-            Message(user: UserProfile_Previews.users[0], content: "Nunc ac ex lobortis, tempor lorem eu, consequat tellus 🐶", time: Date()),
-            Message(user: UserProfile_Previews.users[1], content: "Praesent", time: Date()),
-            Message(user: UserProfile_Previews.users[0], content: "Curabitur rhoncus at ex nec volutpat. Aenean eget purus et justo varius elementum.", time: Date()),
-            Message(user: UserProfile_Previews.users[1], content: "Ut consectetur tellus nibh, vel luctus massa fermentum quis. Nam et iaculis mi. Nunc sem nisl, tempus sed interdum consequat, pulvinar at nulla. 🍪", time: Date()),
-            Message(user: UserProfile_Previews.users[1], content: "Cras feugiat urna et", time: Date()),
-            Message(user: UserProfile_Previews.users[0], content: "Quisque! 🔥", time: Date()),
-            Message(user: UserProfile_Previews.users[1], content: "Suspendisse 🎉", time: Date())
-        ]
-    )
     static var previews: some View {
-        ConversationView(conversation: conversation)
-            //.environmentObject(observed())
+        ConversationView(conversation: ViewModel.sampleConversations[0])
+            .environmentObject(ViewModel.sample)
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FilterView: View {
-    @Binding var distance: Double
+    @Binding var targetDistance: Double
     @Binding var preferencesSource: [FilterOption: FilterAttitude]
     
     var body: some View {
@@ -17,9 +17,9 @@ struct FilterView: View {
                 HStack {
                     Text("Odl. od mojego punktu")
                     Spacer()
-                    Text("do \(String.localizedStringWithFormat("%.1f km", distance))")
+                    Text("do \(String.localizedStringWithFormat("%.1f km", targetDistance))")
                 }
-                Slider(value: $distance, in: 0...10)
+                Slider(value: $targetDistance, in: 0...10)
             }
             .padding(.vertical)
             
@@ -37,7 +37,7 @@ struct FilterView: View {
 struct FilterView_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            FilterView(distance: .constant(5), preferencesSource: .constant([.animals: .positive, .smoking: .negative]))
+            FilterView(targetDistance: .constant(5), preferencesSource: .constant([.animals: .positive, .smoking: .negative]))
         }
     }
 }
