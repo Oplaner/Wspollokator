@@ -42,7 +42,7 @@ struct ConversationsList: View {
     var body: some View {
         NavigationView {
             List {
-                if viewModel.conversations.count == 0 {
+                if viewModel.conversations.isEmpty {
                     Text("Brak wiadomości")
                         .foregroundColor(Appearance.textColor)
                 } else {

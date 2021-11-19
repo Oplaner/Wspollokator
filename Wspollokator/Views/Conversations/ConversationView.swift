@@ -10,12 +10,14 @@ import SwiftUI
 struct ConversationView: View {
     @EnvironmentObject var viewModel: ViewModel
     
+    let scrollViewPadding: CGFloat = 15
+    
     var conversation: Conversation
     
     @State private var text: String = ""
-//    @State private var value: CGFloat = 0
+    //    @State private var value: CGFloat = 0
     
-    var title: String {
+    private var title: String {
         let participants = conversation.participants.filter { $0 != viewModel.currentUser! }
         
         if participants.count == 1 {
@@ -26,61 +28,65 @@ struct ConversationView: View {
         }
     }
     
-    var body: some View {
-        NavigationView {
-            VStack {
-                ScrollViewReader { reader in
-                    ScrollView {
-                        VStack {
-                            ForEach(conversation.messages.sorted(by: { $0.timeSent < $1.timeSent })) { message in
-                                ChatRow(message: message, isGroupConversation: conversation.participants.count > 2)
-                                    .id(message.id)
-                            }
-//                            .onChange(of: conversation.messages) { _ in
-//                                withAnimation {
-//                                    reader.scrollTo(conversation.messages.last?.id, anchor: .bottom)
-//                                }
-//                            }
-                            .onAppear {
-                                withAnimation {
-                                    reader.scrollTo(conversation.messages.last?.id, anchor: .bottom)
-                                }
-                            }
-                        }
-                        .padding()
-                    }
-                }
-                .navigationTitle(title)
-                .navigationBarTitleDisplayMode(.inline)
-                
-                TextField("Wpisz wiadomość", text: $text)
-                    .textFieldStyle(.roundedBorder)
-                    .padding(.horizontal, 15)
-                
-//                MultiTextField()
-//                    .frame(height: self.obj.size < 150 ? self.obj.size : 150)
-//                    .padding(.horizontal, 10)
-//                    .background(Color(UIColor.lightGray))
-//                    .cornerRadius(10)
-//                    .padding(.horizontal,  15)
-            }
-            //Xcode 12 automatic keyboard handling
-//                .onAppear {
-//                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
-//
-//                        let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
-//                        let height = value.height
-//
-//                        self.value = height
-//                    }
-//
-//                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
-//                        self.value = 0
-//                    }
-//                }
+    private var sortedMessages: [Message] {
+        get {
+            conversation.messages.sorted(by: { $0.timeSent < $1.timeSent })
         }
     }
+    
+    var body: some View {
+        VStack {
+            ScrollViewReader { reader in
+                ScrollView {
+                    Spacer()
+                        .frame(height: scrollViewPadding)
+                    
+                    ForEach(sortedMessages) { message in
+                        ChatRow(message: message, isGroupConversation: conversation.participants.count > 2)
+                    }
+                    
+                    Spacer()
+                        .frame(height: scrollViewPadding)
+                        .id("bottom")
+                }
+                .onAppear {
+                    withAnimation {
+                        reader.scrollTo("bottom", anchor: .bottom)
+                    }
+                }
+            }
+            
+            TextField("Wpisz wiadomość", text: $text)
+                .textFieldStyle(.roundedBorder)
+                .padding()
+            
+            //                MultiTextField()
+            //                    .frame(height: self.obj.size < 150 ? self.obj.size : 150)
+            //                    .padding(.horizontal, 10)
+            //                    .background(Color(UIColor.lightGray))
+            //                    .cornerRadius(10)
+            //                    .padding(.horizontal,  15)
+        }
+        .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
+        
+        //Xcode 12 automatic keyboard handling
+        //                .onAppear {
+        //                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
+        //
+        //                        let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+        //                        let height = value.height
+        //
+        //                        self.value = height
+        //                    }
+        //
+        //                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
+        //                        self.value = 0
+        //                    }
+        //                }
+    }
 }
+
 struct Conversation_Previews: PreviewProvider {
     static var previews: some View {
         ConversationView(conversation: ViewModel.sampleConversations[0])

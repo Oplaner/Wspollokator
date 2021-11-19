@@ -10,10 +10,11 @@ import SwiftUI
 struct ChatRow: View {
     @EnvironmentObject var viewModel: ViewModel
     
-    let avatarSize: CGFloat = 60
+    let avatarSize: CGFloat = 40
     let spacerMinLength: CGFloat = 50
     let spacing: CGFloat = 2
-    let padding: CGFloat = 8
+    let textPadding: CGFloat = 8
+    let rowPadding: CGFloat = 15
     let cornerRadius: CGFloat = 10
     
     var message: Message
@@ -32,7 +33,7 @@ struct ChatRow: View {
                 VStack(alignment: .trailing, spacing: spacing) {
                     Text(message.content)
                         .foregroundColor(.white)
-                        .padding(padding)
+                        .padding(textPadding)
                         .background(Color(UIColor.lightGray))
                         .cornerRadius(cornerRadius)
                     Text(formatTimeString(from: message.timeSent))
@@ -45,7 +46,7 @@ struct ChatRow: View {
                     VStack(alignment: .leading, spacing: spacing) {
                         Text(message.content)
                             .foregroundColor(.white)
-                            .padding(padding)
+                            .padding(textPadding)
                             .background(Appearance.fillColor)
                             .cornerRadius(cornerRadius)
                         Text(formatTimeString(from: message.timeSent))
@@ -57,7 +58,7 @@ struct ChatRow: View {
                     VStack(alignment: .leading, spacing: spacing) {
                         Text(message.content)
                             .foregroundColor(.white)
-                            .padding(padding)
+                            .padding(textPadding)
                             .background(Appearance.fillColor)
                             .cornerRadius(cornerRadius)
                         Text(formatTimeString(from: message.timeSent))
@@ -68,6 +69,7 @@ struct ChatRow: View {
                 }
             }
         }
+        .padding(.horizontal, rowPadding)
     }
 }
 
