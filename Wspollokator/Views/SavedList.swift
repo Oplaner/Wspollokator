@@ -13,13 +13,11 @@ struct SavedList: View {
     var body: some View {
         NavigationView {
             List {
-                var savedUsers = viewModel.currentUser!.savedUsers
-                
-                if savedUsers.count == 0 {
+                if viewModel.currentUser!.savedUsers.isEmpty {
                     Text("Brak zapisanych osób")
                         .foregroundColor(Appearance.textColor)
                 } else {
-                    ForEach(savedUsers) { user in
+                    ForEach(viewModel.currentUser!.savedUsers) { user in
                         let distance = user.getDistance(from: viewModel.currentUser!)
                         let caption = distance != nil ? String.localizedStringWithFormat("%.1f km", Float(distance!)) : nil
                         
@@ -29,7 +27,7 @@ struct SavedList: View {
                     }
                     .onDelete {
                         viewModel.objectWillChange.send()
-                        savedUsers.remove(atOffsets: $0)
+                        viewModel.currentUser!.savedUsers.remove(atOffsets: $0)
                     }
                 }
             }

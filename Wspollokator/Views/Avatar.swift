@@ -32,7 +32,7 @@ struct Avatar_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            Avatar(image: Image("avatar"), size: previewSize)
+            Avatar(image: Image("avatar1"), size: previewSize)
             Avatar(size: previewSize)
         }
         .previewLayout(.fixed(width: previewSize, height: previewSize))
