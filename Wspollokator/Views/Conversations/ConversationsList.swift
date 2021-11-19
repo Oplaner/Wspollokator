@@ -20,7 +20,7 @@ struct ConversationsList: View {
         let images = participants.map { $0.avatarImage }
         let recentMessage = conversation.recentMessage
         
-        if conversation.participants.count == 1 {
+        if participants.count == 1 {
             relevantUser = participants.first!
             headline = "\(relevantUser!.name) \(relevantUser!.surname)"
             includesStarButton = true

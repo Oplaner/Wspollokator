@@ -57,19 +57,18 @@ struct ListRow: View {
             Spacer()
             
             if includesStarButton && relevantUser != nil {
-                var savedUsers = viewModel.currentUser!.savedUsers
-                
                 Button {
                     viewModel.objectWillChange.send()
                     
-                    if let index = savedUsers.firstIndex(of: relevantUser!) {
-                        savedUsers.remove(at: index)
+                    if let index = viewModel.currentUser!.savedUsers.firstIndex(of: relevantUser!) {
+                        viewModel.currentUser!.savedUsers.remove(at: index)
                     } else {
-                        savedUsers.append(relevantUser!)
+                        viewModel.currentUser!.savedUsers.append(relevantUser!)
                     }
                 } label: {
-                    Image(systemName: savedUsers.contains(relevantUser!) ? "star.fill" : "star")
+                    Image(systemName: viewModel.currentUser!.savedUsers.contains(relevantUser!) ? "star.fill" : "star")
                         .frame(width: 50, height: 50, alignment: .center)
+                        .font(.system(size: 25))
                         .foregroundColor(Appearance.buttonColor)
                 }
                 .buttonStyle(.borderless)
