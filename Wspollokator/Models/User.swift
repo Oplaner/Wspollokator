@@ -5,32 +5,65 @@
 //  Created by Kamil Chmielewski on 30/10/2021.
 //
 
+import CoreLocation
 import SwiftUI
-import MapKit
 
-class User: Identifiable {
-    let id: UUID
+class User: Identifiable, Equatable {
+    let id: Int
     
     var avatarImage: Image?
     var name: String
     var surname: String
-    var distance: Float // Temporary!
-    var nearestLocationName: String // Temporary!
+    var email: String
+    var pointOfInterest: CLLocationCoordinate2D?
+    var targetDistance: Double
+    var preferences: [FilterOption: FilterAttitude]
     var description: String
-    var coordinate: CLLocationCoordinate2D
-    var isSaved: Bool // Temporary!
+    var savedUsers: [User]
+    var isSearchable: Bool
     
-    // TODO: Complete the model with user's preferences. Add distance calculation and nearest location name retrieval.
+    /// Decodes name, street or city describing location of the receiver's `pointOfInterest`, or an empty string in case of failure. Returns nil if the `pointOfInterest` has not been set.
+    var nearestLocationName: String? {
+        guard pointOfInterest != nil else { return "" }
+        
+        let location = CLLocation(latitude: pointOfInterest!.latitude, longitude: pointOfInterest!.longitude)
+        let geocoder = CLGeocoder()
+        var name: String?
+        
+        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
+            if error == nil, let placemark = placemarks?.first {
+                name = placemark.name ?? placemark.thoroughfare ?? placemark.locality
+            }
+        }
+        
+        return name
+    }
     
-    init(avatarImage: Image?, name: String, surname: String, distance: Float, nearestLocationName: String, description: String, coordinate: CLLocationCoordinate2D, isSaved: Bool) {
-        id = UUID()
+    init(id: Int, avatarImage: Image? = nil, name: String, surname: String, email: String, pointOfInterest: CLLocationCoordinate2D? = nil, targetDistance: Double = ViewModel.defaultTargetDistance, preferences: [FilterOption: FilterAttitude] = ViewModel.defaultPreferences, description: String = "", savedUsers: [User] = [User](), isSearchable: Bool = false) {
+        self.id = id
         self.avatarImage = avatarImage
         self.name = name
         self.surname = surname
-        self.distance = distance
-        self.nearestLocationName = nearestLocationName
+        self.email = email
+        self.pointOfInterest = pointOfInterest
+        self.targetDistance = targetDistance
+        self.preferences = preferences
         self.description = description
-        self.coordinate = coordinate
-        self.isSaved = isSaved
+        self.savedUsers = savedUsers
+        self.isSearchable = isSearchable
+    }
+    
+    static func == (lhs: User, rhs: User) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    /// Calculates distance, in kilometers, between the receiver's and other user's `pointOfInterest`.
+    func distance(from user: User) -> Double? {
+        guard pointOfInterest != nil && user.pointOfInterest != nil else { return nil }
+        
+        let receiverPointLocation = CLLocation(latitude: pointOfInterest!.latitude, longitude: pointOfInterest!.longitude)
+        let otherUserPointLocation = CLLocation(latitude: user.pointOfInterest!.latitude, longitude: user.pointOfInterest!.longitude)
+        
+        return receiverPointLocation.distance(from: otherUserPointLocation) / 1000
     }
 }

@@ -15,7 +15,7 @@ struct Settings: View {
     //Zmienne do customowych alertów
     @State var oldPassword: String = ""
     @State var newPassword: String = ""
-    @State var description: String = UserProfile_Previews.users[0].description
+    @State var description: String = ""
     //"Freezowanie" przycisków
     @State private var isPhotoButtonClickable: Bool = true
     @State private var isPasswordButtonClickable: Bool = true
@@ -31,7 +31,7 @@ struct Settings: View {
     @State private var isPassworButtonBlocked: Bool = false
     //testing password, temporary
     let password: String = "1234"
-    var user : User
+    var user : User = ViewModel.sampleUsers[0] // Temporary.
     var body: some View {
         NavigationView {
             ZStack {
@@ -85,7 +85,7 @@ struct Settings: View {
                         }
                         Button {
                             if isDescriptionButtonClickable {
-                                description = UserProfile_Previews.users[0].description
+                                description = ""
                                 isDescriptionAlertPresented = true
                                 
                                 isPhotoButtonClickable = false
@@ -102,20 +102,20 @@ struct Settings: View {
                         }
                     }
                     Section {
-                            Button {
+                        HStack {
+                            Spacer()
+                            Button(role: .destructive) {
                                 if isLogOutButtonClickable {
                                     isLogOutAlertPresented = true
                                 }
                             } label: {
-                                Text("WYLOGUJ SIĘ")
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.black)
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    .background(.red)
+                                Text("Wyloguj się")
                             }
+                            Spacer()
+                        }
                     }
                 }
-                .listStyle(.grouped)
+                .listStyle(.insetGrouped)
                 .navigationTitle("Ustawienia")
                 .navigationBarTitleDisplayMode(.inline)
                 
@@ -198,6 +198,6 @@ struct Settings: View {
 
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
-        Settings(user: UserProfile_Previews.users[0])
+        Settings(user: ViewModel.sampleUsers[0])
     }
 }

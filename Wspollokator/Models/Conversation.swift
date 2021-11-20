@@ -7,9 +7,19 @@
 
 import Foundation
 
-struct Conversation: Identifiable {
-    let id = UUID()
+class Conversation: Identifiable {
+    let id: Int
     
-    let participants: [User] // Should not contain ourselves.
-    let messages: [Message]
+    var participants: [User]
+    var messages: [Message]
+    
+    var recentMessage: Message {
+        messages.max(by: { $0.timeSent > $1.timeSent })!
+    }
+    
+    init(id: Int, participants: [User], messages: [Message]) {
+        self.id = id
+        self.participants = participants
+        self.messages = messages
+    }
 }

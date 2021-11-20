@@ -9,12 +9,16 @@ import SwiftUI
 
 @main
 struct WspollokatorApp: App {
+    @StateObject var viewModel = ViewModel.sample
+    
     init() {
         Appearance.setNavigationAppearance()
     }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(viewModel)
         }
     }
 }

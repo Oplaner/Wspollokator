@@ -17,10 +17,7 @@ struct MapView: View {
     let screen = UIScreen.main.bounds
     
     // Temporary annotations placeholders
-    let annotations = [
-        User(avatarImage: Image(systemName: "person.circle.fill"), name: "John", surname: "Appleseed", distance: 1.4, nearestLocationName: "ul. Marszałkowska", description: "placeholder", coordinate: CLLocationCoordinate2D(latitude: 52.2370, longitude: 21.0175), isSaved: false),
-        User(avatarImage: Image(systemName: "person.circle.fill"), name: "Anna", surname: "Nowak", distance: 2, nearestLocationName: "ul. Foksal", description: "placeholder", coordinate: CLLocationCoordinate2D(latitude: 52.2378, longitude: 21.0275), isSaved: false)
-    ]
+    let annotations = ViewModel.sampleUsers[0...2]
     
     var body: some View {
         ZStack {
@@ -28,7 +25,7 @@ struct MapView: View {
                 interactionModes: .all,
                 showsUserLocation: true,
                 annotationItems: annotations) { user in
-                MapAnnotation(coordinate: user.coordinate) {
+                MapAnnotation(coordinate: user.pointOfInterest!) {
                     ZStack {
                         Circle()
                             .strokeBorder(Color.black, lineWidth: 4)
