@@ -10,6 +10,7 @@ import SwiftUI
 struct Login: View {
     @State private var email = ""
     @State private var password = ""
+    @State private var isShowingSignUpView = false
     
     var body: some View {
         VStack {
@@ -23,20 +24,18 @@ struct Login: View {
                 .font(.largeTitle)
                 .bold()
             VStack {
-                TextField("Adres e-mail", text: $email)
-                    .padding([.top, .bottom, .leading], 5)
-                    .background(.white)
-                    .cornerRadius(8)
-                    .padding(.horizontal, 40)
-                SecureField("Hasło", text: $password)
-                    .padding([.top, .bottom, .leading], 5)
-                    .background(.white)
-                    .cornerRadius(8)
-                    .padding(.horizontal, 40)
+                Group {
+                    TextField("Adres e-mail", text: $email)
+                    SecureField("Hasło", text: $password)
+                }
+                .padding([.top, .bottom, .leading], 5)
+                .background(.white)
+                .cornerRadius(8)
+                .padding(.horizontal, 40)
             }
             
             Button {
-                print("Button tapped")
+                // TODO: Authenticate user.
             } label: {
                 Text("Zaloguj się")
                     .font(.headline)
@@ -47,13 +46,18 @@ struct Login: View {
             
             Spacer()
             
-            NavigationLink(destination: ContentView())  {
+            Button {
+                isShowingSignUpView = true
+            } label: {
                 Text("Załóż konto")
                     .foregroundColor(Appearance.textColor)
                     .padding(.bottom, 20)
             }
         }
         .background(Appearance.backgroundColor)
+        .sheet(isPresented: $isShowingSignUpView) {
+            SignUp()
+        }
     }
 }
 
