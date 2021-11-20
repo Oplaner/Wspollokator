@@ -11,9 +11,7 @@ struct MyProfile: View {
     @EnvironmentObject var viewModel: ViewModel
     
     private var user: User {
-        get {
-            viewModel.currentUser!
-        }
+        viewModel.currentUser!
     }
     
     var body: some View {

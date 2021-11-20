@@ -23,7 +23,7 @@ struct SearchedList: View {
             } else {
                 ForEach(searchedUsers!) { user in
                     NavigationLink(destination: UserProfile(user: user)) {
-                        ListRow(images: [user.avatarImage], headline: "\(user.name) \(user.surname)", caption: String.localizedStringWithFormat("%.1f km", Float(user.getDistance(from: viewModel.currentUser!)!)), includesStarButton: true, relevantUser: user)
+                        ListRow(images: [user.avatarImage], headline: "\(user.name) \(user.surname)", caption: String.localizedStringWithFormat("%.1f km", Float(user.distance(from: viewModel.currentUser!)!)), includesStarButton: true, relevantUser: user)
                     }
                 }
             }

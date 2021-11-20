@@ -24,21 +24,19 @@ class User: Identifiable, Equatable {
     
     /// Decodes name, street or city describing location of the receiver's `pointOfInterest`, or an empty string in case of failure. Returns nil if the `pointOfInterest` has not been set.
     var nearestLocationName: String? {
-        get {
-            guard pointOfInterest != nil else { return "" }
-            
-            let location = CLLocation(latitude: pointOfInterest!.latitude, longitude: pointOfInterest!.longitude)
-            let geocoder = CLGeocoder()
-            var name: String?
-            
-            geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
-                if error == nil, let placemark = placemarks?.first {
-                    name = placemark.name ?? placemark.thoroughfare ?? placemark.locality
-                }
+        guard pointOfInterest != nil else { return "" }
+        
+        let location = CLLocation(latitude: pointOfInterest!.latitude, longitude: pointOfInterest!.longitude)
+        let geocoder = CLGeocoder()
+        var name: String?
+        
+        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
+            if error == nil, let placemark = placemarks?.first {
+                name = placemark.name ?? placemark.thoroughfare ?? placemark.locality
             }
-            
-            return name
         }
+        
+        return name
     }
     
     init(id: Int, avatarImage: Image? = nil, name: String, surname: String, email: String, pointOfInterest: CLLocationCoordinate2D? = nil, targetDistance: Double = ViewModel.defaultTargetDistance, preferences: [FilterOption: FilterAttitude] = ViewModel.defaultPreferences, description: String = "", savedUsers: [User] = [User](), isSearchable: Bool = false) {
@@ -60,7 +58,7 @@ class User: Identifiable, Equatable {
     }
     
     /// Calculates distance, in kilometers, between the receiver's and other user's `pointOfInterest`.
-    func getDistance(from user: User) -> Double? {
+    func distance(from user: User) -> Double? {
         guard pointOfInterest != nil && user.pointOfInterest != nil else { return nil }
         
         let receiverPointLocation = CLLocation(latitude: pointOfInterest!.latitude, longitude: pointOfInterest!.longitude)

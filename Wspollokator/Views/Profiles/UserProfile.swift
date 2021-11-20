@@ -48,7 +48,7 @@ struct UserProfile: View {
                     Text("\(user.name) \(user.surname)")
                         .font(.title)
                     
-                    if let distance = user.getDistance(from: viewModel.currentUser!) {
+                    if let distance = user.distance(from: viewModel.currentUser!) {
                         if let locationName = user.nearestLocationName, !locationName.isEmpty {
                             Text(String.localizedStringWithFormat("%.1f km, w pobliżu \(locationName)", distance))
                                 .font(.subheadline)

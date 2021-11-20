@@ -14,9 +14,7 @@ class Conversation: Identifiable {
     var messages: [Message]
     
     var recentMessage: Message {
-        get {
-            messages.max(by: { $0.timeSent > $1.timeSent })!
-        }
+        messages.max(by: { $0.timeSent > $1.timeSent })!
     }
     
     init(id: Int, participants: [User], messages: [Message]) {

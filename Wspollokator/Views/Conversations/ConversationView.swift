@@ -29,9 +29,7 @@ struct ConversationView: View {
     }
     
     private var sortedMessages: [Message] {
-        get {
-            conversation.messages.sorted(by: { $0.timeSent < $1.timeSent })
-        }
+        conversation.messages.sorted(by: { $0.timeSent < $1.timeSent })
     }
     
     var body: some View {

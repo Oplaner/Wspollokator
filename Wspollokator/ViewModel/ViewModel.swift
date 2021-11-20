@@ -14,15 +14,13 @@ class ViewModel: ObservableObject {
     
     /// Returns a preferences dictionary with neutral attitude to each filter option.
     static var defaultPreferences: [FilterOption: FilterAttitude] {
-        get {
-            var preferences = [FilterOption: FilterAttitude]()
-            
-            for option in FilterOption.allCases {
-                preferences[option] = .neutral
-            }
-            
-            return preferences
+        var preferences = [FilterOption: FilterAttitude]()
+        
+        for option in FilterOption.allCases {
+            preferences[option] = .neutral
         }
+        
+        return preferences
     }
     
     @Published var currentUser: User?
