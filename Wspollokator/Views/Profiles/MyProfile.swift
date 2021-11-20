@@ -23,6 +23,7 @@ struct MyProfile: View {
                         Text("\(user.name) \(user.surname)")
                             .font(.title2)
                     }
+                    .padding(.vertical, 10)
                 }
                 Section {
                     let binding = Binding<Bool>(
