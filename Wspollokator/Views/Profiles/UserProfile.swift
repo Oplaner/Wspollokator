@@ -27,18 +27,16 @@ struct UserProfile: View {
                             .frame(width: 50, height: 50)
                             .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
                         
-                        var savedUsers = viewModel.currentUser!.savedUsers
-                        
                         Button {
                             viewModel.objectWillChange.send()
                             
-                            if let index = savedUsers.firstIndex(of: user) {
-                                savedUsers.remove(at: index)
+                            if let index = viewModel.currentUser!.savedUsers.firstIndex(of: user) {
+                                viewModel.currentUser!.savedUsers.remove(at: index)
                             } else {
-                                savedUsers.append(user)
+                                viewModel.currentUser!.savedUsers.append(user)
                             }
                         } label: {
-                            Image(systemName: savedUsers.contains(user) ? "star.fill" : "star")
+                            Image(systemName: viewModel.currentUser!.savedUsers.contains(user) ? "star.fill" : "star")
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .font(.system(size: 25))
                                 .foregroundColor(Appearance.buttonColor)
@@ -96,7 +94,7 @@ struct UserProfile: View {
 
 struct UserProfile_Previews: PreviewProvider {
     static var previews: some View {
-        UserProfile(user: ViewModel.sampleUsers[0])
+        UserProfile(user: ViewModel.sampleUsers[1])
             .environmentObject(ViewModel.sample)
     }
 }
