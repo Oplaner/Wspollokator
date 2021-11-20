@@ -29,9 +29,15 @@ struct MyProfile: View {
                 Section {
                     let binding = Binding<Bool>(
                         get: { viewModel.currentUser!.isSearchable },
-                        set: { viewModel.currentUser!.isSearchable = $0 }
+                        set: {
+                            viewModel.objectWillChange.send()
+                            viewModel.currentUser!.isSearchable = $0
+                        }
                     )
                     Toggle("Szukam współlokatora", isOn: binding)
+                } footer: {
+                    let negation = viewModel.currentUser!.isSearchable ? "" : "nie "
+                    Text("Twój profil \(negation)będzie widoczny w wynikach wyszukiwania.")
                 }
                 Section {
                     NavigationLink(destination: Text("Ustawianie punktu")) {
@@ -40,11 +46,17 @@ struct MyProfile: View {
                     
                     let distanceBinding = Binding<Double>(
                         get: { viewModel.currentUser!.targetDistance },
-                        set: { viewModel.currentUser!.targetDistance = $0 }
+                        set: {
+                            viewModel.objectWillChange.send()
+                            viewModel.currentUser!.targetDistance = $0
+                        }
                     )
                     let preferencesBinding = Binding<[FilterOption: FilterAttitude]>(
                         get: { viewModel.currentUser!.preferences },
-                        set: { viewModel.currentUser!.preferences = $0 }
+                        set: {
+                            viewModel.objectWillChange.send()
+                            viewModel.currentUser!.preferences = $0
+                        }
                     )
                     
                     FilterView(targetDistance: distanceBinding, preferencesSource: preferencesBinding)
