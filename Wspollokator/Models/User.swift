@@ -22,7 +22,7 @@ class User: Identifiable, Equatable {
     var savedUsers: [User]
     var isSearchable: Bool
     
-    /// Decodes name, street or city describing location of the receiver's point of interest, or an empty string in case of failure. Returns nil if the point of interest has not been set.
+    /// Decodes name, street or city describing location of the receiver's `pointOfInterest`, or an empty string in case of failure. Returns nil if the `pointOfInterest` has not been set.
     var nearestLocationName: String? {
         get {
             guard pointOfInterest != nil else { return "" }
@@ -59,7 +59,7 @@ class User: Identifiable, Equatable {
         lhs.id == rhs.id
     }
     
-    /// Calculates distance, in kilometers, between the receiver's and other user's points of interest.
+    /// Calculates distance, in kilometers, between the receiver's and other user's `pointOfInterest`.
     func getDistance(from user: User) -> Double? {
         guard pointOfInterest != nil && user.pointOfInterest != nil else { return nil }
         

@@ -20,15 +20,17 @@ struct FilterViewContainer: View {
                 Section {
                     FilterView(targetDistance: $targetDistance, preferencesSource: $preferencesSource)
                 }
-                Section {
-                    Button {
-                        viewModel.searchTargetDistance = viewModel.currentUser!.targetDistance
-                        viewModel.searchPreferences = viewModel.currentUser!.preferences
-                    } label: {
-                        Text("Ustaw zgodnie z moimi preferencjami")
-                            .foregroundColor(Appearance.textColor)
+                
+                if viewModel.searchTargetDistance != viewModel.currentUser!.targetDistance || viewModel.searchPreferences != viewModel.currentUser!.preferences {
+                    Section {
+                        Button {
+                            viewModel.searchTargetDistance = viewModel.currentUser!.targetDistance
+                            viewModel.searchPreferences = viewModel.currentUser!.preferences
+                        } label: {
+                            Text("Ustaw zgodnie z moimi preferencjami")
+                                .foregroundColor(Appearance.textColor)
+                        }
                     }
-                    .disabled(viewModel.searchTargetDistance == viewModel.currentUser!.targetDistance && viewModel.searchPreferences == viewModel.currentUser!.preferences)
                 }
             }
             .navigationTitle("Filtry")

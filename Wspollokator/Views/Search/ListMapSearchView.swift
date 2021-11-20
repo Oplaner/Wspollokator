@@ -17,24 +17,38 @@ struct ListMapSearchView: View {
     @State private var viewMode: SearchResultsViewMode = .list
     @State private var isShowingFilters = false
     
-    /// Returns an array of users matching the filtering criteria or nil in case the current user has not set their point of interest.
-    private var filteredUsers: [User]? {
+    /// Returns a sorted array of users matching the filtering criteria, or nil in case the current user has not set their `pointOfInterest`.
+    private var searchResults: [User]? {
         get {
             let currentUser = viewModel.currentUser!
             
             guard currentUser.pointOfInterest != nil else { return nil }
             
-            return viewModel.users.filter { user in
-                guard user != currentUser && user.isSearchable, let distance = user.getDistance(from: currentUser), distance <= currentUser.targetDistance else { return false }
+            var distances = [Int: Double]()
+            
+            return viewModel.users.filter({ user in
+                guard user != currentUser && user.isSearchable, let distance = user.getDistance(from: currentUser), distance <= viewModel.searchTargetDistance else { return false }
                 
                 for option in FilterOption.allCases {
-                    if currentUser.preferences[option] != .neutral && user.preferences[option] != currentUser.preferences[option] {
+                    if viewModel.searchPreferences[option] != .neutral && user.preferences[option] != viewModel.searchPreferences[option] {
                         return false
                     }
                 }
                 
+                distances[user.id] = distance
+                
                 return true
-            }
+            }).sorted(by: {
+                if distances[$0.id]! != distances[$1.id]! {
+                    return distances[$0.id]! < distances[$1.id]!
+                } else if $0.surname != $1.surname {
+                    return $0.surname < $1.surname
+                } else if $0.name != $1.name {
+                    return $0.name < $1.name
+                } else {
+                    return $0.id < $1.id
+                }
+            })
         }
     }
     
@@ -50,7 +64,7 @@ struct ListMapSearchView: View {
                 .padding(EdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8))
                 
                 if viewMode == .list {
-                    SearchedList(searchedUsers: filteredUsers)
+                    SearchedList(searchedUsers: searchResults)
                 } else if viewMode == .map {
                     MapView()
                 }

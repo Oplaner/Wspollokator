@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct WspollokatorApp: App {
-    let viewModel = ViewModel.sample
+    @StateObject var viewModel = ViewModel.sample
     
     init() {
         Appearance.setNavigationAppearance()
