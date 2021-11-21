@@ -12,7 +12,7 @@ struct WspollokatorApp: App {
     @StateObject var viewModel = ViewModel.sample
     
     init() {
-        Appearance.setNavigationAppearance()
+        Appearance.configureAppearance()
     }
     
     var body: some Scene {

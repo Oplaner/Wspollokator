@@ -15,6 +15,7 @@ struct UserProfile: View {
     let padding: CGFloat = 20
     
     var user: User
+    @State private var nearestLocationName: String?
     
     var body: some View {
         ScrollView {
@@ -49,12 +50,14 @@ struct UserProfile: View {
                         .font(.title)
                     
                     if let distance = user.distance(from: viewModel.currentUser!) {
-                        if let locationName = user.nearestLocationName, !locationName.isEmpty {
+                        if let locationName = nearestLocationName {
                             Text(String.localizedStringWithFormat("%.1f km, w pobliżu \(locationName)", distance))
                                 .font(.subheadline)
+                                .foregroundColor(Appearance.alternateColor)
                         } else {
                             Text(String.localizedStringWithFormat("%.1f km", distance))
                                 .font(.subheadline)
+                                .foregroundColor(Appearance.alternateColor)
                         }
                     }
                 }
@@ -89,6 +92,11 @@ struct UserProfile: View {
         .navigationTitle("Profil")
         .navigationBarTitleDisplayMode(.inline)
         .foregroundColor(Appearance.textColor)
+        .onAppear {
+            user.fetchNearestLocationName { name in
+                nearestLocationName = name
+            }
+        }
     }
 }
 

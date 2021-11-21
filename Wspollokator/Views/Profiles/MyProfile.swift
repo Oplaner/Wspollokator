@@ -34,9 +34,11 @@ struct MyProfile: View {
                         }
                     )
                     Toggle("Szukam współlokatora", isOn: binding)
+                        .tint(Appearance.buttonColor)
                 } footer: {
                     let negation = viewModel.currentUser!.isSearchable ? "" : "nie "
                     Text("Twój profil \(negation)będzie widoczny w wynikach wyszukiwania.")
+                        .foregroundColor(Appearance.alternateColor)
                 }
                 Section {
                     NavigationLink(destination: Text("Ustawianie punktu")) {
@@ -61,15 +63,17 @@ struct MyProfile: View {
                     FilterView(targetDistance: distanceBinding, preferencesSource: preferencesBinding)
                 } header: {
                     Text("Moje preferencje")
+                        .foregroundColor(Appearance.alternateColor)
                 }
             }
             .listStyle(.grouped)
             .navigationTitle("Mój profil")
             .navigationBarTitleDisplayMode(.inline)
+            .foregroundColor(Appearance.textColor)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: Settings()) {
-                        Label("Ustawienia", systemImage: "gearshape")
+                        Label("Ustawienia", systemImage: "gear")
                             .foregroundColor(Appearance.textColor)
                     }
                 }

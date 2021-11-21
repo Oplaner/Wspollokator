@@ -74,7 +74,8 @@ struct ListMapSearchView: View {
                     Button {
                         isShowingFilters.toggle()
                     } label: {
-                        Text("Filtry")
+                        Label("Filtry", systemImage: "slider.horizontal.3")
+                            .foregroundColor(Appearance.textColor)
                     }
                     .sheet(isPresented: $isShowingFilters) {
                         FilterViewContainer(targetDistance: $viewModel.searchTargetDistance, preferencesSource: $viewModel.searchPreferences)

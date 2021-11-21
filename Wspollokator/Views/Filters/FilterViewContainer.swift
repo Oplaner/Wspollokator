@@ -24,17 +24,20 @@ struct FilterViewContainer: View {
                 if viewModel.searchTargetDistance != viewModel.currentUser!.targetDistance || viewModel.searchPreferences != viewModel.currentUser!.preferences {
                     Section {
                         Button {
-                            viewModel.searchTargetDistance = viewModel.currentUser!.targetDistance
-                            viewModel.searchPreferences = viewModel.currentUser!.preferences
+                            withAnimation {
+                                viewModel.searchTargetDistance = viewModel.currentUser!.targetDistance
+                                viewModel.searchPreferences = viewModel.currentUser!.preferences
+                            }
                         } label: {
                             Text("Ustaw zgodnie z moimi preferencjami")
-                                .foregroundColor(Appearance.textColor)
+                                .foregroundColor(Appearance.buttonColor)
                         }
                     }
                 }
             }
             .navigationTitle("Filtry")
             .navigationBarTitleDisplayMode(.inline)
+            .foregroundColor(Appearance.textColor)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {

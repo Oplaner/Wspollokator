@@ -22,23 +22,6 @@ class User: Identifiable, Equatable {
     var savedUsers: [User]
     var isSearchable: Bool
     
-    /// Decodes name, street or city describing location of the receiver's `pointOfInterest`, or an empty string in case of failure. Returns nil if the `pointOfInterest` has not been set.
-    var nearestLocationName: String? {
-        guard pointOfInterest != nil else { return "" }
-        
-        let location = CLLocation(latitude: pointOfInterest!.latitude, longitude: pointOfInterest!.longitude)
-        let geocoder = CLGeocoder()
-        var name: String?
-        
-        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
-            if error == nil, let placemark = placemarks?.first {
-                name = placemark.name ?? placemark.thoroughfare ?? placemark.locality
-            }
-        }
-        
-        return name
-    }
-    
     init(id: Int, avatarImage: Image? = nil, name: String, surname: String, email: String, pointOfInterest: CLLocationCoordinate2D? = nil, targetDistance: Double = ViewModel.defaultTargetDistance, preferences: [FilterOption: FilterAttitude] = ViewModel.defaultPreferences, description: String = "", savedUsers: [User] = [User](), isSearchable: Bool = false) {
         self.id = id
         self.avatarImage = avatarImage
@@ -65,5 +48,19 @@ class User: Identifiable, Equatable {
         let otherUserPointLocation = CLLocation(latitude: user.pointOfInterest!.latitude, longitude: user.pointOfInterest!.longitude)
         
         return receiverPointLocation.distance(from: otherUserPointLocation) / 1000
+    }
+    
+    /// Decodes street or city describing location of the receiver's `pointOfInterest` and uses `storeHandler` to store the result when it arrives.
+    func fetchNearestLocationName(storingWith storeHandler: @escaping ((String?) -> Void)) {
+        guard pointOfInterest != nil else { return }
+        
+        let location = CLLocation(latitude: pointOfInterest!.latitude, longitude: pointOfInterest!.longitude)
+        let geocoder = CLGeocoder()
+        
+        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
+            if error == nil, let placemark = placemarks?.first {
+                storeHandler(placemark.name ?? placemark.locality)
+            }
+        }
     }
 }
