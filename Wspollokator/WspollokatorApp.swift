@@ -19,6 +19,7 @@ struct WspollokatorApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(viewModel)
+                .environment(\.colorScheme, .light) // TODO: 🤔
         }
     }
 }

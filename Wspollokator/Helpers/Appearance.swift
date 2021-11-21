@@ -59,8 +59,5 @@ struct Appearance {
         tabBarAppearance.compactInlineLayoutAppearance = tabBarItemAppearance
         UITabBar.appearance().standardAppearance = tabBarAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(textColor)], for: .normal)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(textColor)], for: .selected)
     }
 }

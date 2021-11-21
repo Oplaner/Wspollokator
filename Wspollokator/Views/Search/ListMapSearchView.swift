@@ -79,6 +79,7 @@ struct ListMapSearchView: View {
                     }
                     .sheet(isPresented: $isShowingFilters) {
                         FilterViewContainer(targetDistance: $viewModel.searchTargetDistance, preferencesSource: $viewModel.searchPreferences)
+                            .environment(\.colorScheme, .light) // TODO: 🤔
                     }
                 }
             }
