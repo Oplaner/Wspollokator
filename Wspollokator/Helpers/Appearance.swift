@@ -35,16 +35,32 @@ struct Appearance {
         return Color(red: 51 / 255, green: 171 / 255, blue: 38 / 255)
     }
     
-    static func setNavigationAppearance() {
-        let navigationAppearance = UINavigationBarAppearance()
-        navigationAppearance.configureWithOpaqueBackground()
-        navigationAppearance.backgroundColor = UIColor(backgroundColor)
-        navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor(textColor)]
-        navigationAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor(textColor)]
-        
-        UINavigationBar.appearance().standardAppearance = navigationAppearance
-        UINavigationBar.appearance().compactAppearance = navigationAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = navigationAppearance
+    static func configureAppearance() {
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = UIColor(backgroundColor)
+        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor(textColor)]
+        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor(textColor)]
+        UINavigationBar.appearance().standardAppearance = navigationBarAppearance
+        UINavigationBar.appearance().compactAppearance = navigationBarAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
         UINavigationBar.appearance().tintColor = UIColor(fillColor)
+        
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.backgroundColor = UIColor(backgroundColor)
+        let tabBarItemAppearance = UITabBarItemAppearance()
+        tabBarItemAppearance.normal.iconColor = UIColor(alternateColor)
+        tabBarItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(alternateColor)]
+        tabBarItemAppearance.selected.iconColor = UIColor(textColor)
+        tabBarItemAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(textColor)]
+        tabBarAppearance.inlineLayoutAppearance = tabBarItemAppearance
+        tabBarAppearance.stackedLayoutAppearance = tabBarItemAppearance
+        tabBarAppearance.compactInlineLayoutAppearance = tabBarItemAppearance
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(textColor)], for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(textColor)], for: .selected)
     }
 }

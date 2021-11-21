@@ -50,6 +50,7 @@ struct ListRow: View {
                     Text(caption!)
                         .font(.caption)
                         .lineLimit(1)
+                        .foregroundColor(Appearance.alternateColor)
                 }
             }
             .foregroundColor(Appearance.textColor)
