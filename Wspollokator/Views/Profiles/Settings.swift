@@ -8,189 +8,170 @@
 import SwiftUI
 
 struct Settings: View {
-    //@EnvironmentObject user
-    //Zmienne dotyczące customowych alertów
-    @State var isPasswordAlertPresented: Bool = false
-    @State var isDescriptionAlertPresented: Bool = false
-    //Zmienne do customowych alertów
-    @State var oldPassword: String = ""
-    @State var newPassword: String = ""
-    @State var description: String = ""
-    //"Freezowanie" przycisków
-    @State private var isPhotoButtonClickable: Bool = true
-    @State private var isPasswordButtonClickable: Bool = true
-    @State private var isDescriptionButtonClickable: Bool = true
-    @State private var isLogOutButtonClickable: Bool = true
-    //Alerty
-    @State private var isPassPassedAlertPresented: Bool = false
-    @State private var isPassFailedAlertPresented: Bool = false
-    @State private var isLogOutAlertPresented: Bool = false
-    //Liczba nideudanych prób wpisania hasła
-    @State private var failedAttempts: Int = 0
-    //Dla failedAttempts = 5
-    @State private var isPassworButtonBlocked: Bool = false
-    //testing password, temporary
-    let password: String = "1234"
-    var user : User = ViewModel.sampleUsers[0] // Temporary.
+    private enum ConfirmationDialogType {
+        case avatarChange
+        case logout
+        
+        var dialogTitle: String {
+            switch self {
+            case .avatarChange: return "Wybierz akcję"
+            case .logout: return "Potwierdzenie"
+            }
+        }
+        
+        var dialogMessage: String? {
+            switch self {
+            case .avatarChange: return nil
+            case .logout: return "Czy na pewno chcesz się wylogować?"
+            }
+        }
+    }
+    
+    @EnvironmentObject var viewModel: ViewModel
+    
+    @State private var name = ""
+    @State private var surname = ""
+    @State private var email = ""
+    @State private var confirmationDialogType = ConfirmationDialogType.avatarChange
+    @State private var isShowingConfirmationDialog = false
+    
+    private func formDidAppear() {
+        name = viewModel.currentUser!.name
+        surname = viewModel.currentUser!.surname
+        email = viewModel.currentUser!.email
+    }
+    
+    private func submitForm() {
+        let nameTrimmed = name.trimmingCharacters(in: .whitespaces)
+        let surnameTrimmed = surname.trimmingCharacters(in: .whitespaces)
+        let emailTrimmed = email.trimmingCharacters(in: .whitespaces)
+        
+        if nameTrimmed.isEmpty {
+            name = viewModel.currentUser!.name
+        } else {
+            name = nameTrimmed
+            viewModel.objectWillChange.send()
+            viewModel.currentUser!.name = name
+        }
+        
+        if surnameTrimmed.isEmpty {
+            surname = viewModel.currentUser!.surname
+        } else {
+            surname = surnameTrimmed
+            viewModel.objectWillChange.send()
+            viewModel.currentUser!.surname = surname
+        }
+        
+        if emailTrimmed.isEmpty {
+            email = viewModel.currentUser!.email
+        } else {
+            email = emailTrimmed
+            viewModel.objectWillChange.send()
+            viewModel.currentUser!.email = email
+        }
+    }
+    
     var body: some View {
-        NavigationView {
-            ZStack {
-                List {
-                    HStack {
-                        Spacer()
-                        VStack {
-                            Avatar(image: user.avatarImage, size: 80)
-                            Button {
-                                if isPhotoButtonClickable{
-                                    //Image Picker prawdopodobnie
-                                    print("Zmienianie zdjęcia...")
-                                }
-                            } label: {
-                                Text("Zmień zdjęcie")
-                            }
-                        }
-                        Spacer()
-                    }
-                    Section {
-                        HStack {
-                            Text("Imię")
-                            Spacer(minLength: 50)
-                            Text(user.name)
-                        }
-                        HStack {
-                            Text("Nazwisko")
-                            Spacer(minLength: 50)
-                            Text(user.surname)
-                        }
-                        HStack {
-                            Text("Adres e-mail")
-                            Spacer(minLength: 50)
-                            Text("john.a....com ")
-                        }
-                        Button {
-                            if isPasswordButtonClickable {
-                                isPasswordAlertPresented = true
-                                
-                                isPhotoButtonClickable = false
-                                isDescriptionButtonClickable = false
-                                isLogOutButtonClickable = false
-                            }
-                        } label : {
-                            HStack {
-                                Text("Hasło:")
-                                Spacer()
-                                Image(systemName: "chevron.forward.circle")
-                            }
-                            .foregroundColor(.black)
-                        }
-                        Button {
-                            if isDescriptionButtonClickable {
-                                description = ""
-                                isDescriptionAlertPresented = true
-                                
-                                isPhotoButtonClickable = false
-                                isPasswordButtonClickable = false
-                                isLogOutButtonClickable = false
-                            }
-                        } label : {
-                            HStack {
-                                Text("Mój opis:")
-                                Spacer()
-                                Image(systemName: "chevron.forward.circle")
-                            }
-                            .foregroundColor(.black)
-                        }
-                    }
-                    Section {
-                        HStack {
-                            Spacer()
-                            Button(role: .destructive) {
-                                if isLogOutButtonClickable {
-                                    isLogOutAlertPresented = true
-                                }
-                            } label: {
-                                Text("Wyloguj się")
-                            }
-                            Spacer()
-                        }
-                    }
-                }
-                .listStyle(.insetGrouped)
-                .navigationTitle("Ustawienia")
-                .navigationBarTitleDisplayMode(.inline)
-                
-                PasswordAlert(isShown: $isPasswordAlertPresented, oldPass: $oldPassword, newPass: $newPassword, onDone: {
-                    if (oldPassword == self.password) {
-                        //jeżeli zgadza się 'stare' plus 'nowe' spełnia krtyteria dla nowego hasła
-                        //zmiana hasła na nowe....
-                        isPasswordAlertPresented = false
-                        isPhotoButtonClickable = true
-                        isDescriptionButtonClickable = true
-                        isLogOutButtonClickable = true
-                        oldPassword = ""
-                        isPassPassedAlertPresented = true
-                    }
-                    else {
-                        isPasswordAlertPresented = true
-                        failedAttempts += 1
-                        if failedAttempts == 5 {
-                            isPasswordAlertPresented = false
-                            
-                            isPhotoButtonClickable = true
-                            isDescriptionButtonClickable = true
-                            isLogOutButtonClickable = true
-                            
-                            oldPassword = ""
-                            isPassFailedAlertPresented = true
-                            failedAttempts = 0
-                            //...
-                            isPasswordButtonClickable = false
-                            isPassworButtonBlocked = true
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                                isPassworButtonBlocked = false
-                                isPasswordButtonClickable = true
-                            }
-                            //...inform user about failed attempts, and that he will be able to try again in \(remained time)
-                        }
-                    }
-                }) {
-                    isPhotoButtonClickable = true
-                    isDescriptionButtonClickable = true
-                    isLogOutButtonClickable = true
-                }
-                DescriptionAlert(isShown: $isDescriptionAlertPresented, desc: $description, onDone: {
-                    //user description = description, zmienna jest zbindowana i nie trzeba jej przesyłać dodatkowo
-                    isDescriptionAlertPresented = false
-                    
-                    
-                    if !isPassworButtonBlocked {
-                        isPasswordButtonClickable = true
-                    }
-                    isPhotoButtonClickable = true
-                    isLogOutButtonClickable = true
-                }) {
-                    isPhotoButtonClickable = true
-                    if !isPassworButtonBlocked {
-                        isPasswordButtonClickable = true
-                    }
-                    isLogOutButtonClickable = true
-                }
-            }
-            .alert("Hasło zostało zmienione pomyślnie!", isPresented: $isPassPassedAlertPresented) {
-                Button("OK", role: .cancel) {}
-            }
-            .alert("Zbyt dużo nieudanych prób. Proszę, spróbuj za 5 minut.", isPresented: $isPassFailedAlertPresented) {
-                Button("OK", role: .cancel) {}
-            }
-            .alert("Czy na pewno chcesz się wylogować?", isPresented: $isLogOutAlertPresented) {
+        Form {
+            Section {
                 HStack {
-                    Button("Anuluj", role: .cancel) {}
-                    Button {
-                        //...wyloguj, nawiguj do ekranu startowego
-                    } label: {
-                       Text("Wyloguj")
+                    Spacer()
+                    VStack {
+                        Avatar(image: viewModel.currentUser!.avatarImage, size: 80)
+                        Button {
+                            confirmationDialogType = .avatarChange
+                            isShowingConfirmationDialog = true
+                        } label: {
+                            Text("Zmień zdjęcie")
+                                .foregroundColor(Appearance.buttonColor)
+                        }
+                    }
+                    Spacer()
+                }
+            }
+            
+            Section {
+                HStack {
+                    Text("Imię")
+                        .foregroundColor(Appearance.textColor)
+                    Spacer()
+                    TextField("Imię", text: $name, prompt: Text("Wpisz imię"))
+                        .multilineTextAlignment(.trailing)
+                        .foregroundColor(Appearance.alternateColor)
+                        .onAppear(perform: formDidAppear)
+                        .onSubmit(submitForm)
+                }
+                
+                HStack {
+                    Text("Nazwisko")
+                        .foregroundColor(Appearance.textColor)
+                    Spacer()
+                    TextField("Nazwisko", text: $surname, prompt: Text("Wpisz nazwisko"))
+                        .multilineTextAlignment(.trailing)
+                        .foregroundColor(Appearance.alternateColor)
+                        .onAppear(perform: formDidAppear)
+                        .onSubmit(submitForm)
+                }
+                
+                HStack {
+                    Text("E-mail")
+                        .foregroundColor(Appearance.textColor)
+                    Spacer()
+                    TextField("E-mail", text: $email, prompt: Text("Wpisz e-mail"))
+                        .multilineTextAlignment(.trailing)
+                        .textInputAutocapitalization(.never)
+                        .foregroundColor(Appearance.alternateColor)
+                        .onAppear(perform: formDidAppear)
+                        .onSubmit(submitForm)
+                }
+                
+                NavigationLink(destination: Text("Zmiana hasła")) {
+                    Text("Hasło")
+                        .foregroundColor(Appearance.textColor)
+                }
+                
+                NavigationLink(destination: Text("Zmiana opisu")) {
+                    Text("Mój opis")
+                        .foregroundColor(Appearance.textColor)
+                }
+            }
+            
+            Section {
+                HStack {
+                    Spacer()
+                    Button("Wyloguj się", role: .destructive) {
+                        confirmationDialogType = .logout
+                        isShowingConfirmationDialog = true
+                    }
+                    Spacer()
+                }
+            }
+        }
+        .navigationTitle("Ustawienia")
+        .navigationBarTitleDisplayMode(.inline)
+        .submitLabel(.done)
+        .onDisappear(perform: submitForm)
+        .confirmationDialog(confirmationDialogType.dialogTitle, isPresented: $isShowingConfirmationDialog) {
+            switch confirmationDialogType {
+            case .avatarChange:
+                Button("Wybierz zdjęcie") {
+                    // TODO: Show image picker.
+                }
+                
+                if viewModel.currentUser!.avatarImage != nil {
+                    Button("Usuń zdjęcie", role: .destructive) {
+                        // TODO: Remove avatar image file.
+                        viewModel.currentUser!.avatarImage = nil
                     }
                 }
+            case .logout:
+                Button("Tak", role: .destructive) {
+                    // TODO: Perform a logout action.
+                }
+            }
+        } message: {
+            if let message = confirmationDialogType.dialogMessage {
+                Text(message)
             }
         }
     }
@@ -198,6 +179,9 @@ struct Settings: View {
 
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
-        Settings(user: ViewModel.sampleUsers[0])
+        NavigationView {
+            Settings()
+                .environmentObject(ViewModel.sample)
+        }
     }
 }

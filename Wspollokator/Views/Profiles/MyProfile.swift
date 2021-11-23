@@ -70,6 +70,9 @@ struct MyProfile: View {
             .navigationTitle("Mój profil")
             .navigationBarTitleDisplayMode(.inline)
             .foregroundColor(Appearance.textColor)
+            .onAppear {
+                viewModel.objectWillChange.send()
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: Settings()) {
