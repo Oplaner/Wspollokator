@@ -9,6 +9,12 @@ import CoreLocation
 import SwiftUI
 
 class User: Identifiable, Equatable {
+    enum PasswordChangeError: Error {
+        case invalidOldPassword
+        case unmatchingNewPasswords
+        case oldAndNewPasswordsEqual
+    }
+    
     let id: Int
     
     var avatarImage: Image?
@@ -38,6 +44,18 @@ class User: Identifiable, Equatable {
     
     static func == (lhs: User, rhs: User) -> Bool {
         lhs.id == rhs.id
+    }
+    
+    func changePassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) throws -> Bool {
+        // TODO: Check if encrypted old password matches value stored on the server.
+        guard old == "qwerty" else { throw PasswordChangeError.invalidOldPassword }
+        guard new1 == new2 else { throw PasswordChangeError.unmatchingNewPasswords }
+        guard new1 != old else { throw PasswordChangeError.oldAndNewPasswordsEqual }
+        
+        // TODO: Try to set new password and return the operation status.
+        // TODO: Make this asynchronous!
+        
+        return true
     }
     
     /// Calculates distance, in kilometers, between the receiver's and other user's `pointOfInterest`.

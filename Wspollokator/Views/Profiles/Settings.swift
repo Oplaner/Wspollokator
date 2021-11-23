@@ -32,8 +32,8 @@ struct Settings: View {
     @State private var name = ""
     @State private var surname = ""
     @State private var email = ""
-    @State private var confirmationDialogType = ConfirmationDialogType.avatarChange
     @State private var isShowingConfirmationDialog = false
+    @State private var confirmationDialogType = ConfirmationDialogType.avatarChange
     
     private func formDidAppear() {
         name = viewModel.currentUser!.name
@@ -119,13 +119,16 @@ struct Settings: View {
                     Spacer()
                     TextField("E-mail", text: $email, prompt: Text("Wpisz e-mail"))
                         .multilineTextAlignment(.trailing)
+                        .keyboardType(.emailAddress)
                         .textInputAutocapitalization(.never)
                         .foregroundColor(Appearance.alternateColor)
                         .onAppear(perform: formDidAppear)
                         .onSubmit(submitForm)
                 }
                 
-                NavigationLink(destination: Text("Zmiana hasła")) {
+                NavigationLink {
+                    PasswordChange()
+                } label: {
                     Text("Hasło")
                         .foregroundColor(Appearance.textColor)
                 }
