@@ -133,7 +133,9 @@ struct Settings: View {
                         .foregroundColor(Appearance.textColor)
                 }
                 
-                NavigationLink(destination: Text("Zmiana opisu")) {
+                NavigationLink {
+                    DescriptionChange()
+                } label: {
                     Text("Mój opis")
                         .foregroundColor(Appearance.textColor)
                 }
@@ -153,7 +155,6 @@ struct Settings: View {
         .navigationTitle("Ustawienia")
         .navigationBarTitleDisplayMode(.inline)
         .submitLabel(.done)
-        .onDisappear(perform: submitForm)
         .confirmationDialog(confirmationDialogType.dialogTitle, isPresented: $isShowingConfirmationDialog) {
             switch confirmationDialogType {
             case .avatarChange:
