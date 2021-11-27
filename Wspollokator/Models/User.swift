@@ -50,17 +50,17 @@ class User: Identifiable, Equatable {
         return receiverPointLocation.distance(from: otherUserPointLocation) / 1000
     }
     
-    /// Decodes street or city describing location of the receiver's `pointOfInterest` and uses `storeHandler` to store the result when it arrives.
-    func fetchNearestLocationName(storingWith storeHandler: @escaping ((String?) -> Void)) {
-        guard pointOfInterest != nil else { return }
+    /// Decodes street or city describing location of the receiver's `pointOfInterest`.
+    func fetchNearestLocationName() async -> String? {
+        guard pointOfInterest != nil else { return nil }
         
         let location = CLLocation(latitude: pointOfInterest!.latitude, longitude: pointOfInterest!.longitude)
         let geocoder = CLGeocoder()
         
-        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
-            if error == nil, let placemark = placemarks?.first {
-                storeHandler(placemark.name ?? placemark.locality)
-            }
+        if let placemark = try? await geocoder.reverseGeocodeLocation(location).first {
+            return placemark.name ?? placemark.locality
+        } else {
+            return nil
         }
     }
 }

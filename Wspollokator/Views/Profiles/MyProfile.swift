@@ -10,17 +10,13 @@ import SwiftUI
 struct MyProfile: View {
     @EnvironmentObject var viewModel: ViewModel
     
-    private var user: User {
-        viewModel.currentUser!
-    }
-    
     var body: some View {
         NavigationView {
             List {
                 Section {
                     HStack {
-                        Avatar(image: user.avatarImage, size: 80)
-                        Text("\(user.name) \(user.surname)")
+                        Avatar(image: viewModel.currentUser!.avatarImage, size: 80)
+                        Text("\(viewModel.currentUser!.name) \(viewModel.currentUser!.surname)")
                             .font(.title2)
                     }
                     .padding(.vertical, 10)
@@ -66,10 +62,12 @@ struct MyProfile: View {
                         .foregroundColor(Appearance.alternateColor)
                 }
             }
-            .listStyle(.grouped)
             .navigationTitle("Mój profil")
             .navigationBarTitleDisplayMode(.inline)
             .foregroundColor(Appearance.textColor)
+            .onAppear {
+                viewModel.objectWillChange.send()
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: Settings()) {

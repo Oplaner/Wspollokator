@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-enum SearchResultsViewMode: String, CaseIterable {
-    case list = "Lista"
-    case map = "Mapa"
-}
-
 struct ListMapSearchView: View {
+    private enum SearchResultsViewMode: String, CaseIterable {
+        case list = "Lista"
+        case map = "Mapa"
+    }
+    
     @EnvironmentObject var viewModel: ViewModel
     @State private var viewMode: SearchResultsViewMode = .list
     @State private var isShowingFilters = false
