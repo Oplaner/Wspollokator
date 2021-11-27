@@ -9,11 +9,17 @@ import CoreLocation
 import Foundation
 import SwiftUI
 
-class ViewModel: ObservableObject {
+@MainActor class ViewModel: ObservableObject {
+    enum PasswordChangeError: Error {
+        case invalidOldPassword
+        case unmatchingNewPasswords
+        case oldAndNewPasswordsEqual
+    }
+    
     static let defaultTargetDistance: Double = 5
     
     /// Returns a preferences dictionary with neutral attitude to each filter option.
-    static var defaultPreferences: [FilterOption: FilterAttitude] {
+    nonisolated static var defaultPreferences: [FilterOption: FilterAttitude] {
         var preferences = [FilterOption: FilterAttitude]()
         
         for option in FilterOption.allCases {
@@ -37,8 +43,21 @@ class ViewModel: ObservableObject {
         searchPreferences = ViewModel.defaultPreferences
     }
     
+    func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
+        // TODO: Check if encrypted old password matches value stored on the server.
+        guard old == "qwerty" else { throw PasswordChangeError.invalidOldPassword }
+        guard new1 == new2 else { throw PasswordChangeError.unmatchingNewPasswords }
+        guard new1 != old else { throw PasswordChangeError.oldAndNewPasswordsEqual }
+        
+        // TODO: Try to set new password and return the operation status.
+        await Task.sleep(3 * 1_000_000_000) // A 3-second simulation of server communication.
+        
+        return true
+    }
+    
 #if DEBUG
-    static var sampleUsers: [User] {
+    // TODO: Remove "nonisolated" when map views are finished.
+    nonisolated static var sampleUsers: [User] {
         let john = User(
             id: 1,
             avatarImage: Image("avatar1"),

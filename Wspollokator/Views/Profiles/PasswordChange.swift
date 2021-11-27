@@ -21,12 +21,12 @@ struct PasswordChange: View {
     @State private var alertMessage = ""
     @State private var passwordDidChange = false
     
-    private func updatePassword() {
+    private func updatePassword() async {
         focusedFieldNumber = nil
         isSettingNewPassword = true
         
         do {
-            if try viewModel.currentUser!.changePassword(oldPassword: oldPassword, newPassword: newPassword1, confirmation: newPassword2) {
+            if try await viewModel.changeCurrentUserPassword(oldPassword: oldPassword, newPassword: newPassword1, confirmation: newPassword2) {
                 alertTitle = "Sukces"
                 alertMessage = "Twoje hasło zostało zmienione."
                 passwordDidChange = true
@@ -37,7 +37,7 @@ struct PasswordChange: View {
         } catch {
             alertTitle = "Błąd"
             
-            switch error as! User.PasswordChangeError {
+            switch error as! ViewModel.PasswordChangeError {
             case .invalidOldPassword:
                 alertMessage = "Stare hasło jest nieprawidłowe."
             case .unmatchingNewPasswords:
@@ -76,7 +76,11 @@ struct PasswordChange: View {
             .foregroundColor(Appearance.textColor)
             
             Section {
-                Button(action: updatePassword) {
+                Button {
+                    Task {
+                        await updatePassword()
+                    }
+                } label: {
                     HStack {
                         Text("Zmień hasło")
                             .tint(Appearance.buttonColor)
@@ -93,6 +97,7 @@ struct PasswordChange: View {
         }
         .navigationTitle("Zmiana hasła")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(isSettingNewPassword)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                 self.focusedFieldNumber = 1
