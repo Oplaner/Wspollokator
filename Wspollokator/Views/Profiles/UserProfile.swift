@@ -92,10 +92,8 @@ struct UserProfile: View {
         .navigationTitle("Profil")
         .navigationBarTitleDisplayMode(.inline)
         .foregroundColor(Appearance.textColor)
-        .onAppear {
-            user.fetchNearestLocationName { name in
-                nearestLocationName = name
-            }
+        .task {
+            nearestLocationName = await user.fetchNearestLocationName()
         }
     }
 }
