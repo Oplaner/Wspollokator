@@ -16,6 +16,12 @@ struct UserProfile: View {
     
     var user: User
     @State private var nearestLocationName: String?
+    @State private var isShowingConversationView = false
+    
+    /// An existing conversation with `user` or a template for a new one.
+    private var conversation: Conversation {
+        viewModel.conversations.filter({ $0.participants.count == 2 && $0.participants.contains(user) }).first ?? Conversation(id: 0, participants: [viewModel.currentUser!, user], messages: [])
+    }
     
     var body: some View {
         ScrollView {
@@ -80,12 +86,16 @@ struct UserProfile: View {
                 
                 Text(user.description)
                 
-                Button("Wyślij wiadomość") {
-                    // TODO: Navigation to a new conversation.
+                NavigationLink(isActive: $isShowingConversationView) {
+                    ConversationView(conversation: conversation)
+                } label: {
+                    Button("Wyślij wiadomość") {
+                        isShowingConversationView = true
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .font(.headline)
+                    .tint(Appearance.buttonColor)
                 }
-                .buttonStyle(.borderedProminent)
-                .font(.headline)
-                .tint(Appearance.buttonColor)
             }
             .padding(padding)
         }
