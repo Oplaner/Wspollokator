@@ -7,19 +7,23 @@
 
 import Foundation
 
-class Conversation: Identifiable {
+class Conversation: Identifiable, Equatable {
     let id: Int
     
     var participants: [User]
     var messages: [Message]
     
     var recentMessage: Message {
-        messages.max(by: { $0.timeSent > $1.timeSent })!
+        messages.max(by: { $0.timeSent < $1.timeSent })!
     }
     
     init(id: Int, participants: [User], messages: [Message]) {
         self.id = id
         self.participants = participants
         self.messages = messages
+    }
+    
+    static func == (lhs: Conversation, rhs: Conversation) -> Bool {
+        lhs.id == rhs.id
     }
 }

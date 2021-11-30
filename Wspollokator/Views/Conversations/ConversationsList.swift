@@ -10,6 +10,10 @@ import SwiftUI
 struct ConversationsList: View {
     @EnvironmentObject var viewModel: ViewModel
     
+    private var sortedConversations: [Conversation] {
+        viewModel.conversations.sorted { $0.recentMessage.timeSent > $1.recentMessage.timeSent }
+    }
+    
     private func formatConversationRow(_ conversation: Conversation) -> (images: [Image?], headline: String, caption: String, includesStarButton: Bool, relevantUser: User?) {
         let headline: String
         let caption: String
@@ -42,11 +46,11 @@ struct ConversationsList: View {
     var body: some View {
         NavigationView {
             List {
-                if viewModel.conversations.isEmpty {
+                if sortedConversations.isEmpty {
                     Text("Brak wiadomości")
                         .foregroundColor(Appearance.textColor)
                 } else {
-                    ForEach(viewModel.conversations) { conversation in
+                    ForEach(sortedConversations) { conversation in
                         NavigationLink(destination: ConversationView(conversation: conversation)) {
                             let format = formatConversationRow(conversation)
                             ListRow(images: format.images, headline: format.headline, caption: format.caption, includesStarButton: format.includesStarButton, relevantUser: format.relevantUser)
@@ -54,8 +58,10 @@ struct ConversationsList: View {
                     }
                     .onDelete { indexSet in
                         for index in indexSet {
-                            viewModel.conversations[index].participants.removeAll { $0 == viewModel.currentUser! }
-                            viewModel.conversations.remove(at: index)
+                            if let conversationIndex = viewModel.conversations.firstIndex(of: sortedConversations[index]) {
+                                viewModel.conversations[conversationIndex].participants.removeAll { $0 == viewModel.currentUser! }
+                                viewModel.conversations.remove(at: conversationIndex)
+                            }
                         }
                     }
                 }

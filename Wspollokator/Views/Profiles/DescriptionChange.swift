@@ -37,7 +37,7 @@ struct DescriptionChange: View {
                 }
             }
             .onDisappear {
-                viewModel.currentUser!.description = description
+                viewModel.currentUser!.description = description.trimmingCharacters(in: .whitespaces)
             }
         }
     }

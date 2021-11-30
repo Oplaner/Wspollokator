@@ -44,15 +44,45 @@ import SwiftUI
     }
     
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
-        // TODO: Check if encrypted old password matches value stored on the server.
-        guard old == "qwerty" else { throw PasswordChangeError.invalidOldPassword }
+        // TODO: Add an actual password encryption matching the one used in the databse (1/2).
+        var encryptedPassword = old
+        
+        guard await Networking.checkEncryptedPassword(encryptedPassword, forUser: currentUser!) else { throw PasswordChangeError.invalidOldPassword }
         guard new1 == new2 else { throw PasswordChangeError.unmatchingNewPasswords }
         guard new1 != old else { throw PasswordChangeError.oldAndNewPasswordsEqual }
         
-        // TODO: Try to set new password and return the operation status.
-        await Task.sleep(3 * 1_000_000_000) // A 3-second simulation of server communication.
+        // TODO: Add an actual password encryption matching the one used in the databse (2/2).
+        encryptedPassword = new1
+        return await Networking.setNewPassword(encryptedPassword, forUser: currentUser!)
+    }
+    
+    func sendMessage(_ text: String, in conversation: Conversation) async -> (createdConversation: Conversation?, sentMessage: Message?, success: Bool) {
+        let (messageID, timeSent) = await Networking.sendMessage(text, writtenBy: currentUser!)
+        guard messageID != nil else { return (nil, nil, false) }
+        let sentMessage = Message(id: messageID!, author: currentUser!, content: text, timeSent: timeSent!)
         
-        return true
+        if conversation.id == 0 { // A new conversation.
+            guard let conversationID = await Networking.createConversation(withParticipants: conversation.participants) else {
+                await Networking.deleteMessage(sentMessage)
+                return (nil, nil, false)
+            }
+            let createdConversation = Conversation(id: conversationID, participants: conversation.participants, messages: [sentMessage])
+            
+            if await Networking.addMessage(sentMessage, to: createdConversation) {
+                return (createdConversation, sentMessage, true)
+            } else {
+                await Networking.deleteMessage(sentMessage)
+                await Networking.deleteConversation(createdConversation)
+                return (nil, nil, false)
+            }
+        } else { // An existing conversation.
+            if await Networking.addMessage(sentMessage, to: conversation) {
+                return (nil, sentMessage, true)
+            } else {
+                await Networking.deleteMessage(sentMessage)
+                return (nil, nil, false)
+            }
+        }
     }
     
 #if DEBUG

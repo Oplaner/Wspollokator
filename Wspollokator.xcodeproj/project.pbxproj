@@ -30,6 +30,7 @@
 		8E95D4A5274D13F9003D40DB /* PasswordChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E95D4A4274D13F9003D40DB /* PasswordChange.swift */; };
 		8ED4B715272BEF73007A0CCC /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED4B714272BEF73007A0CCC /* ListRow.swift */; };
 		8ED4B717272BF8A3007A0CCC /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED4B716272BF8A2007A0CCC /* Appearance.swift */; };
+		8EEB4AC42756866B00C96021 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEB4AC32756866B00C96021 /* Networking.swift */; };
 		C2170E82273FE82D0076ECBF /* MapViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */; };
 		C2170E85273FF5AD0076ECBF /* MapViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */; };
 		C2170E87274022890076ECBF /* GlobalHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2170E86274022890076ECBF /* GlobalHelpers.swift */; };
@@ -67,6 +68,7 @@
 		8E95D4A4274D13F9003D40DB /* PasswordChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordChange.swift; sourceTree = "<group>"; };
 		8ED4B714272BEF73007A0CCC /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
 		8ED4B716272BF8A2007A0CCC /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
+		8EEB4AC32756866B00C96021 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewRepresentable.swift; sourceTree = "<group>"; };
 		C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewContainer.swift; sourceTree = "<group>"; };
 		C2170E86274022890076ECBF /* GlobalHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHelpers.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 		8E0F066F274541B700066B98 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				8EEB4AC32756866B00C96021 /* Networking.swift */,
 				8E17C2CA2745D26F006C2C9C /* ViewModel.swift */,
 			);
 			path = ViewModel;
@@ -336,6 +339,7 @@
 				8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */,
 				8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */,
 				8E89BCCF272D5C3500C707BB /* SavedList.swift in Sources */,
+				8EEB4AC42756866B00C96021 /* Networking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
