@@ -10,6 +10,10 @@ import SwiftUI
 struct ConversationsList: View {
     @EnvironmentObject var viewModel: ViewModel
     
+    @State private var isShowingNewConversationSheet = false
+    @State private var isShowingConversationView = false
+    @State private var newConversationParticipants = [User]()
+    
     private var sortedConversations: [Conversation] {
         viewModel.conversations.sorted { $0.recentMessage.timeSent > $1.recentMessage.timeSent }
     }
@@ -21,7 +25,7 @@ struct ConversationsList: View {
         let relevantUser: User?
         let currentUser = viewModel.currentUser!
         let participants = conversation.participants.filter { $0 != currentUser }
-        let images = participants.map { $0.avatarImage }
+        let images = participants.prefix(2).map { $0.avatarImage }
         let recentMessage = conversation.recentMessage
         
         if participants.count == 1 {
@@ -45,29 +49,40 @@ struct ConversationsList: View {
     
     var body: some View {
         NavigationView {
-            List {
-                if sortedConversations.isEmpty {
-                    Text("Brak wiadomości")
-                        .foregroundColor(Appearance.textColor)
-                } else {
-                    ForEach(sortedConversations) { conversation in
-                        NavigationLink(destination: ConversationView(conversation: conversation)) {
-                            let format = formatConversationRow(conversation)
-                            ListRow(images: format.images, headline: format.headline, caption: format.caption, includesStarButton: format.includesStarButton, relevantUser: format.relevantUser)
-                        }
-                    }
-                    .onDelete { indexSet in
-                        for index in indexSet {
-                            if let conversationIndex = viewModel.conversations.firstIndex(of: sortedConversations[index]) {
-                                viewModel.conversations[conversationIndex].participants.removeAll { $0 == viewModel.currentUser! }
-                                viewModel.conversations.remove(at: conversationIndex)
+            ZStack {
+                NavigationLink(isActive: $isShowingConversationView) {
+                    ConversationView(conversation: Conversation(id: 0, participants: newConversationParticipants, messages: []))
+                } label: {}
+                
+                List {
+                    if viewModel.conversations.isEmpty {
+                        Text("Brak wiadomości.")
+                            .foregroundColor(Appearance.textColor)
+                    } else {
+                        ForEach(sortedConversations) { conversation in
+                            NavigationLink(destination: ConversationView(conversation: conversation)) {
+                                let format = formatConversationRow(conversation)
+                                ListRow(images: format.images, headline: format.headline, caption: format.caption, includesStarButton: format.includesStarButton, relevantUser: format.relevantUser)
                             }
                         }
                     }
                 }
+                .navigationTitle("Wiadomości")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            isShowingNewConversationSheet = true
+                        } label: {
+                            Label("Nowa konwersacja", systemImage: "square.and.pencil")
+                                .foregroundColor(Appearance.textColor)
+                        }
+                        .sheet(isPresented: $isShowingNewConversationSheet) {
+                            NewConversation(isShowingConversationView: $isShowingConversationView, newConversationParticipants: $newConversationParticipants)
+                        }
+                    }
+                }
             }
-            .navigationTitle("Wiadomości")
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

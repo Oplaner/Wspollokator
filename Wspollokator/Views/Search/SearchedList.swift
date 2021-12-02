@@ -15,10 +15,10 @@ struct SearchedList: View {
     var body: some View {
         List {
             if searchedUsers == nil {
-                Text("Aby móc wyszukiwać współlokatorów, ustaw swój punkt")
+                Text("Aby móc wyszukiwać współlokatorów, ustaw swój punkt.")
                     .foregroundColor(Appearance.textColor)
             } else if searchedUsers!.isEmpty {
-                Text("Nie znaleziono osób spełniających zadane kryteria")
+                Text("Nie znaleziono osób spełniających zadane kryteria.")
                     .foregroundColor(Appearance.textColor)
             } else {
                 ForEach(searchedUsers!) { user in

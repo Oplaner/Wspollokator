@@ -72,7 +72,7 @@ struct ListMapSearchView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        isShowingFilters.toggle()
+                        isShowingFilters = true
                     } label: {
                         Label("Filtry", systemImage: "slider.horizontal.3")
                             .foregroundColor(Appearance.textColor)

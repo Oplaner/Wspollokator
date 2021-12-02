@@ -9,10 +9,12 @@ import SwiftUI
 
 struct ConversationView: View {
     @EnvironmentObject var viewModel: ViewModel
+    @FocusState var focusedFieldNumber: Int?
     
     let scrollViewPadding: CGFloat = 15
     
     @State private var conversation: Conversation
+    private var shouldFocus: Bool
     @State private var text: String = ""
     @State private var isSendingMessage = false
     @State private var isShowingAlert = false
@@ -34,6 +36,7 @@ struct ConversationView: View {
     
     init(conversation: Conversation) {
         self.conversation = conversation
+        shouldFocus = conversation.id == 0
     }
     
     private func scrollToBottom(withReader reader: ScrollViewProxy) {
@@ -43,9 +46,11 @@ struct ConversationView: View {
     }
     
     private func sendMessage() async {
+        let content = text.trimmingCharacters(in: .whitespaces)
+        guard !content.isEmpty else { return }
         isSendingMessage = true
         
-        let (createdConversation, sentMessage, success) = await viewModel.sendMessage(text.trimmingCharacters(in: .whitespaces), in: conversation)
+        let (createdConversation, sentMessage, success) = await viewModel.sendMessage(content, in: conversation)
         
         if success {
             viewModel.objectWillChange.send()
@@ -92,6 +97,8 @@ struct ConversationView: View {
                 TextField("Wpisz wiadomość", text: $text)
                     .textFieldStyle(.roundedBorder)
                     .foregroundColor(Appearance.textColor)
+                    .focused($focusedFieldNumber, equals: 1)
+                    .id(1)
                     .disabled(isSendingMessage)
                     .submitLabel(.send)
                     .onSubmit {
@@ -109,6 +116,13 @@ struct ConversationView: View {
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            if shouldFocus {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                    self.focusedFieldNumber = 1
+                }
+            }
+        }
         .alert("Błąd", isPresented: $isShowingAlert, actions: {}) {
             Text("Wystąpił błąd podczas wysyłania wiadomości. Spróbuj ponownie.")
         }
