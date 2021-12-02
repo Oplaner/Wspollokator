@@ -79,6 +79,7 @@ struct ConversationsList: View {
                         }
                         .sheet(isPresented: $isShowingNewConversationSheet) {
                             NewConversation(isShowingConversationView: $isShowingConversationView, newConversationParticipants: $newConversationParticipants)
+                                .environment(\.colorScheme, .light) // TODO: 🤔
                         }
                     }
                 }
