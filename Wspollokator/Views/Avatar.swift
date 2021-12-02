@@ -18,7 +18,7 @@ struct Avatar: View {
                 .frame(width: size, height: size, alignment: .center)
                 .clipShape(Circle())
         } else {
-            Image(systemName: "person.circle.fill")
+            Image(systemName: "person.crop.circle.fill")
                 .resizable()
                 .frame(width: size, height: size, alignment: .center)
                 .background(Color.white, in: Circle())

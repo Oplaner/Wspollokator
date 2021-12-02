@@ -9,13 +9,15 @@ import SwiftUI
 
 struct ConversationView: View {
     @EnvironmentObject var viewModel: ViewModel
+    @FocusState var focusedFieldNumber: Int?
     
     let scrollViewPadding: CGFloat = 15
     
-    var conversation: Conversation
-    
+    @State private var conversation: Conversation
+    private var shouldFocus: Bool
     @State private var text: String = ""
-    //    @State private var value: CGFloat = 0
+    @State private var isSendingMessage = false
+    @State private var isShowingAlert = false
     
     private var title: String {
         let participants = conversation.participants.filter { $0 != viewModel.currentUser! }
@@ -30,6 +32,42 @@ struct ConversationView: View {
     
     private var sortedMessages: [Message] {
         conversation.messages.sorted(by: { $0.timeSent < $1.timeSent })
+    }
+    
+    init(conversation: Conversation) {
+        self.conversation = conversation
+        shouldFocus = conversation.id == 0
+    }
+    
+    private func scrollToBottom(withReader reader: ScrollViewProxy) {
+        withAnimation {
+            reader.scrollTo("bottom", anchor: .bottom)
+        }
+    }
+    
+    private func sendMessage() async {
+        let content = text.trimmingCharacters(in: .whitespaces)
+        guard !content.isEmpty else { return }
+        isSendingMessage = true
+        
+        let (createdConversation, sentMessage, success) = await viewModel.sendMessage(content, in: conversation)
+        
+        if success {
+            viewModel.objectWillChange.send()
+            
+            if createdConversation != nil {
+                conversation = createdConversation!
+                viewModel.conversations.append(conversation)
+            } else {
+                conversation.messages.append(sentMessage!)
+            }
+            
+            text = ""
+        } else {
+            isShowingAlert = true
+        }
+        
+        isSendingMessage = false
     }
     
     var body: some View {
@@ -48,40 +86,46 @@ struct ConversationView: View {
                         .id("bottom")
                 }
                 .onAppear {
-                    withAnimation {
-                        reader.scrollTo("bottom", anchor: .bottom)
-                    }
+                    scrollToBottom(withReader: reader)
+                }
+                .onChange(of: conversation.messages.count) { _ in
+                    scrollToBottom(withReader: reader)
                 }
             }
             
-            TextField("Wpisz wiadomość", text: $text)
-                .textFieldStyle(.roundedBorder)
-                .padding()
-            
-            //                MultiTextField()
-            //                    .frame(height: self.obj.size < 150 ? self.obj.size : 150)
-            //                    .padding(.horizontal, 10)
-            //                    .background(Color(UIColor.lightGray))
-            //                    .cornerRadius(10)
-            //                    .padding(.horizontal,  15)
+            ZStack(alignment: .trailing) {
+                TextField("Wpisz wiadomość", text: $text)
+                    .textFieldStyle(.roundedBorder)
+                    .foregroundColor(Appearance.textColor)
+                    .focused($focusedFieldNumber, equals: 1)
+                    .id(1)
+                    .disabled(isSendingMessage)
+                    .submitLabel(.send)
+                    .onSubmit {
+                        Task {
+                            await sendMessage()
+                        }
+                    }
+                
+                if isSendingMessage {
+                    ProgressView()
+                        .offset(x: -8)
+                }
+            }
+            .padding()
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
-        
-        //Xcode 12 automatic keyboard handling
-        //                .onAppear {
-        //                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
-        //
-        //                        let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
-        //                        let height = value.height
-        //
-        //                        self.value = height
-        //                    }
-        //
-        //                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
-        //                        self.value = 0
-        //                    }
-        //                }
+        .onAppear {
+            if shouldFocus {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                    self.focusedFieldNumber = 1
+                }
+            }
+        }
+        .alert("Błąd", isPresented: $isShowingAlert, actions: {}) {
+            Text("Wystąpił błąd podczas wysyłania wiadomości. Spróbuj ponownie.")
+        }
     }
 }
 

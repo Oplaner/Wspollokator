@@ -39,23 +39,11 @@ struct SavedList: View {
         let sortedUsersWithDistanceDefined = usersWithDistanceDefined.sorted(by: {
             if distances[$0.id]! != distances[$1.id]! {
                 return distances[$0.id]! < distances[$1.id]!
-            } else if $0.surname != $1.surname {
-                return $0.surname < $1.surname
-            } else if $0.name != $1.name {
-                return $0.name < $1.name
             } else {
-                return $0.id < $1.id
+                return User.sortingPredicate(user1: $0, user2: $1)
             }
         })
-        let sortedUsersWithDistanceUndefined = usersWithDistanceUndefined.sorted(by: {
-            if $0.surname != $1.surname {
-                return $0.surname < $1.surname
-            } else if $0.name != $1.name {
-                return $0.name < $1.name
-            } else {
-                return $0.id < $1.id
-            }
-        })
+        let sortedUsersWithDistanceUndefined = usersWithDistanceUndefined.sorted(by: User.sortingPredicate)
         
         return sortedUsersWithDistanceDefined + sortedUsersWithDistanceUndefined
     }
@@ -64,7 +52,7 @@ struct SavedList: View {
         NavigationView {
             List {
                 if viewModel.currentUser!.savedUsers.isEmpty {
-                    Text("Brak zapisanych osób")
+                    Text("Brak zapisanych osób.")
                         .foregroundColor(Appearance.textColor)
                 } else {
                     let distances = fetchDistances()
