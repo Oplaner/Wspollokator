@@ -56,7 +56,6 @@ struct SignUp: View {
                         .font(.headline)
                         .bold()
                         .foregroundColor(Appearance.textColor)
-                        .cornerRadius(8)
                 }
                 
                 Spacer()

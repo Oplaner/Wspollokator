@@ -9,10 +9,34 @@ import SwiftUI
 
 struct Login: View {
     @EnvironmentObject var viewModel: ViewModel
+    @FocusState private var focusedFieldNumber: Int?
     
     @State private var email = ""
     @State private var password = ""
+    @State private var isAuthenticating = false
+    @State private var isShowingAlert = false
+    @State private var alertMessage = ""
     @State private var isShowingSignUpView = false
+    
+    private func authenticateUser() async {
+        focusedFieldNumber = nil
+        isAuthenticating = true
+        
+        let emailTrimmed = email.trimmingCharacters(in: .whitespaces)
+        
+        do {
+            try await viewModel.authenticateUser(withEmail: emailTrimmed, password: password)
+            viewModel.isUserAuthenticated = true
+        } catch {
+            switch error as! ViewModel.LoginError {
+            case .invalidCredentials:
+                alertMessage = "Wprowadzone dane są nieprawidłowe."
+            }
+            
+            isShowingAlert = true
+            isAuthenticating = false
+        }
+    }
     
     var body: some View {
         VStack {
@@ -28,22 +52,43 @@ struct Login: View {
             VStack {
                 Group {
                     TextField("Adres e-mail", text: $email)
+                        .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                        .focused($focusedFieldNumber, equals: 1)
+                        .submitLabel(.next)
+                        .onSubmit {
+                            focusedFieldNumber = 2
+                        }
                     SecureField("Hasło", text: $password)
+                        .focused($focusedFieldNumber, equals: 2)
+                        .submitLabel(.done)
+                        .onSubmit {
+                            focusedFieldNumber = nil
+                        }
                 }
                 .padding([.top, .bottom, .leading], 5)
+                .foregroundColor(Appearance.textColor)
                 .background(.white)
                 .cornerRadius(8)
                 .padding(.horizontal, 40)
             }
             
-            Button {
-                // TODO: Authenticate user.
-            } label: {
-                Text("Zaloguj się")
-                    .font(.headline)
-                    .bold()
-                    .foregroundColor(Appearance.textColor)
-                    .cornerRadius(8)
+            HStack(spacing: 8) {
+                Button {
+                    Task {
+                        await authenticateUser()
+                    }
+                } label: {
+                    Text("Zaloguj się")
+                        .font(.headline)
+                        .bold()
+                        .foregroundColor(Appearance.textColor)
+                }
+                .disabled(isAuthenticating || email.isEmpty || password.isEmpty)
+                
+                if isAuthenticating {
+                    ProgressView()
+                }
             }
             
             Spacer()
@@ -57,6 +102,13 @@ struct Login: View {
             }
         }
         .background(Appearance.backgroundColor)
+        .alert("Błąd", isPresented: $isShowingAlert) {
+            Button("OK") {
+                focusedFieldNumber = 1
+            }
+        } message: {
+            Text(alertMessage)
+        }
         .sheet(isPresented: $isShowingSignUpView) {
             SignUp()
         }

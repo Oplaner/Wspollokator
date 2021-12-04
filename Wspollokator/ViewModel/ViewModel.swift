@@ -10,6 +10,10 @@ import Foundation
 import SwiftUI
 
 @MainActor class ViewModel: ObservableObject {
+    enum LoginError: Error {
+        case invalidCredentials
+    }
+    
     enum PasswordChangeError: Error {
         case invalidOldPassword
         case unmatchingNewPasswords
@@ -45,15 +49,31 @@ import SwiftUI
         searchPreferences = ViewModel.defaultPreferences
     }
     
+    func authenticateUser(withEmail email: String, password: String) async throws {
+        // TODO: Add an actual password encryption matching the one used in the database.
+        let encryptedPassword = password
+        
+        if let user = await Networking.fetchUser(withEmail: email, encryptedPassword: encryptedPassword) {
+            currentUser = user
+            
+            // TODO: Download all the required data for the user.
+            
+            searchTargetDistance = ViewModel.defaultTargetDistance
+            searchPreferences = ViewModel.defaultPreferences
+        } else {
+            throw LoginError.invalidCredentials
+        }
+    }
+    
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
-        // TODO: Add an actual password encryption matching the one used in the databse (1/2).
+        // TODO: Add an actual password encryption matching the one used in the database (1/2).
         var encryptedPassword = old
         
         guard await Networking.checkEncryptedPassword(encryptedPassword, forUser: currentUser!) else { throw PasswordChangeError.invalidOldPassword }
         guard new1 == new2 else { throw PasswordChangeError.unmatchingNewPasswords }
         guard new1 != old else { throw PasswordChangeError.oldAndNewPasswordsEqual }
         
-        // TODO: Add an actual password encryption matching the one used in the databse (2/2).
+        // TODO: Add an actual password encryption matching the one used in the database (2/2).
         encryptedPassword = new1
         return await Networking.setNewPassword(encryptedPassword, forUser: currentUser!)
     }
@@ -108,7 +128,7 @@ import SwiftUI
             name: "John",
             surname: "Appleseed",
             email: "john.appleseed@apple.com",
-            pointOfInterest: CLLocationCoordinate2D(latitude: 52.22322350545386, longitude: 21.01232058780615), // Arigator Ramen Shop, ul. Piękna 54
+            pointOfInterest: CLLocationCoordinate2D(latitude: 52.22322350545386, longitude: 21.01232058780615), // ul. Piękna 54
             targetDistance: 3,
             preferences: [.animals: .positive, .smoking: .negative],
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer viverra leo sed lacus aliquet, ut hendrerit dolor porttitor. Nullam vel ligula justo. Donec sit amet eleifend magna. Suspendisse potenti. Mauris eu rutrum sapien. Integer consectetur eu sapien sit amet venenatis. Etiam rhoncus lacus sit amet dui aliquet, vitae lacinia sapien semper.",
@@ -119,7 +139,7 @@ import SwiftUI
             avatarImage: Image("avatar2"),
             name: "Anna",
             surname: "Brown",
-            email: "anna.brown@gmail.com",
+            email: "anna.brown@apple.com",
             pointOfInterest: CLLocationCoordinate2D(latitude: 52.23078106134393, longitude: 20.99624683259071), // ul. Sienna 68
             targetDistance: 7.2,
             preferences: [.animals: .negative, .smoking: .neutral],
@@ -131,7 +151,7 @@ import SwiftUI
             avatarImage: Image("avatar3"),
             name: "Mark",
             surname: "Williams",
-            email: "mark.williams@yahoo.com",
+            email: "mark.williams@apple.com",
             pointOfInterest: CLLocationCoordinate2D(latitude: 52.180284667251996, longitude: 21.060619730182783), // ul. Truskawiecka
             targetDistance: 10,
             preferences: [.animals: .neutral, .smoking: .positive],
@@ -143,8 +163,8 @@ import SwiftUI
             avatarImage: Image("avatar4"),
             name: "Amy",
             surname: "Smith",
-            email: "amy.smith@outlook.com",
-            pointOfInterest: CLLocationCoordinate2D(latitude: 52.204754538085254, longitude: 21.02354461310359), // Cafe Mozaika, ul. Puławska 53
+            email: "amy.smith@apple.com",
+            pointOfInterest: CLLocationCoordinate2D(latitude: 52.204754538085254, longitude: 21.02354461310359), // ul. Puławska 53
             targetDistance: 6,
             preferences: [.animals: .neutral, .smoking: .neutral],
             description: "Maecenas nec porta urna. Sed neque orci, convallis eget tempus et, vulputate et augue. Donec porta dui quis ultrices cursus. Sed pharetra nunc commodo velit blandit sollicitudin. Praesent posuere augue nec pellentesque scelerisque. Curabitur tristique pretium enim, nec lobortis est semper vel. Donec elementum ex non metus maximus fermentum ut ut diam. Fusce eu mollis libero.",
@@ -155,7 +175,7 @@ import SwiftUI
             avatarImage: nil,
             name: "Carol",
             surname: "Johnson",
-            email: "carol.johnson@example.co.uk",
+            email: "carol.johnson@apple.com",
             pointOfInterest: CLLocationCoordinate2D(latitude: 52.216761821455016, longitude: 21.018691400178643), // ul. Oleandrów
             targetDistance: 4.1,
             preferences: [.animals: .negative, .smoking: .negative],

@@ -8,6 +8,12 @@
 import Foundation
 
 class Networking {
+    /// Checks if the database contains a user with given `email` and `encryptedPassword` and returns an object representing the user, or nil if they were not found.
+    static func fetchUser(withEmail email: String, encryptedPassword password: String) async -> User? {
+        await Task.sleep(1_000_000_000)
+        return ViewModel.sampleUsers.first(where: { $0.email == email })
+    }
+    
     /// Checks if an already encrypted `password` is correct for `user`.
     static func checkEncryptedPassword(_ password: String, forUser user: User) async -> Bool {
         await Task.sleep(1_000_000_000)
