@@ -29,6 +29,7 @@ import SwiftUI
         return preferences
     }
     
+    @Published var isUserAuthenticated: Bool
     @Published var currentUser: User?
     @Published var users: [User]
     @Published var conversations: [Conversation]
@@ -36,6 +37,7 @@ import SwiftUI
     @Published var searchPreferences: [FilterOption: FilterAttitude]
     
     init(currentUser: User?, users: [User], conversations: [Conversation]) {
+        isUserAuthenticated = currentUser != nil
         self.currentUser = currentUser
         self.users = users
         self.conversations = conversations
@@ -54,6 +56,18 @@ import SwiftUI
         // TODO: Add an actual password encryption matching the one used in the databse (2/2).
         encryptedPassword = new1
         return await Networking.setNewPassword(encryptedPassword, forUser: currentUser!)
+    }
+    
+    func logout() {
+        // TODO: Stop background communication and remove scheduled refresh tasks.
+        // TODO: Remove current user information from a local storage.
+        
+        isUserAuthenticated = false
+        
+        // Unsetting the current user must be delayed, otherwise the app will crash, because many views explicitly unwrap this optional and their bodies recompute prior to displaying the login view.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.currentUser = nil
+        }
     }
     
     func sendMessage(_ text: String, in conversation: Conversation) async -> (createdConversation: Conversation?, sentMessage: Message?, success: Bool) {

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct Login: View {
+    @EnvironmentObject var viewModel: ViewModel
+    
     @State private var email = ""
     @State private var password = ""
     @State private var isShowingSignUpView = false
@@ -64,5 +66,6 @@ struct Login: View {
 struct Login_Previews: PreviewProvider {
     static var previews: some View {
         Login()
+            .environmentObject(ViewModel.sample)
     }
 }

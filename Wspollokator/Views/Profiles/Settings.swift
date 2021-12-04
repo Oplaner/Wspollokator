@@ -170,7 +170,7 @@ struct Settings: View {
                 }
             case .logout:
                 Button("Tak", role: .destructive) {
-                    // TODO: Perform a logout action.
+                    viewModel.logout()
                 }
             }
         } message: {
