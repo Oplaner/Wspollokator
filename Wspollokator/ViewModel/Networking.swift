@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class Networking {
     /// Tries to create a new user in the database and returns their ID, or nil if the operation failed.
@@ -56,6 +57,12 @@ class Networking {
         return true
     }
     
+    /// Sets a new avatar image and returns the operation status.
+    static func setNewAvatarImage(_ image: UIImage, forUser user: User) async -> Bool {
+        await Task.sleep(1_000_000_000)
+        return true
+    }
+  
     /// Updates `user`'s `description` and returns the operation status.
     static func update(description: String, forUser user: User) async -> Bool {
         await Task.sleep(1_000_000_000)

@@ -60,12 +60,14 @@ struct PasswordChange: View {
                     .onSubmit {
                         focusedFieldNumber = 2
                     }
+                
                 SecureField("Nowe hasło", text: $newPassword1)
                     .focused($focusedFieldNumber, equals: 2)
                     .submitLabel(.next)
                     .onSubmit {
                         focusedFieldNumber = 3
                     }
+                
                 SecureField("Powtórz nowe hasło", text: $newPassword2)
                     .focused($focusedFieldNumber, equals: 3)
                     .submitLabel(.done)
