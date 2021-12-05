@@ -87,11 +87,6 @@ import SwiftUI
         await Networking.update(description: description, forUser: currentUser!)
     }
     
-    func changeCurrentUserAvatarImage(avatarImage image: UIImage) async -> Bool
-    {
-        return await Networking.setNewAvatarImage(image, forUser: currentUser!)
-    }
-    
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
         var encryptedPassword = encryptPassword(old)
         

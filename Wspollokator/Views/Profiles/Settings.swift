@@ -16,8 +16,6 @@ struct Settings: View {
     @State private var name = ""
     @State private var surname = ""
     @State private var email = ""
-    @State private var inputImage: UIImage?
-    @State private var showingImagePicker = false
     @State private var isUpdatingName = false
     @State private var isUpdatingSurname = false
     @State private var isUpdatingEmail = false
@@ -105,16 +103,6 @@ struct Settings: View {
         isUpdatingEmail = false
     }
     
-    func loadImage() async {
-        guard let inputImage = inputImage else { return }
-        
-        viewModel.objectWillChange.send()
-        
-        if await viewModel.changeCurrentUserAvatarImage(avatarImage: inputImage) {
-            viewModel.currentUser!.avatarImage = Image(uiImage: inputImage)
-        }
-    }
-    
     var body: some View {
         Form {
             Section {
@@ -124,7 +112,6 @@ struct Settings: View {
                         Avatar(image: viewModel.currentUser!.avatarImage, size: 80)
                         Button {
                             isShowingConfirmationDialog = true
-                            
                         } label: {
                             Text("Zmień zdjęcie")
                                 .foregroundColor(Appearance.buttonColor)
@@ -232,19 +219,11 @@ struct Settings: View {
             }
         }
         .navigationTitle("Ustawienia")
-        .sheet(isPresented: $showingImagePicker){
-            ImagePicker(image: $inputImage)
-        }
-        .onChange(of: inputImage) { _ in
-            Task {
-                await loadImage()
-            }
-        }
         .navigationBarTitleDisplayMode(.inline)
         .submitLabel(.done)
         .confirmationDialog("Wybierz akcję", isPresented: $isShowingConfirmationDialog) {
             Button("Wybierz zdjęcie") {
-                showingImagePicker = true
+                // TODO: Show image picker.
             }
             
             if viewModel.currentUser!.avatarImage != nil {
