@@ -19,6 +19,7 @@ struct Settings: View {
     @State private var isUpdatingName = false
     @State private var isUpdatingSurname = false
     @State private var isUpdatingEmail = false
+    @State private var isUpdatingDescription = false
     @State private var isShowingConfirmationDialog = false
     
     private func formDidAppear() {
@@ -191,10 +192,17 @@ struct Settings: View {
                 }
                 
                 NavigationLink {
-                    DescriptionChange()
+                    DescriptionChange(alertType: $alertType, alertMessage: $alertMessage, isShowingAlert: $isShowingAlert, isUpdatingDescription: $isUpdatingDescription)
                 } label: {
-                    Text("Mój opis")
-                        .foregroundColor(Appearance.textColor)
+                    HStack {
+                        Text("Mój opis")
+                            .foregroundColor(Appearance.textColor)
+                        
+                        if isUpdatingDescription {
+                            Spacer()
+                            ProgressView()
+                        }
+                    }
                 }
             }
             

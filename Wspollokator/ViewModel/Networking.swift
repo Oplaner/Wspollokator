@@ -50,6 +50,12 @@ class Networking {
         return true
     }
     
+    /// Updates `user`'s `description` and returns the operation status.
+    static func update(description: String, forUser user: User) async -> Bool {
+        await Task.sleep(1_000_000_000)
+        return true
+    }
+    
     /// Creates a new conversation and returns its ID, or nil if the operation failed.
     static func createConversation(withParticipants participants: [User]) async -> Int? {
         await Task.sleep(1_000_000_000)

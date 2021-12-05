@@ -80,6 +80,10 @@ import SwiftUI
         }
     }
     
+    func changeCurrentUser(description: String) async -> Bool {
+        await Networking.update(description: description, forUser: currentUser!)
+    }
+    
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
         // TODO: Add an actual password encryption matching the one used in the database (1/2).
         var encryptedPassword = old
