@@ -8,6 +8,12 @@
 import Foundation
 
 class Networking {
+    /// Tries to create a new user in the database and returns their ID, or nil if the operation failed.
+    static func createUserAccount(name: String, surname: String, email: String, encryptedPassword password: String) async -> Int? {
+        await Task.sleep(1_000_000_000)
+        return Int.random(in: 6...1000)
+    }
+    
     /// Checks if the database contains a user with given `email` and `encryptedPassword` and returns an object representing the user, or nil if they were not found.
     static func fetchUser(withEmail email: String, encryptedPassword password: String) async -> User? {
         await Task.sleep(1_000_000_000)
@@ -68,7 +74,7 @@ class Networking {
     }
     
     /// Sends a new message and returns a tuple with its ID and time of creation, or two nil values if the operation failed. The newly created message _is not_ attached to any conversation.
-    static func sendMessage(_ text: String, writtenBy author: User) async -> (Int?, Date?) {
+    static func sendMessage(_ text: String, writtenBy author: User) async -> (messageID: Int?, timeSent: Date?) {
         await Task.sleep(1_000_000_000)
         return (Int.random(in: 11...1000), Date())
     }

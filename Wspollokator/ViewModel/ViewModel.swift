@@ -10,6 +10,11 @@ import Foundation
 import SwiftUI
 
 @MainActor class ViewModel: ObservableObject {
+    enum SignUpError: Error {
+        case emailAlreadyTaken
+        case unmatchingPasswords
+    }
+    
     enum LoginError: Error {
         case invalidCredentials
     }
@@ -51,14 +56,12 @@ import SwiftUI
         self.conversations = conversations
     }
     
-    func authenticateUser(withEmail email: String, password: String) async throws {
-        // TODO: Add an actual password encryption matching the one used in the database.
-        let encryptedPassword = password
+    func authenticateUser(withEmail email: String, password: String) async throws -> Bool {
+        let encryptedPassword = encryptPassword(password)
         
         if let user = await Networking.fetchUser(withEmail: email, encryptedPassword: encryptedPassword) {
             currentUser = user
-            
-            // TODO: Download all the required data for the user.
+            return await downloadCurrentUserData()
         } else {
             throw LoginError.invalidCredentials
         }
@@ -85,16 +88,28 @@ import SwiftUI
     }
     
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
-        // TODO: Add an actual password encryption matching the one used in the database (1/2).
-        var encryptedPassword = old
+        var encryptedPassword = encryptPassword(old)
         
         guard await Networking.checkEncryptedPassword(encryptedPassword, forUser: currentUser!) else { throw PasswordChangeError.invalidOldPassword }
         guard new1 == new2 else { throw PasswordChangeError.unmatchingNewPasswords }
         guard new1 != old else { throw PasswordChangeError.oldAndNewPasswordsEqual }
         
-        // TODO: Add an actual password encryption matching the one used in the database (2/2).
-        encryptedPassword = new1
+        encryptedPassword = encryptPassword(new1)
         return await Networking.setNewPassword(encryptedPassword, forUser: currentUser!)
+    }
+    
+    func createUserAccount(name: String, surname: String, email: String, password1: String, password2: String) async throws -> Bool {
+        guard await Networking.checkEmailAvailability(email) else { throw SignUpError.emailAlreadyTaken }
+        guard password1 == password2 else { throw SignUpError.unmatchingPasswords }
+        
+        let encryptedPassword = encryptPassword(password1)
+        
+        if let userID = await Networking.createUserAccount(name: name, surname: surname, email: email, encryptedPassword: encryptedPassword) {
+            currentUser = User(id: userID, name: name, surname: surname, email: email)
+            return await downloadCurrentUserData()
+        } else {
+            return false
+        }
     }
     
     func logout() {
@@ -138,6 +153,16 @@ import SwiftUI
                 return (nil, nil, false)
             }
         }
+    }
+    
+    private func downloadCurrentUserData() async -> Bool {
+        // TODO: Download all the required data for the current user, for example other users' data, conversations.
+        true
+    }
+    
+    private func encryptPassword(_ password: String) -> String {
+        // TODO: Add an actual password encryption matching the one used in the database.
+        password
     }
     
 #if DEBUG

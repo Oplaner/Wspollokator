@@ -17,16 +17,24 @@ struct Login: View {
     @State private var isShowingAlert = false
     @State private var alertMessage = ""
     @State private var isShowingSignUpView = false
+    @State private var didAuthenticate = false
+    
+    private var emailTrimmed: String {
+        email.trimmingCharacters(in: .whitespaces)
+    }
     
     private func authenticateUser() async {
         focusedFieldNumber = nil
         isAuthenticating = true
         
-        let emailTrimmed = email.trimmingCharacters(in: .whitespaces)
-        
         do {
-            try await viewModel.authenticateUser(withEmail: emailTrimmed, password: password)
-            viewModel.isUserAuthenticated = true
+            if try await viewModel.authenticateUser(withEmail: emailTrimmed, password: password) {
+                viewModel.isUserAuthenticated = true
+            } else {
+                alertMessage = "Wystąpił błąd. Spróbuj ponownie."
+                isShowingAlert = true
+                isAuthenticating = false
+            }
         } catch {
             switch error as! ViewModel.LoginError {
             case .invalidCredentials:
@@ -84,7 +92,7 @@ struct Login: View {
                         .bold()
                         .foregroundColor(Appearance.textColor)
                 }
-                .disabled(isAuthenticating || email.isEmpty || password.isEmpty)
+                .disabled(didAuthenticate || isAuthenticating || emailTrimmed.isEmpty || password.isEmpty)
                 
                 if isAuthenticating {
                     ProgressView()
@@ -94,12 +102,16 @@ struct Login: View {
             Spacer()
             
             Button {
+                focusedFieldNumber = nil
+                email = ""
+                password = ""
                 isShowingSignUpView = true
             } label: {
                 Text("Załóż konto")
                     .foregroundColor(Appearance.textColor)
                     .padding(.bottom, 20)
             }
+            .disabled(didAuthenticate || isAuthenticating)
         }
         .background(Appearance.backgroundColor)
         .alert("Błąd", isPresented: $isShowingAlert) {
