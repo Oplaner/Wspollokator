@@ -14,6 +14,10 @@ import SwiftUI
         case invalidCredentials
     }
     
+    enum EmailChangeError: Error {
+        case emailAlreadyTaken
+    }
+    
     enum PasswordChangeError: Error {
         case invalidOldPassword
         case unmatchingNewPasswords
@@ -37,16 +41,14 @@ import SwiftUI
     @Published var currentUser: User?
     @Published var users: [User]
     @Published var conversations: [Conversation]
-    @Published var searchTargetDistance: Double
-    @Published var searchPreferences: [FilterOption: FilterAttitude]
+    @Published var searchTargetDistance = defaultTargetDistance
+    @Published var searchPreferences = defaultPreferences
     
     init(currentUser: User?, users: [User], conversations: [Conversation]) {
         isUserAuthenticated = currentUser != nil
         self.currentUser = currentUser
         self.users = users
         self.conversations = conversations
-        searchTargetDistance = ViewModel.defaultTargetDistance
-        searchPreferences = ViewModel.defaultPreferences
     }
     
     func authenticateUser(withEmail email: String, password: String) async throws {
@@ -57,11 +59,24 @@ import SwiftUI
             currentUser = user
             
             // TODO: Download all the required data for the user.
-            
-            searchTargetDistance = ViewModel.defaultTargetDistance
-            searchPreferences = ViewModel.defaultPreferences
         } else {
             throw LoginError.invalidCredentials
+        }
+    }
+    
+    func changeCurrentUser(name: String) async -> Bool {
+        await Networking.update(name: name, forUser: currentUser!)
+    }
+    
+    func changeCurrentUser(surname: String) async -> Bool {
+        await Networking.update(surname: surname, forUser: currentUser!)
+    }
+    
+    func changeCurrentUser(email: String) async throws -> Bool {
+        if await !Networking.checkEmailAvailability(email) {
+            throw EmailChangeError.emailAlreadyTaken
+        } else {
+            return await Networking.update(email: email, forUser: currentUser!)
         }
     }
     
@@ -82,6 +97,8 @@ import SwiftUI
         // TODO: Stop background communication and remove scheduled refresh tasks.
         // TODO: Remove current user information from a local storage.
         
+        searchTargetDistance = ViewModel.defaultTargetDistance
+        searchPreferences = ViewModel.defaultPreferences
         isUserAuthenticated = false
         
         // Unsetting the current user must be delayed, otherwise the app will crash, because many views explicitly unwrap this optional and their bodies recompute prior to displaying the login view.

@@ -8,7 +8,23 @@
 import SwiftUI
 
 struct MyProfile: View {
+    enum SettingsAlertType {
+        case logout
+        case error
+        
+        var title: String {
+            switch self {
+            case .logout: return "Potwierdzenie"
+            case .error: return "Błąd"
+            }
+        }
+    }
+    
     @EnvironmentObject var viewModel: ViewModel
+    
+    @State private var alertType = SettingsAlertType.logout
+    @State private var alertMessage = ""
+    @State private var isShowingAlert = false
     
     var body: some View {
         NavigationView {
@@ -70,11 +86,24 @@ struct MyProfile: View {
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: Settings()) {
+                    NavigationLink(destination: Settings(alertType: $alertType, alertMessage: $alertMessage, isShowingAlert: $isShowingAlert)) {
                         Label("Ustawienia", systemImage: "gear")
                             .foregroundColor(Appearance.textColor)
                     }
                 }
+            }
+            .alert(alertType.title, isPresented: $isShowingAlert) {
+                switch alertType {
+                case .logout:
+                    Button("Nie", role: .cancel, action: {})
+                    Button("Tak", role: .destructive) {
+                        viewModel.logout()
+                    }
+                case .error:
+                    Button("OK", action: {})
+                }
+            } message: {
+                Text(alertMessage)
             }
         }
     }

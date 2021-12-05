@@ -14,6 +14,30 @@ class Networking {
         return ViewModel.sampleUsers.first(where: { $0.email == email })
     }
     
+    /// Updates `user`'s `name` and returns the operation status.
+    static func update(name: String, forUser user: User) async -> Bool {
+        await Task.sleep(1_000_000_000)
+        return true
+    }
+    
+    /// Updates `user`'s `surname` and returns the operation status.
+    static func update(surname: String, forUser user: User) async -> Bool {
+        await Task.sleep(1_000_000_000)
+        return true
+    }
+    
+    /// Checks if `email` is already taken by any user.
+    static func checkEmailAvailability(_ email: String) async -> Bool {
+        await Task.sleep(1_000_000_000)
+        return !ViewModel.sampleUsers.contains(where: { $0.email == email })
+    }
+    
+    /// Updates `user`'s `email` and returns the operation status.
+    static func update(email: String, forUser user: User) async -> Bool {
+        await Task.sleep(1_000_000_000)
+        return true
+    }
+    
     /// Checks if an already encrypted `password` is correct for `user`.
     static func checkEncryptedPassword(_ password: String, forUser user: User) async -> Bool {
         await Task.sleep(1_000_000_000)

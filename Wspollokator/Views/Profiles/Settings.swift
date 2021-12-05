@@ -8,32 +8,18 @@
 import SwiftUI
 
 struct Settings: View {
-    private enum ConfirmationDialogType {
-        case avatarChange
-        case logout
-        
-        var dialogTitle: String {
-            switch self {
-            case .avatarChange: return "Wybierz akcję"
-            case .logout: return "Potwierdzenie"
-            }
-        }
-        
-        var dialogMessage: String? {
-            switch self {
-            case .avatarChange: return nil
-            case .logout: return "Czy na pewno chcesz się wylogować?"
-            }
-        }
-    }
-    
     @EnvironmentObject var viewModel: ViewModel
     
+    @Binding var alertType: MyProfile.SettingsAlertType
+    @Binding var alertMessage: String
+    @Binding var isShowingAlert: Bool
     @State private var name = ""
     @State private var surname = ""
     @State private var email = ""
+    @State private var isUpdatingName = false
+    @State private var isUpdatingSurname = false
+    @State private var isUpdatingEmail = false
     @State private var isShowingConfirmationDialog = false
-    @State private var confirmationDialogType = ConfirmationDialogType.avatarChange
     
     private func formDidAppear() {
         name = viewModel.currentUser!.name
@@ -41,34 +27,79 @@ struct Settings: View {
         email = viewModel.currentUser!.email
     }
     
-    private func submitForm() {
-        let nameTrimmed = name.trimmingCharacters(in: .whitespaces)
-        let surnameTrimmed = surname.trimmingCharacters(in: .whitespaces)
-        let emailTrimmed = email.trimmingCharacters(in: .whitespaces)
+    private func updateName() async {
+        isUpdatingName = true
+        name = name.trimmingCharacters(in: .whitespaces)
         
-        if nameTrimmed.isEmpty {
+        if name.isEmpty || name == viewModel.currentUser!.name {
             name = viewModel.currentUser!.name
         } else {
-            name = nameTrimmed
-            viewModel.objectWillChange.send()
-            viewModel.currentUser!.name = name
+            if await viewModel.changeCurrentUser(name: name) {
+                viewModel.objectWillChange.send()
+                viewModel.currentUser!.name = name
+            } else {
+                name = viewModel.currentUser!.name
+                alertType = .error
+                alertMessage = "Wystąpił błąd podczas aktualizacji imienia. Spróbuj ponownie."
+                isShowingAlert = true
+            }
         }
         
-        if surnameTrimmed.isEmpty {
+        isUpdatingName = false
+    }
+    
+    private func updateSurname() async {
+        isUpdatingSurname = true
+        surname = surname.trimmingCharacters(in: .whitespaces)
+        
+        if surname.isEmpty || surname == viewModel.currentUser!.surname {
             surname = viewModel.currentUser!.surname
         } else {
-            surname = surnameTrimmed
-            viewModel.objectWillChange.send()
-            viewModel.currentUser!.surname = surname
+            if await viewModel.changeCurrentUser(surname: surname) {
+                viewModel.objectWillChange.send()
+                viewModel.currentUser!.surname = surname
+            } else {
+                surname = viewModel.currentUser!.surname
+                alertType = .error
+                alertMessage = "Wystąpił błąd podczas aktualizacji nazwiska. Spróbuj ponownie."
+                isShowingAlert = true
+            }
         }
         
-        if emailTrimmed.isEmpty {
+        isUpdatingSurname = false
+    }
+    
+    private func updateEmail() async {
+        isUpdatingEmail = true
+        email = email.trimmingCharacters(in: .whitespaces)
+        
+        if email.isEmpty || email == viewModel.currentUser!.email {
             email = viewModel.currentUser!.email
         } else {
-            email = emailTrimmed
-            viewModel.objectWillChange.send()
-            viewModel.currentUser!.email = email
+            do {
+                if try await viewModel.changeCurrentUser(email: email) {
+                    viewModel.objectWillChange.send()
+                    viewModel.currentUser!.email = email
+                } else {
+                    email = viewModel.currentUser!.email
+                    alertType = .error
+                    alertMessage = "Wystąpił błąd podczas aktualizacji adresu e-mail. Spróbuj ponownie."
+                    isShowingAlert = true
+                }
+            } catch {
+                email = viewModel.currentUser!.email
+                alertType = .error
+                
+                switch error as! ViewModel.EmailChangeError {
+                case .emailAlreadyTaken:
+                    alertMessage = "Wprowadzony adres e-mail jest już zajęty przez innego użytkownika."
+                }
+                
+                isShowingAlert = true
+            }
         }
+        
+        isUpdatingEmail = false
     }
     
     var body: some View {
@@ -79,7 +110,6 @@ struct Settings: View {
                     VStack {
                         Avatar(image: viewModel.currentUser!.avatarImage, size: 80)
                         Button {
-                            confirmationDialogType = .avatarChange
                             isShowingConfirmationDialog = true
                         } label: {
                             Text("Zmień zdjęcie")
@@ -99,7 +129,16 @@ struct Settings: View {
                         .multilineTextAlignment(.trailing)
                         .foregroundColor(Appearance.alternateColor)
                         .onAppear(perform: formDidAppear)
-                        .onSubmit(submitForm)
+                        .onSubmit {
+                            Task {
+                                await updateName()
+                            }
+                        }
+                    
+                    if isUpdatingName {
+                        Spacer()
+                        ProgressView()
+                    }
                 }
                 
                 HStack {
@@ -110,7 +149,16 @@ struct Settings: View {
                         .multilineTextAlignment(.trailing)
                         .foregroundColor(Appearance.alternateColor)
                         .onAppear(perform: formDidAppear)
-                        .onSubmit(submitForm)
+                        .onSubmit {
+                            Task {
+                                await updateSurname()
+                            }
+                        }
+                    
+                    if isUpdatingSurname {
+                        Spacer()
+                        ProgressView()
+                    }
                 }
                 
                 HStack {
@@ -123,7 +171,16 @@ struct Settings: View {
                         .textInputAutocapitalization(.never)
                         .foregroundColor(Appearance.alternateColor)
                         .onAppear(perform: formDidAppear)
-                        .onSubmit(submitForm)
+                        .onSubmit {
+                            Task {
+                                await updateEmail()
+                            }
+                        }
+                    
+                    if isUpdatingEmail {
+                        Spacer()
+                        ProgressView()
+                    }
                 }
                 
                 NavigationLink {
@@ -145,8 +202,9 @@ struct Settings: View {
                 HStack {
                     Spacer()
                     Button("Wyloguj się", role: .destructive) {
-                        confirmationDialogType = .logout
-                        isShowingConfirmationDialog = true
+                        alertType = .logout
+                        alertMessage = "Czy na pewno chcesz się wylogować?"
+                        isShowingAlert = true
                     }
                     Spacer()
                 }
@@ -155,27 +213,16 @@ struct Settings: View {
         .navigationTitle("Ustawienia")
         .navigationBarTitleDisplayMode(.inline)
         .submitLabel(.done)
-        .confirmationDialog(confirmationDialogType.dialogTitle, isPresented: $isShowingConfirmationDialog) {
-            switch confirmationDialogType {
-            case .avatarChange:
-                Button("Wybierz zdjęcie") {
-                    // TODO: Show image picker.
-                }
-                
-                if viewModel.currentUser!.avatarImage != nil {
-                    Button("Usuń zdjęcie", role: .destructive) {
-                        // TODO: Remove avatar image file.
-                        viewModel.currentUser!.avatarImage = nil
-                    }
-                }
-            case .logout:
-                Button("Tak", role: .destructive) {
-                    viewModel.logout()
-                }
+        .confirmationDialog("Wybierz akcję", isPresented: $isShowingConfirmationDialog) {
+            Button("Wybierz zdjęcie") {
+                // TODO: Show image picker.
             }
-        } message: {
-            if let message = confirmationDialogType.dialogMessage {
-                Text(message)
+            
+            if viewModel.currentUser!.avatarImage != nil {
+                Button("Usuń zdjęcie", role: .destructive) {
+                    // TODO: Remove avatar image file.
+                    viewModel.currentUser!.avatarImage = nil
+                }
             }
         }
     }
@@ -184,7 +231,7 @@ struct Settings: View {
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            Settings()
+            Settings(alertType: .constant(.logout), alertMessage: .constant(""), isShowingAlert: .constant(false))
                 .environmentObject(ViewModel.sample)
         }
     }
