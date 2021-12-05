@@ -10,6 +10,19 @@ import Foundation
 import SwiftUI
 
 @MainActor class ViewModel: ObservableObject {
+    enum SignUpError: Error {
+        case emailAlreadyTaken
+        case unmatchingPasswords
+    }
+    
+    enum LoginError: Error {
+        case invalidCredentials
+    }
+    
+    enum EmailChangeError: Error {
+        case emailAlreadyTaken
+    }
+    
     enum PasswordChangeError: Error {
         case invalidOldPassword
         case unmatchingNewPasswords
@@ -29,18 +42,49 @@ import SwiftUI
         return preferences
     }
     
+    @Published var isUserAuthenticated: Bool
     @Published var currentUser: User?
     @Published var users: [User]
     @Published var conversations: [Conversation]
-    @Published var searchTargetDistance: Double
-    @Published var searchPreferences: [FilterOption: FilterAttitude]
+    @Published var searchTargetDistance = defaultTargetDistance
+    @Published var searchPreferences = defaultPreferences
     
     init(currentUser: User?, users: [User], conversations: [Conversation]) {
+        isUserAuthenticated = currentUser != nil
         self.currentUser = currentUser
         self.users = users
         self.conversations = conversations
-        searchTargetDistance = ViewModel.defaultTargetDistance
-        searchPreferences = ViewModel.defaultPreferences
+    }
+    
+    func authenticateUser(withEmail email: String, password: String) async throws -> Bool {
+        let encryptedPassword = encryptPassword(password)
+        
+        if let user = await Networking.fetchUser(withEmail: email, encryptedPassword: encryptedPassword) {
+            currentUser = user
+            return await downloadCurrentUserData()
+        } else {
+            throw LoginError.invalidCredentials
+        }
+    }
+    
+    func changeCurrentUser(name: String) async -> Bool {
+        await Networking.update(name: name, forUser: currentUser!)
+    }
+    
+    func changeCurrentUser(surname: String) async -> Bool {
+        await Networking.update(surname: surname, forUser: currentUser!)
+    }
+    
+    func changeCurrentUser(email: String) async throws -> Bool {
+        if await !Networking.checkEmailAvailability(email) {
+            throw EmailChangeError.emailAlreadyTaken
+        } else {
+            return await Networking.update(email: email, forUser: currentUser!)
+        }
+    }
+    
+    func changeCurrentUser(description: String) async -> Bool {
+        await Networking.update(description: description, forUser: currentUser!)
     }
     
     func changeCurrentUserAvatarImage(avatarImage image: UIImage) async -> Bool
@@ -49,16 +93,42 @@ import SwiftUI
     }
     
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
-        // TODO: Add an actual password encryption matching the one used in the databse (1/2).
-        var encryptedPassword = old
+        var encryptedPassword = encryptPassword(old)
         
         guard await Networking.checkEncryptedPassword(encryptedPassword, forUser: currentUser!) else { throw PasswordChangeError.invalidOldPassword }
         guard new1 == new2 else { throw PasswordChangeError.unmatchingNewPasswords }
         guard new1 != old else { throw PasswordChangeError.oldAndNewPasswordsEqual }
         
-        // TODO: Add an actual password encryption matching the one used in the databse (2/2).
-        encryptedPassword = new1
+        encryptedPassword = encryptPassword(new1)
         return await Networking.setNewPassword(encryptedPassword, forUser: currentUser!)
+    }
+    
+    func createUserAccount(name: String, surname: String, email: String, password1: String, password2: String) async throws -> Bool {
+        guard await Networking.checkEmailAvailability(email) else { throw SignUpError.emailAlreadyTaken }
+        guard password1 == password2 else { throw SignUpError.unmatchingPasswords }
+        
+        let encryptedPassword = encryptPassword(password1)
+        
+        if let userID = await Networking.createUserAccount(name: name, surname: surname, email: email, encryptedPassword: encryptedPassword) {
+            currentUser = User(id: userID, name: name, surname: surname, email: email)
+            return await downloadCurrentUserData()
+        } else {
+            return false
+        }
+    }
+    
+    func logout() {
+        // TODO: Stop background communication and remove scheduled refresh tasks.
+        // TODO: Remove current user information from a local storage.
+        
+        searchTargetDistance = ViewModel.defaultTargetDistance
+        searchPreferences = ViewModel.defaultPreferences
+        isUserAuthenticated = false
+        
+        // Unsetting the current user must be delayed, otherwise the app will crash, because many views explicitly unwrap this optional and their bodies recompute prior to displaying the login view.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.currentUser = nil
+        }
     }
     
     func sendMessage(_ text: String, in conversation: Conversation) async -> (createdConversation: Conversation?, sentMessage: Message?, success: Bool) {
@@ -90,6 +160,16 @@ import SwiftUI
         }
     }
     
+    private func downloadCurrentUserData() async -> Bool {
+        // TODO: Download all the required data for the current user, for example other users' data, conversations.
+        true
+    }
+    
+    private func encryptPassword(_ password: String) -> String {
+        // TODO: Add an actual password encryption matching the one used in the database.
+        password
+    }
+    
 #if DEBUG
     // TODO: Remove "nonisolated" when map views are finished.
     nonisolated static var sampleUsers: [User] {
@@ -99,7 +179,7 @@ import SwiftUI
             name: "John",
             surname: "Appleseed",
             email: "john.appleseed@apple.com",
-            pointOfInterest: CLLocationCoordinate2D(latitude: 52.22322350545386, longitude: 21.01232058780615), // Arigator Ramen Shop, ul. Piękna 54
+            pointOfInterest: CLLocationCoordinate2D(latitude: 52.22322350545386, longitude: 21.01232058780615), // ul. Piękna 54
             targetDistance: 3,
             preferences: [.animals: .positive, .smoking: .negative],
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer viverra leo sed lacus aliquet, ut hendrerit dolor porttitor. Nullam vel ligula justo. Donec sit amet eleifend magna. Suspendisse potenti. Mauris eu rutrum sapien. Integer consectetur eu sapien sit amet venenatis. Etiam rhoncus lacus sit amet dui aliquet, vitae lacinia sapien semper.",
@@ -110,7 +190,7 @@ import SwiftUI
             avatarImage: Image("avatar2"),
             name: "Anna",
             surname: "Brown",
-            email: "anna.brown@gmail.com",
+            email: "anna.brown@apple.com",
             pointOfInterest: CLLocationCoordinate2D(latitude: 52.23078106134393, longitude: 20.99624683259071), // ul. Sienna 68
             targetDistance: 7.2,
             preferences: [.animals: .negative, .smoking: .neutral],
@@ -122,7 +202,7 @@ import SwiftUI
             avatarImage: Image("avatar3"),
             name: "Mark",
             surname: "Williams",
-            email: "mark.williams@yahoo.com",
+            email: "mark.williams@apple.com",
             pointOfInterest: CLLocationCoordinate2D(latitude: 52.180284667251996, longitude: 21.060619730182783), // ul. Truskawiecka
             targetDistance: 10,
             preferences: [.animals: .neutral, .smoking: .positive],
@@ -134,8 +214,8 @@ import SwiftUI
             avatarImage: Image("avatar4"),
             name: "Amy",
             surname: "Smith",
-            email: "amy.smith@outlook.com",
-            pointOfInterest: CLLocationCoordinate2D(latitude: 52.204754538085254, longitude: 21.02354461310359), // Cafe Mozaika, ul. Puławska 53
+            email: "amy.smith@apple.com",
+            pointOfInterest: CLLocationCoordinate2D(latitude: 52.204754538085254, longitude: 21.02354461310359), // ul. Puławska 53
             targetDistance: 6,
             preferences: [.animals: .neutral, .smoking: .neutral],
             description: "Maecenas nec porta urna. Sed neque orci, convallis eget tempus et, vulputate et augue. Donec porta dui quis ultrices cursus. Sed pharetra nunc commodo velit blandit sollicitudin. Praesent posuere augue nec pellentesque scelerisque. Curabitur tristique pretium enim, nec lobortis est semper vel. Donec elementum ex non metus maximus fermentum ut ut diam. Fusce eu mollis libero.",
@@ -146,7 +226,7 @@ import SwiftUI
             avatarImage: nil,
             name: "Carol",
             surname: "Johnson",
-            email: "carol.johnson@example.co.uk",
+            email: "carol.johnson@apple.com",
             pointOfInterest: CLLocationCoordinate2D(latitude: 52.216761821455016, longitude: 21.018691400178643), // ul. Oleandrów
             targetDistance: 4.1,
             preferences: [.animals: .negative, .smoking: .negative],
