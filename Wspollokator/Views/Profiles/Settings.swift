@@ -73,11 +73,14 @@ struct Settings: View {
         }
     }
     
-    func loadImage() {
+    func loadImage() async {
         guard let inputImage = inputImage else { return }
         
         viewModel.objectWillChange.send()
-        viewModel.currentUser!.avatarImage = Image(uiImage: inputImage)
+        
+        if await viewModel.changeCurrentUserAvatarImage(avatarImage: inputImage) {
+            viewModel.currentUser!.avatarImage = Image(uiImage: inputImage)
+        }
     }
     
     var body: some View {
@@ -166,7 +169,11 @@ struct Settings: View {
         .sheet(isPresented: $showingImagePicker){
             ImagePicker(image: $inputImage)
         }
-        .onChange(of: inputImage) { _ in loadImage() }
+        .onChange(of: inputImage) { _ in
+            Task {
+                await loadImage()
+            }
+        }
         .navigationBarTitleDisplayMode(.inline)
         .submitLabel(.done)
         .confirmationDialog(confirmationDialogType.dialogTitle, isPresented: $isShowingConfirmationDialog) {
