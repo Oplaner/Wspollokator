@@ -32,8 +32,10 @@ struct Settings: View {
     @State private var name = ""
     @State private var surname = ""
     @State private var email = ""
+    @State private var inputImage: UIImage?
     @State private var isShowingConfirmationDialog = false
     @State private var confirmationDialogType = ConfirmationDialogType.avatarChange
+    @State private var showingImagePicker = false
     
     private func formDidAppear() {
         name = viewModel.currentUser!.name
@@ -71,6 +73,13 @@ struct Settings: View {
         }
     }
     
+    func loadImage() {
+        guard let inputImage = inputImage else { return }
+        
+        viewModel.objectWillChange.send()
+        viewModel.currentUser!.avatarImage = Image(uiImage: inputImage)
+    }
+    
     var body: some View {
         Form {
             Section {
@@ -81,6 +90,7 @@ struct Settings: View {
                         Button {
                             confirmationDialogType = .avatarChange
                             isShowingConfirmationDialog = true
+                            
                         } label: {
                             Text("Zmień zdjęcie")
                                 .foregroundColor(Appearance.buttonColor)
@@ -153,6 +163,10 @@ struct Settings: View {
             }
         }
         .navigationTitle("Ustawienia")
+        .sheet(isPresented: $showingImagePicker){
+            ImagePicker(image: $inputImage)
+        }
+        .onChange(of: inputImage) { _ in loadImage() }
         .navigationBarTitleDisplayMode(.inline)
         .submitLabel(.done)
         .confirmationDialog(confirmationDialogType.dialogTitle, isPresented: $isShowingConfirmationDialog) {
@@ -160,13 +174,16 @@ struct Settings: View {
             case .avatarChange:
                 Button("Wybierz zdjęcie") {
                     // TODO: Show image picker.
+                    showingImagePicker = true
                 }
+                
                 
                 if viewModel.currentUser!.avatarImage != nil {
                     Button("Usuń zdjęcie", role: .destructive) {
                         // TODO: Remove avatar image file.
                         viewModel.currentUser!.avatarImage = nil
                     }
+                    
                 }
             case .logout:
                 Button("Tak", role: .destructive) {

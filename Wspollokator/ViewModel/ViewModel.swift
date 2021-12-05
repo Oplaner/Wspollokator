@@ -43,6 +43,11 @@ import SwiftUI
         searchPreferences = ViewModel.defaultPreferences
     }
     
+    func updateCurrentUserAvatarImage(avatarImage image: Image?, forUser user: User) async -> Bool
+    {
+        return await Networking.setNewAvatarImage(image, forUser: user)
+    }
+    
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
         // TODO: Add an actual password encryption matching the one used in the databse (1/2).
         var encryptedPassword = old
