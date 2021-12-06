@@ -67,6 +67,10 @@ import SwiftUI
         }
     }
     
+    func changeCurrentUser(avatarImage image: UIImage?) async -> Bool {
+        await Networking.update(avatarImage: image, forUser: currentUser!)
+    }
+    
     func changeCurrentUser(name: String) async -> Bool {
         await Networking.update(name: name, forUser: currentUser!)
     }
@@ -85,11 +89,6 @@ import SwiftUI
     
     func changeCurrentUser(description: String) async -> Bool {
         await Networking.update(description: description, forUser: currentUser!)
-    }
-    
-    func changeCurrentUserAvatarImage(avatarImage image: UIImage) async -> Bool
-    {
-        return await Networking.setNewAvatarImage(image, forUser: currentUser!)
     }
     
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {

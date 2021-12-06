@@ -13,11 +13,12 @@ struct Settings: View {
     @Binding var alertType: MyProfile.SettingsAlertType
     @Binding var alertMessage: String
     @Binding var isShowingAlert: Bool
+    @State private var inputImage: UIImage?
     @State private var name = ""
     @State private var surname = ""
     @State private var email = ""
-    @State private var inputImage: UIImage?
-    @State private var showingImagePicker = false
+    @State private var isShowingImagePicker = false
+    @State private var isUpdatingAvatarImage = false
     @State private var isUpdatingName = false
     @State private var isUpdatingSurname = false
     @State private var isUpdatingEmail = false
@@ -28,6 +29,22 @@ struct Settings: View {
         name = viewModel.currentUser!.name
         surname = viewModel.currentUser!.surname
         email = viewModel.currentUser!.email
+    }
+    
+    private func updateAvatarImage() async {
+        isUpdatingAvatarImage = true
+        
+        if await viewModel.changeCurrentUser(avatarImage: inputImage) {
+            viewModel.objectWillChange.send()
+            viewModel.currentUser!.avatarImage = inputImage == nil ? nil : Image(uiImage: inputImage!)
+        } else {
+            alertType = .error
+            alertMessage = "Wystąpił błąd podczas aktualizacji zdjęcia. Spróbuj ponownie."
+            isShowingAlert = true
+        }
+        
+        isUpdatingAvatarImage = false
+        inputImage = nil
     }
     
     private func updateName() async {
@@ -105,16 +122,6 @@ struct Settings: View {
         isUpdatingEmail = false
     }
     
-    func loadImage() async {
-        guard let inputImage = inputImage else { return }
-        
-        viewModel.objectWillChange.send()
-        
-        if await viewModel.changeCurrentUserAvatarImage(avatarImage: inputImage) {
-            viewModel.currentUser!.avatarImage = Image(uiImage: inputImage)
-        }
-    }
-    
     var body: some View {
         Form {
             Section {
@@ -126,8 +133,14 @@ struct Settings: View {
                             isShowingConfirmationDialog = true
                             
                         } label: {
-                            Text("Zmień zdjęcie")
-                                .foregroundColor(Appearance.buttonColor)
+                            HStack(spacing: 8) {
+                                Text("Zmień zdjęcie")
+                                    .foregroundColor(Appearance.buttonColor)
+                                
+                                if isUpdatingAvatarImage {
+                                    ProgressView()
+                                }
+                            }
                         }
                     }
                     Spacer()
@@ -232,25 +245,28 @@ struct Settings: View {
             }
         }
         .navigationTitle("Ustawienia")
-        .sheet(isPresented: $showingImagePicker){
-            ImagePicker(image: $inputImage)
-        }
-        .onChange(of: inputImage) { _ in
-            Task {
-                await loadImage()
-            }
-        }
         .navigationBarTitleDisplayMode(.inline)
         .submitLabel(.done)
         .confirmationDialog("Wybierz akcję", isPresented: $isShowingConfirmationDialog) {
             Button("Wybierz zdjęcie") {
-                showingImagePicker = true
+                isShowingImagePicker = true
             }
             
             if viewModel.currentUser!.avatarImage != nil {
                 Button("Usuń zdjęcie", role: .destructive) {
-                    // TODO: Remove avatar image file.
-                    viewModel.currentUser!.avatarImage = nil
+                    Task {
+                        await updateAvatarImage()
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $isShowingImagePicker) {
+            ImagePicker(image: $inputImage)
+        }
+        .onChange(of: inputImage) { newValue in
+            if newValue != nil {
+                Task {
+                    await updateAvatarImage()
                 }
             }
         }
