@@ -24,6 +24,8 @@
 		8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E502F792726F6FC003227AA /* ContentView.swift */; };
 		8E502F7C2726F6FE003227AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E502F7B2726F6FE003227AA /* Assets.xcassets */; };
 		8E502F7F2726F6FE003227AA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E502F7E2726F6FE003227AA /* Preview Assets.xcassets */; };
+		8E7532C92760073400BF66CE /* MapDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7532C82760073400BF66CE /* MapDetails.swift */; };
+		8E7532CB27600C6C00BF66CE /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7532CA27600C6C00BF66CE /* UserAnnotation.swift */; };
 		8E89BCCF272D5C3500C707BB /* SavedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCCE272D5C3500C707BB /* SavedList.swift */; };
 		8E89BCD1272D62FE00C707BB /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCD0272D62FE00C707BB /* UserProfile.swift */; };
 		8E89BCD4272D6D5400C707BB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCD3272D6D5400C707BB /* User.swift */; };
@@ -65,6 +67,8 @@
 		8E502F792726F6FC003227AA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8E502F7B2726F6FE003227AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8E502F7E2726F6FE003227AA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		8E7532C82760073400BF66CE /* MapDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDetails.swift; sourceTree = "<group>"; };
+		8E7532CA27600C6C00BF66CE /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
 		8E89BCCE272D5C3500C707BB /* SavedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedList.swift; sourceTree = "<group>"; };
 		8E89BCD0272D62FE00C707BB /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		8E89BCD3272D6D5400C707BB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -186,10 +190,12 @@
 		8ED8A6DF274317650016CB3B /* Maps */ = {
 			isa = PBXGroup;
 			children = (
-				C2610BD027315D8A00C4C941 /* MapView.swift */,
-				C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */,
-				C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */,
 				C252D9452757BF5D00CC99A8 /* LocationManager.swift */,
+				8E7532C82760073400BF66CE /* MapDetails.swift */,
+				C2610BD027315D8A00C4C941 /* MapView.swift */,
+				C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */,
+				C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */,
+				8E7532CA27600C6C00BF66CE /* UserAnnotation.swift */,
 			);
 			path = Maps;
 			sourceTree = "<group>";
@@ -329,6 +335,7 @@
 				8ED4B715272BEF73007A0CCC /* ListRow.swift in Sources */,
 				C2FD03B7273EFBD100A4B44E /* FilterViewContainer.swift in Sources */,
 				C2170E85273FF5AD0076ECBF /* MapViewContainer.swift in Sources */,
+				8E7532CB27600C6C00BF66CE /* UserAnnotation.swift in Sources */,
 				1CC36F18273E8A840092056B /* Settings.swift in Sources */,
 				1C6B2EE72733F17E000B96C1 /* Message.swift in Sources */,
 				8E89BCDD272DFE1300C707BB /* ConversationsList.swift in Sources */,
@@ -347,6 +354,7 @@
 				8E95D4A5274D13F9003D40DB /* PasswordChange.swift in Sources */,
 				C25458C02732F0D400C5317F /* FilterRow.swift in Sources */,
 				C2170E87274022890076ECBF /* GlobalHelpers.swift in Sources */,
+				8E7532C92760073400BF66CE /* MapDetails.swift in Sources */,
 				C25458C227332ED300C5317F /* Filters.swift in Sources */,
 				8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */,
 				8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */,
