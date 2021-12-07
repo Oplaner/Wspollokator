@@ -12,6 +12,8 @@ struct UserProfile: View {
     @EnvironmentObject var viewModel: ViewModel
     @Environment(\.colorScheme) var colorScheme
     
+    static let avatarSize: CGFloat = 160
+    
     let padding: CGFloat = 20
     
     var user: User
@@ -27,7 +29,7 @@ struct UserProfile: View {
         ScrollView {
             VStack(spacing: padding) {
                 ZStack(alignment: .bottomTrailing) {
-                    Avatar(image: user.avatarImage, size: 160)
+                    Avatar(image: user.avatarImage, size: UserProfile.avatarSize)
                     
                     ZStack {
                         Circle()

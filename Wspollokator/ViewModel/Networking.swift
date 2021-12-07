@@ -20,6 +20,12 @@ class Networking {
         return ViewModel.sampleUsers.first(where: { $0.email == email })
     }
     
+    /// Updates `user`'s `avatarImage` and returns the operation status.
+    static func update(avatarImage image: UIImage?, forUser user: User) async -> Bool {
+        await Task.sleep(1_000_000_000)
+        return true
+    }
+    
     /// Updates `user`'s `name` and returns the operation status.
     static func update(name: String, forUser user: User) async -> Bool {
         await Task.sleep(1_000_000_000)

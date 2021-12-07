@@ -204,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				8E3EEF53274DBB3100E403C9 /* DescriptionChange.swift */,
+				1CC10C10275D35F0000805BE /* ImagePicker.swift */,
 				1C5071CB2734239E005E5114 /* MyProfile.swift */,
 				8E95D4A4274D13F9003D40DB /* PasswordChange.swift */,
 				1CC36F17273E8A840092056B /* Settings.swift */,

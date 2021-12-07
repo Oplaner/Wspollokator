@@ -13,9 +13,12 @@ struct Settings: View {
     @Binding var alertType: MyProfile.SettingsAlertType
     @Binding var alertMessage: String
     @Binding var isShowingAlert: Bool
+    @State private var inputImage: UIImage?
     @State private var name = ""
     @State private var surname = ""
     @State private var email = ""
+    @State private var isShowingImagePicker = false
+    @State private var isUpdatingAvatarImage = false
     @State private var isUpdatingName = false
     @State private var isUpdatingSurname = false
     @State private var isUpdatingEmail = false
@@ -26,6 +29,24 @@ struct Settings: View {
         name = viewModel.currentUser!.name
         surname = viewModel.currentUser!.surname
         email = viewModel.currentUser!.email
+    }
+    
+    private func updateAvatarImage() async {
+        isUpdatingAvatarImage = true
+        
+        let image = inputImage == nil ? nil : viewModel.resizeImage(inputImage!)
+        
+        if await viewModel.changeCurrentUser(avatarImage: image) {
+            viewModel.objectWillChange.send()
+            viewModel.currentUser!.avatarImage = image == nil ? nil : Image(uiImage: image!)
+        } else {
+            alertType = .error
+            alertMessage = "Wystąpił błąd podczas aktualizacji zdjęcia. Spróbuj ponownie."
+            isShowingAlert = true
+        }
+        
+        isUpdatingAvatarImage = false
+        inputImage = nil
     }
     
     private func updateName() async {
@@ -113,8 +134,14 @@ struct Settings: View {
                         Button {
                             isShowingConfirmationDialog = true
                         } label: {
-                            Text("Zmień zdjęcie")
-                                .foregroundColor(Appearance.buttonColor)
+                            HStack(spacing: 8) {
+                                Text("Zmień zdjęcie")
+                                    .foregroundColor(Appearance.buttonColor)
+                                
+                                if isUpdatingAvatarImage {
+                                    ProgressView()
+                                }
+                            }
                         }
                     }
                     Spacer()
@@ -223,13 +250,24 @@ struct Settings: View {
         .submitLabel(.done)
         .confirmationDialog("Wybierz akcję", isPresented: $isShowingConfirmationDialog) {
             Button("Wybierz zdjęcie") {
-                // TODO: Show image picker.
+                isShowingImagePicker = true
             }
             
             if viewModel.currentUser!.avatarImage != nil {
                 Button("Usuń zdjęcie", role: .destructive) {
-                    // TODO: Remove avatar image file.
-                    viewModel.currentUser!.avatarImage = nil
+                    Task {
+                        await updateAvatarImage()
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $isShowingImagePicker) {
+            ImagePicker(image: $inputImage)
+        }
+        .onChange(of: inputImage) { newValue in
+            if newValue != nil {
+                Task {
+                    await updateAvatarImage()
                 }
             }
         }

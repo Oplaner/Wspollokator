@@ -67,6 +67,10 @@ import SwiftUI
         }
     }
     
+    func changeCurrentUser(avatarImage image: UIImage?) async -> Bool {
+        await Networking.update(avatarImage: image, forUser: currentUser!)
+    }
+    
     func changeCurrentUser(name: String) async -> Bool {
         await Networking.update(name: name, forUser: currentUser!)
     }
@@ -123,6 +127,25 @@ import SwiftUI
         // Unsetting the current user must be delayed, otherwise the app will crash, because many views explicitly unwrap this optional and their bodies recompute prior to displaying the login view.
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.currentUser = nil
+        }
+    }
+    
+    func resizeImage(_ image: UIImage) -> UIImage {
+        let nativeImageSize = CGSize(width: image.scale * image.size.width, height: image.scale * image.size.height)
+        let screenScale = UIScreen.main.scale
+        let nativeTargetSize = screenScale * UserProfile.avatarSize // The largest size, in pixels, at which an avatar is displayed within the app.
+        
+        if nativeImageSize.width <= nativeTargetSize && nativeImageSize.height <= nativeTargetSize {
+            return image
+        } else {
+            let scaleFactor = nativeTargetSize / max(nativeImageSize.width, nativeImageSize.height) / screenScale
+            let newImageSize = CGSize(width: scaleFactor * image.size.width, height: scaleFactor * image.size.height)
+            let renderer = UIGraphicsImageRenderer(size: newImageSize)
+            let resizedImage = renderer.image { _ in
+                image.draw(in: CGRect(origin: .zero, size: newImageSize))
+            }
+            
+            return resizedImage
         }
     }
     
