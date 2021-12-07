@@ -133,7 +133,6 @@ struct Settings: View {
                         Avatar(image: viewModel.currentUser!.avatarImage, size: 80)
                         Button {
                             isShowingConfirmationDialog = true
-                            
                         } label: {
                             HStack(spacing: 8) {
                                 Text("Zmień zdjęcie")
