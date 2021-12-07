@@ -34,9 +34,11 @@ struct Settings: View {
     private func updateAvatarImage() async {
         isUpdatingAvatarImage = true
         
-        if await viewModel.changeCurrentUser(avatarImage: inputImage) {
+        let image = inputImage == nil ? nil : viewModel.resizeImage(inputImage!)
+        
+        if await viewModel.changeCurrentUser(avatarImage: image) {
             viewModel.objectWillChange.send()
-            viewModel.currentUser!.avatarImage = inputImage == nil ? nil : Image(uiImage: inputImage!)
+            viewModel.currentUser!.avatarImage = image == nil ? nil : Image(uiImage: image!)
         } else {
             alertType = .error
             alertMessage = "Wystąpił błąd podczas aktualizacji zdjęcia. Spróbuj ponownie."

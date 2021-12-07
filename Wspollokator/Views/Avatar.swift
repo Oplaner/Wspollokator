@@ -15,8 +15,8 @@ struct Avatar: View {
         if image != nil {
             image!
                 .resizable()
-                .frame(width: size, height: size, alignment: .center)
                 .aspectRatio(contentMode: .fit)
+                .frame(width: size, height: size, alignment: .center)
                 .clipShape(Circle())
         } else {
             Image(systemName: "person.crop.circle.fill")

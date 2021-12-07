@@ -130,6 +130,25 @@ import SwiftUI
         }
     }
     
+    func resizeImage(_ image: UIImage) -> UIImage {
+        let nativeImageSize = CGSize(width: image.scale * image.size.width, height: image.scale * image.size.height)
+        let screenScale = UIScreen.main.scale
+        let nativeTargetSize = screenScale * UserProfile.avatarSize // The largest size, in pixels, at which an avatar is displayed within the app.
+        
+        if nativeImageSize.width <= nativeTargetSize && nativeImageSize.height <= nativeTargetSize {
+            return image
+        } else {
+            let scaleFactor = nativeTargetSize / max(nativeImageSize.width, nativeImageSize.height) / screenScale
+            let newImageSize = CGSize(width: scaleFactor * image.size.width, height: scaleFactor * image.size.height)
+            let renderer = UIGraphicsImageRenderer(size: newImageSize)
+            let resizedImage = renderer.image { _ in
+                image.draw(in: CGRect(origin: .zero, size: newImageSize))
+            }
+            
+            return resizedImage
+        }
+    }
+    
     func sendMessage(_ text: String, in conversation: Conversation) async -> (createdConversation: Conversation?, sentMessage: Message?, success: Bool) {
         let (messageID, timeSent) = await Networking.sendMessage(text, writtenBy: currentUser!)
         guard messageID != nil else { return (nil, nil, false) }
