@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct MyProfile: View {
     enum SettingsAlertType {
@@ -53,9 +54,20 @@ struct MyProfile: View {
                         .foregroundColor(Appearance.alternateColor)
                 }
                 Section {
-                    NavigationLink(destination: Text("Ustawianie punktu")) {
+                    let pointOfInterestBinding = Binding<CLLocationCoordinate2D?>(
+                        get: { viewModel.currentUser!.pointOfInterest },
+                        set: {
+                            viewModel.objectWillChange.send()
+                            viewModel.currentUser!.pointOfInterest = $0
+                        }
+                    )
+                    
+                    NavigationLink {
+                        MapViewContainer(pointOfInterest: pointOfInterestBinding)
+                    } label: {
                         Text("Mój punkt")
                     }
+
                     
                     let distanceBinding = Binding<Double>(
                         get: { viewModel.currentUser!.targetDistance },

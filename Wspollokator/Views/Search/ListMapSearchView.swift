@@ -64,7 +64,7 @@ struct ListMapSearchView: View {
                 if viewMode == .list {
                     SearchedList(searchedUsers: searchResults)
                 } else if viewMode == .map {
-                    MapView()
+                    MapView(searchedUsers: searchResults)
                 }
             }
             .navigationTitle("Szukaj")

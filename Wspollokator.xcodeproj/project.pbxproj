@@ -36,6 +36,7 @@
 		C2170E82273FE82D0076ECBF /* MapViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */; };
 		C2170E85273FF5AD0076ECBF /* MapViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */; };
 		C2170E87274022890076ECBF /* GlobalHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2170E86274022890076ECBF /* GlobalHelpers.swift */; };
+		C252D9462757BF5D00CC99A8 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C252D9452757BF5D00CC99A8 /* LocationManager.swift */; };
 		C25458BE2732EDEC00C5317F /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25458BD2732EDEC00C5317F /* FilterView.swift */; };
 		C25458C02732F0D400C5317F /* FilterRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25458BF2732F0D400C5317F /* FilterRow.swift */; };
 		C25458C227332ED300C5317F /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25458C127332ED300C5317F /* Filters.swift */; };
@@ -76,6 +77,7 @@
 		C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewRepresentable.swift; sourceTree = "<group>"; };
 		C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewContainer.swift; sourceTree = "<group>"; };
 		C2170E86274022890076ECBF /* GlobalHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHelpers.swift; sourceTree = "<group>"; };
+		C252D9452757BF5D00CC99A8 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C25458BD2732EDEC00C5317F /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		C25458BF2732F0D400C5317F /* FilterRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterRow.swift; sourceTree = "<group>"; };
 		C25458C127332ED300C5317F /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
@@ -185,8 +187,9 @@
 			isa = PBXGroup;
 			children = (
 				C2610BD027315D8A00C4C941 /* MapView.swift */,
-				C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */,
 				C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */,
+				C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */,
+				C252D9452757BF5D00CC99A8 /* LocationManager.swift */,
 			);
 			path = Maps;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				8ED4B717272BF8A3007A0CCC /* Appearance.swift in Sources */,
 				C2610BD327315DE700C4C941 /* ListMapSearchView.swift in Sources */,
 				1C5071CC2734239E005E5114 /* MyProfile.swift in Sources */,
+				C252D9462757BF5D00CC99A8 /* LocationManager.swift in Sources */,
 				1C6B2EE32733F141000B96C1 /* ConversationView.swift in Sources */,
 				8ED4B715272BEF73007A0CCC /* ListRow.swift in Sources */,
 				C2FD03B7273EFBD100A4B44E /* FilterViewContainer.swift in Sources */,
@@ -493,6 +497,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Współlokator";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Możesz wykorzystać bieżącą lokalizację, by szybko ustawić swój punkt.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -525,6 +530,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Współlokator";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Możesz wykorzystać bieżącą lokalizację, by szybko ustawić swój punkt.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
