@@ -15,10 +15,18 @@ struct MapView: View {
     
     @State private var allUsers: [User] = []
     
-    // Temporary annotations placeholders
-    let annotations = ViewModel.sampleUsers[0...2]
+    @State var searchedUsers: [User]?
     
-    var searchedUsers: [User]?
+    private var usersForAnnotations: [User]? {
+        var allUsers = searchedUsers
+        if allUsers != nil {
+            allUsers!.append(viewModel.currentUser!)
+            
+            return allUsers
+        }
+        
+        return nil
+    }
     
     var body: some View {
         ZStack {
@@ -36,7 +44,7 @@ struct MapView: View {
                 Map(coordinateRegion: $region,
                     interactionModes: .all,
                     showsUserLocation: false,
-                    annotationItems: searchedUsers!) { user in
+                    annotationItems: usersForAnnotations!) { user in
                     mark(for: user)
                 }
             }
@@ -48,7 +56,7 @@ struct MapView: View {
             return AnyMapAnnotationProtocol(MapAnnotation(coordinate: user.pointOfInterest!) {
                 ZStack {
                     Circle()
-                        .strokeBorder(Color.black, lineWidth: 3)
+                        .strokeBorder(.black, lineWidth: 3)
                         .background(Circle().foregroundColor(.white))
                         .frame(width: 52, height: 52)
                     Text("\("TY")")
@@ -63,18 +71,21 @@ struct MapView: View {
                 NavigationLink {
                     UserProfile(user: user)
                 } label: {
-                    Text("\(user.name)")
-                        .font(.caption)
-                        .bold()
-                        .padding(6)
-                        .foregroundColor(Color.white)
-                        .font(.body)
-                        .background(
-                            Circle()
-                                .strokeBorder(Color.black, lineWidth: 3)
-                                .background(Circle().foregroundColor(Appearance.buttonColor))
-                                .scaledToFill()
-                        )
+                    if user.avatarImage != nil {
+                        user.avatarImage!
+                            .resizable()
+                            .clipShape(Circle())
+                            .frame(width: 48, height: 48)
+                            .overlay(Circle().stroke(Color.black, lineWidth: 3))
+                            .shadow(color: .gray, radius: 1, x: 0, y: 1)
+                    } else {
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .clipShape(Circle())
+                            .frame(width: 48, height: 48)
+                            .overlay(Circle().stroke(Color.black, lineWidth: 3))
+                            .shadow(color: .gray, radius: 1, x: 0, y: 1)
+                    }
                 }
             })
         }
