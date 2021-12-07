@@ -135,10 +135,10 @@ import SwiftUI
         let screenScale = UIScreen.main.scale
         let nativeTargetSize = screenScale * UserProfile.avatarSize // The largest size, in pixels, at which an avatar is displayed within the app.
         
-        if nativeImageSize.width <= nativeTargetSize && nativeImageSize.height <= nativeTargetSize {
+        if nativeImageSize.width <= nativeTargetSize || nativeImageSize.height <= nativeTargetSize {
             return image
         } else {
-            let scaleFactor = nativeTargetSize / max(nativeImageSize.width, nativeImageSize.height) / screenScale
+            let scaleFactor = nativeTargetSize / min(nativeImageSize.width, nativeImageSize.height) / screenScale
             let newImageSize = CGSize(width: scaleFactor * image.size.width, height: scaleFactor * image.size.height)
             let renderer = UIGraphicsImageRenderer(size: newImageSize)
             let resizedImage = renderer.image { _ in
