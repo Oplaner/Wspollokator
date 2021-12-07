@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class Networking {
     /// Tries to create a new user in the database and returns their ID, or nil if the operation failed.
