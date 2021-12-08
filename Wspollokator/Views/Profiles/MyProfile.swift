@@ -26,6 +26,7 @@ struct MyProfile: View {
     @State private var alertType = SettingsAlertType.logout
     @State private var alertMessage = ""
     @State private var isShowingAlert = false
+    @State private var isUpdatingPointOfInterest = false
     
     var body: some View {
         NavigationView {
@@ -54,20 +55,19 @@ struct MyProfile: View {
                         .foregroundColor(Appearance.alternateColor)
                 }
                 Section {
-                    let pointOfInterestBinding = Binding<CLLocationCoordinate2D?>(
-                        get: { viewModel.currentUser!.pointOfInterest },
-                        set: {
-                            viewModel.objectWillChange.send()
-                            viewModel.currentUser!.pointOfInterest = $0
-                        }
-                    )
-                    
                     NavigationLink {
-                        MapViewContainer(pointOfInterest: pointOfInterestBinding)
+                        MapViewContainer(alertType: $alertType, alertMessage: $alertMessage, isShowingAlert: $isShowingAlert, isUpdatingPointOfInterest: $isUpdatingPointOfInterest)
                     } label: {
-                        Text("Mój punkt")
+                        HStack {
+                            Text("Mój punkt")
+                                .foregroundColor(Appearance.textColor)
+                            
+                            if isUpdatingPointOfInterest {
+                                Spacer()
+                                ProgressView()
+                            }
+                        }
                     }
-
                     
                     let distanceBinding = Binding<Double>(
                         get: { viewModel.currentUser!.targetDistance },

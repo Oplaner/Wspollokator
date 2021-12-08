@@ -41,7 +41,7 @@ struct MapView: View {
                     UserAnnotation(user: user, size: 50)
                 }
             }
-            .ignoresSafeArea(.all, edges: .bottom)
+            .ignoresSafeArea()
             .onAppear {
                 if let center = viewModel.currentUser!.pointOfInterest {
                     region.center = center

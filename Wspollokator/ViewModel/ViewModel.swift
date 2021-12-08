@@ -6,7 +6,6 @@
 //
 
 import CoreLocation
-import Foundation
 import SwiftUI
 
 @MainActor class ViewModel: ObservableObject {
@@ -89,6 +88,10 @@ import SwiftUI
     
     func changeCurrentUser(description: String) async -> Bool {
         await Networking.update(description: description, forUser: currentUser!)
+    }
+    
+    func changeCurrentUser(pointOfInterest: CLLocationCoordinate2D?) async -> Bool {
+        await Networking.update(pointOfInterest: pointOfInterest, forUser: currentUser!)
     }
     
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
