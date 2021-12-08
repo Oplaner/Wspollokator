@@ -43,12 +43,12 @@ struct ListRow: View {
             
             VStack(alignment: .leading) {
                 Text(headline)
-                    .font(.headline)
                     .lineLimit(2)
                 
                 if caption != nil {
                     Text(caption!)
                         .font(.caption)
+                        .foregroundColor(.secondary)
                         .lineLimit(1)
                 }
             }

@@ -53,6 +53,7 @@ struct SavedList: View {
             List {
                 if viewModel.currentUser!.savedUsers.isEmpty {
                     Text("Brak zapisanych osób.")
+                        .foregroundColor(.secondary)
                 } else {
                     let distances = fetchDistances()
                     let sortedUsers = sortedUsers(usingDistances: distances)
@@ -80,7 +81,6 @@ struct SavedList: View {
                 }
             }
             .navigationTitle("Zapisane osoby")
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
