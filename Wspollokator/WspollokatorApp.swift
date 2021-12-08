@@ -11,10 +11,6 @@ import SwiftUI
 struct WspollokatorApp: App {
     @StateObject var viewModel = ViewModel.sample
     
-    init() {
-        Appearance.configureAppearance()
-    }
-    
     var body: some Scene {
         WindowGroup {
             ContentView()
