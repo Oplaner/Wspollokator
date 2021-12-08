@@ -62,9 +62,9 @@ struct ListMapSearchView: View {
                 .padding(EdgeInsets(top: 8, leading: 8, bottom: 0, trailing: 8))
                 
                 if viewMode == .list {
-                    SearchedList(searchedUsers: searchResults)
+                    SearchedList(searchResults: searchResults)
                 } else if viewMode == .map {
-                    MapView(searchedUsers: searchResults)
+                    MapView(searchResults: searchResults)
                 }
             }
             .navigationTitle("Szukaj")

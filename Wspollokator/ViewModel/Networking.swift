@@ -5,7 +5,7 @@
 //  Created by Kamil Chmielewski on 30.11.21.
 //
 
-import Foundation
+import CoreLocation
 import UIKit
 
 class Networking {
@@ -65,6 +65,12 @@ class Networking {
     
     /// Updates `user`'s `description` and returns the operation status.
     static func update(description: String, forUser user: User) async -> Bool {
+        await Task.sleep(1_000_000_000)
+        return true
+    }
+    
+    /// Updates `user`'s `pointOfInterest` and returns the operation status.
+    static func update(pointOfInterest: CLLocationCoordinate2D?, forUser user: User) async -> Bool {
         await Task.sleep(1_000_000_000)
         return true
     }

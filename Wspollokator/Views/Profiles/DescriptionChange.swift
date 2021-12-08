@@ -25,6 +25,7 @@ struct DescriptionChange: View {
             description = viewModel.currentUser!.description
         } else {
             if await viewModel.changeCurrentUser(description: description) {
+                viewModel.objectWillChange.send()
                 viewModel.currentUser!.description = description
             } else {
                 description = viewModel.currentUser!.description
