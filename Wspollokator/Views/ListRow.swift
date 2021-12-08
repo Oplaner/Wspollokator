@@ -50,10 +50,8 @@ struct ListRow: View {
                     Text(caption!)
                         .font(.caption)
                         .lineLimit(1)
-                        .foregroundColor(Appearance.alternateColor)
                 }
             }
-            .foregroundColor(Appearance.textColor)
             
             Spacer()
             
@@ -70,7 +68,6 @@ struct ListRow: View {
                     Image(systemName: viewModel.currentUser!.savedUsers.contains(relevantUser!) ? "star.fill" : "star")
                         .frame(width: 50, height: 50, alignment: .center)
                         .font(.system(size: 25))
-                        .foregroundColor(Appearance.buttonColor)
                 }
                 .buttonStyle(.borderless)
             }

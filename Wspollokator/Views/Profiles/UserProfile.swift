@@ -48,7 +48,6 @@ struct UserProfile: View {
                             Image(systemName: viewModel.currentUser!.savedUsers.contains(user) ? "star.fill" : "star")
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .font(.system(size: 25))
-                                .foregroundColor(Appearance.buttonColor)
                         }
                     }
                 }
@@ -61,11 +60,9 @@ struct UserProfile: View {
                         if let locationName = nearestLocationName {
                             Text(String.localizedStringWithFormat("%.1f km, w pobliżu \(locationName)", distance))
                                 .font(.subheadline)
-                                .foregroundColor(Appearance.alternateColor)
                         } else {
                             Text(String.localizedStringWithFormat("%.1f km", distance))
                                 .font(.subheadline)
-                                .foregroundColor(Appearance.alternateColor)
                         }
                     }
                 }
@@ -96,14 +93,12 @@ struct UserProfile: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .font(.headline)
-                    .tint(Appearance.buttonColor)
                 }
             }
             .padding(padding)
         }
         .navigationTitle("Profil")
         .navigationBarTitleDisplayMode(.inline)
-        .foregroundColor(Appearance.textColor)
         .task {
             nearestLocationName = await user.fetchNearestLocationName()
         }

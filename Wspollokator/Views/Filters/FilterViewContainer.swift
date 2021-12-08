@@ -30,21 +30,18 @@ struct FilterViewContainer: View {
                             }
                         } label: {
                             Text("Ustaw zgodnie z moimi preferencjami")
-                                .foregroundColor(Appearance.buttonColor)
                         }
                     }
                 }
             }
             .navigationTitle("Filtry")
             .navigationBarTitleDisplayMode(.inline)
-            .foregroundColor(Appearance.textColor)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         dismiss()
                     } label: {
                         Text("Gotowe")
-                            .foregroundColor(Appearance.textColor)
                             .bold()
                     }
                 }

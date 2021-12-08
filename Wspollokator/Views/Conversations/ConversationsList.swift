@@ -57,7 +57,6 @@ struct ConversationsList: View {
                 List {
                     if viewModel.conversations.isEmpty {
                         Text("Brak wiadomości.")
-                            .foregroundColor(Appearance.textColor)
                     } else {
                         ForEach(sortedConversations) { conversation in
                             NavigationLink(destination: ConversationView(conversation: conversation)) {
@@ -75,7 +74,6 @@ struct ConversationsList: View {
                             isShowingNewConversationSheet = true
                         } label: {
                             Label("Nowa konwersacja", systemImage: "square.and.pencil")
-                                .foregroundColor(Appearance.textColor)
                         }
                         .sheet(isPresented: $isShowingNewConversationSheet) {
                             NewConversation(isShowingConversationView: $isShowingConversationView, newConversationParticipants: $newConversationParticipants)

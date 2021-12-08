@@ -54,7 +54,6 @@ struct Login: View {
                 .clipShape(Circle())
             
             Text("WSPÓŁLOKATORZY")
-                .foregroundColor(Appearance.textColor)
                 .font(.largeTitle)
                 .bold()
             VStack {
@@ -75,7 +74,6 @@ struct Login: View {
                         }
                 }
                 .padding([.top, .bottom, .leading], 5)
-                .foregroundColor(Appearance.textColor)
                 .background(.white)
                 .cornerRadius(8)
                 .padding(.horizontal, 40)
@@ -90,7 +88,6 @@ struct Login: View {
                     Text("Zaloguj się")
                         .font(.headline)
                         .bold()
-                        .foregroundColor(Appearance.textColor)
                 }
                 .disabled(didAuthenticate || isAuthenticating || emailTrimmed.isEmpty || password.isEmpty)
                 
@@ -108,12 +105,10 @@ struct Login: View {
                 isShowingSignUpView = true
             } label: {
                 Text("Załóż konto")
-                    .foregroundColor(Appearance.textColor)
                     .padding(.bottom, 20)
             }
             .disabled(didAuthenticate || isAuthenticating)
         }
-        .background(Appearance.backgroundColor)
         .alert("Błąd", isPresented: $isShowingAlert) {
             Button("OK") {
                 focusedFieldNumber = 1

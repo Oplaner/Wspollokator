@@ -73,7 +73,6 @@ struct PasswordChange: View {
                         focusedFieldNumber = nil
                     }
             }
-            .foregroundColor(Appearance.textColor)
             
             Section {
                 Button {
@@ -83,7 +82,6 @@ struct PasswordChange: View {
                 } label: {
                     HStack {
                         Text("Zmień hasło")
-                            .tint(Appearance.buttonColor)
                         
                         Spacer()
                         

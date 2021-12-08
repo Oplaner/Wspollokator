@@ -53,7 +53,6 @@ struct SavedList: View {
             List {
                 if viewModel.currentUser!.savedUsers.isEmpty {
                     Text("Brak zapisanych osób.")
-                        .foregroundColor(Appearance.textColor)
                 } else {
                     let distances = fetchDistances()
                     let sortedUsers = sortedUsers(usingDistances: distances)

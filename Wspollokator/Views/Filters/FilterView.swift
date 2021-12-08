@@ -20,7 +20,6 @@ struct FilterView: View {
                     Text("do \(String.localizedStringWithFormat("%.1f km", targetDistance))")
                 }
                 Slider(value: $targetDistance, in: 0...10)
-                    .tint(Appearance.buttonColor)
             }
             .padding(.vertical)
             

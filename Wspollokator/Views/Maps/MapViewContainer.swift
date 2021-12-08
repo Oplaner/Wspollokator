@@ -103,7 +103,6 @@ struct MapViewContainer: View {
                                 inputCoordinate = userLocation
                             }
                         }
-                        .foregroundColor(Appearance.textColor)
                     }
                     .padding()
                     .background(panelMaterial)

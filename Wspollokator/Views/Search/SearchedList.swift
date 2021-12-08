@@ -16,10 +16,8 @@ struct SearchedList: View {
         List {
             if searchResults == nil {
                 Text("Aby móc wyszukiwać współlokatorów, ustaw swój punkt.")
-                    .foregroundColor(Appearance.textColor)
             } else if searchResults!.isEmpty {
                 Text("Nie znaleziono osób spełniających zadane kryteria.")
-                    .foregroundColor(Appearance.textColor)
             } else {
                 ForEach(searchResults!) { user in
                     NavigationLink(destination: UserProfile(user: user)) {

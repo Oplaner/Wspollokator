@@ -24,7 +24,6 @@ struct UserAnnotation: View {
                     .overlay(Circle().stroke(Color.gray, lineWidth: overlayWidth))
                 Text("TY")
                     .font(.headline)
-                    .foregroundColor(Appearance.textColor)
             }
         } else {
             NavigationLink {

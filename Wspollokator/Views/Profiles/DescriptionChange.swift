@@ -44,7 +44,6 @@ struct DescriptionChange: View {
                 TextEditor(text: $description)
                     .frame(minHeight: 0.3 * UIScreen.main.bounds.height)
                     .lineLimit(nil)
-                    .foregroundColor(Appearance.textColor)
                     .focused($focusedFieldNumber, equals: 1)
                     .id(1)
                     .onChange(of: description) { _ in

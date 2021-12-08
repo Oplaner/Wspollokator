@@ -89,7 +89,6 @@ struct SignUp: View {
                 Spacer()
                 
                 Text("Rejestracja")
-                    .foregroundColor(Appearance.textColor)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
@@ -133,7 +132,6 @@ struct SignUp: View {
                             }
                     }
                     .padding([.top, .bottom, .leading], 5)
-                    .foregroundColor(Appearance.textColor)
                     .background(.white)
                     .cornerRadius(8)
                     .padding(.horizontal, 40)
@@ -148,7 +146,6 @@ struct SignUp: View {
                         Text("Załóż konto")
                             .font(.headline)
                             .bold()
-                            .foregroundColor(Appearance.textColor)
                     }
                     .disabled(didCreateUserAccount || isCreatingUserAccount || nameTrimmed.isEmpty || surnameTrimmed.isEmpty || emailTrimmed.isEmpty || password1.isEmpty || password2.isEmpty)
                     
@@ -163,13 +160,11 @@ struct SignUp: View {
                     dismiss()
                 } label: {
                     Text("Zaloguj się")
-                        .foregroundColor(Appearance.textColor)
                         .padding(.bottom, 20)
                 }
                 .disabled(didCreateUserAccount || isCreatingUserAccount)
             }
         }
-        .background(Appearance.backgroundColor)
         .alert(alertType.title, isPresented: $isShowingAlert) {
             if alertType == .success {
                 Button("OK") {

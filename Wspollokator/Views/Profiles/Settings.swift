@@ -136,7 +136,6 @@ struct Settings: View {
                         } label: {
                             HStack(spacing: 8) {
                                 Text("Zmień zdjęcie")
-                                    .foregroundColor(Appearance.buttonColor)
                                 
                                 if isUpdatingAvatarImage {
                                     ProgressView()
@@ -151,11 +150,9 @@ struct Settings: View {
             Section {
                 HStack {
                     Text("Imię")
-                        .foregroundColor(Appearance.textColor)
                     Spacer()
                     TextField("Imię", text: $name)
                         .multilineTextAlignment(.trailing)
-                        .foregroundColor(Appearance.alternateColor)
                         .onAppear(perform: formDidAppear)
                         .onSubmit {
                             Task {
@@ -171,11 +168,9 @@ struct Settings: View {
                 
                 HStack {
                     Text("Nazwisko")
-                        .foregroundColor(Appearance.textColor)
                     Spacer()
                     TextField("Nazwisko", text: $surname)
                         .multilineTextAlignment(.trailing)
-                        .foregroundColor(Appearance.alternateColor)
                         .onAppear(perform: formDidAppear)
                         .onSubmit {
                             Task {
@@ -191,13 +186,11 @@ struct Settings: View {
                 
                 HStack {
                     Text("E-mail")
-                        .foregroundColor(Appearance.textColor)
                     Spacer()
                     TextField("E-mail", text: $email)
                         .multilineTextAlignment(.trailing)
                         .keyboardType(.emailAddress)
                         .textInputAutocapitalization(.never)
-                        .foregroundColor(Appearance.alternateColor)
                         .onAppear(perform: formDidAppear)
                         .onSubmit {
                             Task {
@@ -215,7 +208,6 @@ struct Settings: View {
                     PasswordChange()
                 } label: {
                     Text("Hasło")
-                        .foregroundColor(Appearance.textColor)
                 }
                 
                 NavigationLink {
@@ -223,7 +215,6 @@ struct Settings: View {
                 } label: {
                     HStack {
                         Text("Mój opis")
-                            .foregroundColor(Appearance.textColor)
                         
                         if isUpdatingDescription {
                             Spacer()

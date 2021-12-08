@@ -96,7 +96,6 @@ struct ConversationView: View {
             ZStack(alignment: .trailing) {
                 TextField("Wpisz wiadomość", text: $text)
                     .textFieldStyle(.roundedBorder)
-                    .foregroundColor(Appearance.textColor)
                     .focused($focusedFieldNumber, equals: 1)
                     .id(1)
                     .disabled(isSendingMessage)
