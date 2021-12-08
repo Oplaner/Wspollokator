@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct Avatar: View {
-    let defaultAvatarColor = Color(red: 32 / 255, green: 104 / 255, blue: 22 / 255)
-    
     var image: Image?
     var size: CGFloat
     
@@ -25,7 +23,7 @@ struct Avatar: View {
                 .resizable()
                 .frame(width: size, height: size, alignment: .center)
                 .background(Color.white, in: Circle())
-                .foregroundColor(defaultAvatarColor)
+                .foregroundColor(Color("FillColor"))
         }
     }
 }
