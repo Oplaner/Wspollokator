@@ -57,6 +57,7 @@ struct ConversationsList: View {
                 List {
                     if viewModel.conversations.isEmpty {
                         Text("Brak wiadomości.")
+                            .foregroundColor(.secondary)
                     } else {
                         ForEach(sortedConversations) { conversation in
                             NavigationLink(destination: ConversationView(conversation: conversation)) {
@@ -67,7 +68,6 @@ struct ConversationsList: View {
                     }
                 }
                 .navigationTitle("Wiadomości")
-                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
@@ -77,7 +77,6 @@ struct ConversationsList: View {
                         }
                         .sheet(isPresented: $isShowingNewConversationSheet) {
                             NewConversation(isShowingConversationView: $isShowingConversationView, newConversationParticipants: $newConversationParticipants)
-                                .environment(\.colorScheme, .light) // TODO: 🤔
                         }
                     }
                 }

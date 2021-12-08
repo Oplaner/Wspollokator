@@ -53,6 +53,7 @@ struct NewConversation: View {
             List(selection: $selectedUsers) {
                 if viewModel.currentUser!.savedUsers.isEmpty {
                     Text("Aby móc tworzyć konwersacje, dodaj przynajmniej 1 osobę do listy zapisanych. Możesz też skorzystać z odpowiedniego przycisku w profilu użytkownika.")
+                        .foregroundColor(.secondary)
                 } else {
                     Section {
                         ForEach(sortedUsers, id: \.self) { user in
