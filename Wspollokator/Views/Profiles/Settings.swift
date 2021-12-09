@@ -153,6 +153,7 @@ struct Settings: View {
                     Spacer()
                     TextField("Imię", text: $name)
                         .multilineTextAlignment(.trailing)
+                        .foregroundColor(.secondary)
                         .onAppear(perform: formDidAppear)
                         .onSubmit {
                             Task {
@@ -171,6 +172,7 @@ struct Settings: View {
                     Spacer()
                     TextField("Nazwisko", text: $surname)
                         .multilineTextAlignment(.trailing)
+                        .foregroundColor(.secondary)
                         .onAppear(perform: formDidAppear)
                         .onSubmit {
                             Task {
@@ -189,6 +191,7 @@ struct Settings: View {
                     Spacer()
                     TextField("E-mail", text: $email)
                         .multilineTextAlignment(.trailing)
+                        .foregroundColor(.secondary)
                         .keyboardType(.emailAddress)
                         .textInputAutocapitalization(.never)
                         .onAppear(perform: formDidAppear)

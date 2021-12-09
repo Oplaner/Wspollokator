@@ -48,6 +48,7 @@ struct MyProfile: View {
                         }
                     )
                     Toggle("Szukam współlokatora", isOn: binding)
+                        .tint(Color.accentColor)
                 } footer: {
                     let negation = viewModel.currentUser!.isSearchable ? "" : "nie "
                     Text("Twój profil \(negation)będzie widoczny w wynikach wyszukiwania.")
@@ -87,7 +88,6 @@ struct MyProfile: View {
                 }
             }
             .navigationTitle("Mój profil")
-            .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 viewModel.objectWillChange.send()
             }
