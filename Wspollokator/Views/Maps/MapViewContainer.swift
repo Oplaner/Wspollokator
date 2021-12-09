@@ -84,6 +84,7 @@ struct MapViewContainer: View {
             VStack {
                 VStack(alignment: .leading, spacing: panelSpacing) {
                     Text("Aby ustawić swój punkt, przytrzymaj palec na mapie\(alternativeInstruction).")
+                        .font(.subheadline)
                         .foregroundColor(.secondary)
                     
                     if !currentPointString.isEmpty {
@@ -111,6 +112,8 @@ struct MapViewContainer: View {
             }
             .padding()
         }
+        .navigationTitle("Mój punkt")
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             mapData.enableLocationServices()
             inputCoordinate = viewModel.currentUser!.pointOfInterest
