@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ListRow: View {
     @EnvironmentObject var viewModel: ViewModel
-    @Environment(\.colorScheme) var colorScheme
     
     let height: CGFloat = 60
     let padding: CGFloat = 10
@@ -28,9 +27,9 @@ struct ListRow: View {
                 
                 HStack(spacing: 0) {
                     Avatar(image: images[0], size: avatarSize)
-                        .overlay(Circle().stroke(colorScheme == .dark ? Color(uiColor: .secondarySystemBackground) : Color.white, lineWidth: outlineWidth))
+                        .overlay(Circle().stroke(Color(uiColor: .secondarySystemBackground), lineWidth: outlineWidth))
                     Avatar(image: images[1], size: avatarSize)
-                        .overlay(Circle().stroke(colorScheme == .dark ? Color(uiColor: .secondarySystemBackground) : Color.white, lineWidth: outlineWidth))
+                        .overlay(Circle().stroke(Color(uiColor: .secondarySystemBackground), lineWidth: outlineWidth))
                         .offset(x: -0.5 * avatarSize, y: -0.5 * avatarSize)
                 }
                 .padding(.trailing, -0.5 * avatarSize)

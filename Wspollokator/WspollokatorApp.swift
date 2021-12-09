@@ -7,15 +7,13 @@
 
 import SwiftUI
 
-@main
-struct WspollokatorApp: App {
+@main struct WspollokatorApp: App {
     @StateObject var viewModel = ViewModel.sample
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(viewModel)
-                .environment(\.colorScheme, .light) // TODO: 🤔
         }
     }
 }

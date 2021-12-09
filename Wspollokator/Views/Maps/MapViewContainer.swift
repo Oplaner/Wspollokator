@@ -12,7 +12,7 @@ struct MapViewContainer: View {
     @EnvironmentObject var viewModel: ViewModel
     @StateObject var mapData = LocationManager()
     
-    let panelMaterial = Material.thinMaterial
+    let panelMaterial = Material.regularMaterial
     let panelCornerRadius: CGFloat = 14
     let panelSpacing: CGFloat = 14
     
@@ -79,7 +79,6 @@ struct MapViewContainer: View {
     var body: some View {
         ZStack {
             MapViewRepresentable(mapData: mapData, inputCoordinate: $inputCoordinate)
-                .ignoresSafeArea()
             
             VStack {
                 VStack(alignment: .leading, spacing: panelSpacing) {
