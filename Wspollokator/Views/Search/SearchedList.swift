@@ -16,8 +16,10 @@ struct SearchedList: View {
         List {
             if searchResults == nil {
                 Text("Aby móc wyszukiwać współlokatorów, ustaw swój punkt.")
+                    .foregroundColor(.secondary)
             } else if searchResults!.isEmpty {
                 Text("Nie znaleziono osób spełniających zadane kryteria.")
+                    .foregroundColor(.secondary)
             } else {
                 ForEach(searchResults!) { user in
                     NavigationLink(destination: UserProfile(user: user)) {
@@ -31,7 +33,9 @@ struct SearchedList: View {
 
 struct SearchedList_Previews: PreviewProvider {
     static var previews: some View {
-        SearchedList(searchResults: ViewModel.sampleUsers)
-            .environmentObject(ViewModel.sample)
+        NavigationView {
+            SearchedList(searchResults: ViewModel.sampleUsers)
+                .environmentObject(ViewModel.sample)
+        }
     }
 }
