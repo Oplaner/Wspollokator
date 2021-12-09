@@ -10,7 +10,6 @@ import MapKit
 
 struct UserProfile: View {
     @EnvironmentObject var viewModel: ViewModel
-    @Environment(\.colorScheme) var colorScheme
     
     static let avatarSize: CGFloat = 160
     
@@ -34,7 +33,7 @@ struct UserProfile: View {
                     ZStack {
                         Circle()
                             .frame(width: 50, height: 50)
-                            .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
+                            .foregroundColor(Color(uiColor: .systemBackground))
                         
                         Button {
                             viewModel.objectWillChange.send()
@@ -48,7 +47,6 @@ struct UserProfile: View {
                             Image(systemName: viewModel.currentUser!.savedUsers.contains(user) ? "star.fill" : "star")
                                 .frame(width: 50, height: 50, alignment: .center)
                                 .font(.system(size: 25))
-                                .foregroundColor(Appearance.buttonColor)
                         }
                     }
                 }
@@ -61,11 +59,11 @@ struct UserProfile: View {
                         if let locationName = nearestLocationName {
                             Text(String.localizedStringWithFormat("%.1f km, w pobliżu \(locationName)", distance))
                                 .font(.subheadline)
-                                .foregroundColor(Appearance.alternateColor)
+                                .foregroundColor(.secondary)
                         } else {
                             Text(String.localizedStringWithFormat("%.1f km", distance))
                                 .font(.subheadline)
-                                .foregroundColor(Appearance.alternateColor)
+                                .foregroundColor(.secondary)
                         }
                     }
                 }
@@ -91,19 +89,19 @@ struct UserProfile: View {
                 NavigationLink(isActive: $isShowingConversationView) {
                     ConversationView(conversation: conversation)
                 } label: {
-                    Button("Wyślij wiadomość") {
+                    Button {
                         isShowingConversationView = true
+                    } label: {
+                        Text("Wyślij wiadomość")
+                            .bold()
                     }
                     .buttonStyle(.borderedProminent)
-                    .font(.headline)
-                    .tint(Appearance.buttonColor)
                 }
             }
             .padding(padding)
         }
         .navigationTitle("Profil")
         .navigationBarTitleDisplayMode(.inline)
-        .foregroundColor(Appearance.textColor)
         .task {
             nearestLocationName = await user.fetchNearestLocationName()
         }
@@ -112,7 +110,9 @@ struct UserProfile: View {
 
 struct UserProfile_Previews: PreviewProvider {
     static var previews: some View {
-        UserProfile(user: ViewModel.sampleUsers[1])
-            .environmentObject(ViewModel.sample)
+        NavigationView {
+            UserProfile(user: ViewModel.sampleUsers[1])
+                .environmentObject(ViewModel.sample)
+        }
     }
 }

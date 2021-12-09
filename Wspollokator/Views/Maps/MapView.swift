@@ -28,12 +28,12 @@ struct MapView: View {
         if searchResults == nil {
             List {
                 Text("Aby móc wyszukiwać współlokatorów, ustaw swój punkt.")
-                    .foregroundColor(Appearance.textColor)
+                    .foregroundColor(.secondary)
             }
         } else if searchResults!.isEmpty {
             List {
                 Text("Nie znaleziono osób spełniających zadane kryteria.")
-                    .foregroundColor(Appearance.textColor)
+                    .foregroundColor(.secondary)
             }
         } else {
             Map(coordinateRegion: $region, interactionModes: .all, showsUserLocation: false, annotationItems: usersForAnnotations!) { user in
@@ -41,7 +41,6 @@ struct MapView: View {
                     UserAnnotation(user: user, size: 50)
                 }
             }
-            .ignoresSafeArea()
             .onAppear {
                 if let center = viewModel.currentUser!.pointOfInterest {
                     region.center = center

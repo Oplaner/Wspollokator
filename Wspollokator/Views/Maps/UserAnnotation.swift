@@ -21,17 +21,16 @@ struct UserAnnotation: View {
                 Circle()
                     .frame(width: size, height: size)
                     .foregroundColor(.white)
-                    .overlay(Circle().stroke(Color.gray, lineWidth: overlayWidth))
+                    .overlay(Circle().stroke(Color("FillColor"), lineWidth: overlayWidth))
                 Text("TY")
                     .font(.headline)
-                    .foregroundColor(Appearance.textColor)
             }
         } else {
             NavigationLink {
                 UserProfile(user: user)
             } label: {
                 Avatar(image: user.avatarImage, size: size)
-                    .overlay(Circle().stroke(Color.gray, lineWidth: overlayWidth))
+                    .overlay(Circle().stroke(Color("FillColor"), lineWidth: overlayWidth))
             }
         }
     }

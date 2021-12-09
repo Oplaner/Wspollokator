@@ -33,7 +33,6 @@
 		8E89BCDD272DFE1300C707BB /* ConversationsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCDC272DFE1300C707BB /* ConversationsList.swift */; };
 		8E95D4A5274D13F9003D40DB /* PasswordChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E95D4A4274D13F9003D40DB /* PasswordChange.swift */; };
 		8ED4B715272BEF73007A0CCC /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED4B714272BEF73007A0CCC /* ListRow.swift */; };
-		8ED4B717272BF8A3007A0CCC /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED4B716272BF8A2007A0CCC /* Appearance.swift */; };
 		8EE5EB3D27582E2100915C7E /* NewConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EE5EB3C27582E2100915C7E /* NewConversation.swift */; };
 		8EEB4AC42756866B00C96021 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EEB4AC32756866B00C96021 /* Networking.swift */; };
 		C2170E82273FE82D0076ECBF /* MapViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */; };
@@ -76,7 +75,6 @@
 		8E89BCDC272DFE1300C707BB /* ConversationsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsList.swift; sourceTree = "<group>"; };
 		8E95D4A4274D13F9003D40DB /* PasswordChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordChange.swift; sourceTree = "<group>"; };
 		8ED4B714272BEF73007A0CCC /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
-		8ED4B716272BF8A2007A0CCC /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		8EE5EB3C27582E2100915C7E /* NewConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversation.swift; sourceTree = "<group>"; };
 		8EEB4AC32756866B00C96021 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewRepresentable.swift; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 		8E634960272F117D00244985 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				8ED4B716272BF8A2007A0CCC /* Appearance.swift */,
 				8E7532CC2760DC9600BF66CE /* CoordinateExtension.swift */,
 				C25458C127332ED300C5317F /* Filters.swift */,
 			);
@@ -327,7 +324,6 @@
 				1C6B2EE92733F1ED000B96C1 /* ChatRow.swift in Sources */,
 				C25458BE2732EDEC00C5317F /* FilterView.swift in Sources */,
 				1C6B2EDF2733F0A2000B96C1 /* Login.swift in Sources */,
-				8ED4B717272BF8A3007A0CCC /* Appearance.swift in Sources */,
 				C2610BD327315DE700C4C941 /* ListMapSearchView.swift in Sources */,
 				1C5071CC2734239E005E5114 /* MyProfile.swift in Sources */,
 				C252D9462757BF5D00CC99A8 /* LocationManager.swift in Sources */,

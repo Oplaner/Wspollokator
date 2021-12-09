@@ -38,7 +38,7 @@ struct ChatRow: View {
                         .cornerRadius(cornerRadius)
                     Text(formatTimeString(from: message.timeSent))
                         .font(.caption2)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.secondary)
                 }
             } else {
                 if isGroupConversation {
@@ -47,11 +47,11 @@ struct ChatRow: View {
                         Text(message.content)
                             .foregroundColor(.white)
                             .padding(textPadding)
-                            .background(Appearance.fillColor)
+                            .background(Color("FillColor"))
                             .cornerRadius(cornerRadius)
                         Text(formatTimeString(from: message.timeSent))
                             .font(.caption2)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.secondary)
                     }
                     Spacer(minLength: spacerMinLength)
                 } else {
@@ -59,11 +59,11 @@ struct ChatRow: View {
                         Text(message.content)
                             .foregroundColor(.white)
                             .padding(textPadding)
-                            .background(Appearance.fillColor)
+                            .background(Color("FillColor"))
                             .cornerRadius(cornerRadius)
                         Text(formatTimeString(from: message.timeSent))
                             .font(.caption2)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.secondary)
                     }
                     Spacer(minLength: spacerMinLength)
                 }

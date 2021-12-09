@@ -12,7 +12,7 @@ struct MapViewContainer: View {
     @EnvironmentObject var viewModel: ViewModel
     @StateObject var mapData = LocationManager()
     
-    let panelMaterial = Material.thinMaterial
+    let panelMaterial = Material.regularMaterial
     let panelCornerRadius: CGFloat = 14
     let panelSpacing: CGFloat = 14
     
@@ -79,11 +79,11 @@ struct MapViewContainer: View {
     var body: some View {
         ZStack {
             MapViewRepresentable(mapData: mapData, inputCoordinate: $inputCoordinate)
-                .ignoresSafeArea()
             
             VStack {
                 VStack(alignment: .leading, spacing: panelSpacing) {
                     Text("Aby ustawić swój punkt, przytrzymaj palec na mapie\(alternativeInstruction).")
+                        .font(.subheadline)
                         .foregroundColor(.secondary)
                     
                     if !currentPointString.isEmpty {
@@ -103,7 +103,6 @@ struct MapViewContainer: View {
                                 inputCoordinate = userLocation
                             }
                         }
-                        .foregroundColor(Appearance.textColor)
                     }
                     .padding()
                     .background(panelMaterial)
@@ -112,6 +111,8 @@ struct MapViewContainer: View {
             }
             .padding()
         }
+        .navigationTitle("Mój punkt")
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             mapData.enableLocationServices()
             inputCoordinate = viewModel.currentUser!.pointOfInterest

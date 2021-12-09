@@ -77,11 +77,11 @@ struct SignUp: View {
     var body: some View {
         ZStack {
             VStack {
-                Image("pat_mat")
+                Image("logo-300")
                     .resizable()
                     .frame(width: 300, height: 300)
-                    .clipShape(Circle())
-                    .opacity(0.2)
+                    .padding(.top, 20)
+                    .opacity(0.1)
                 Spacer()
             }
             
@@ -89,55 +89,50 @@ struct SignUp: View {
                 Spacer()
                 
                 Text("Rejestracja")
-                    .foregroundColor(Appearance.textColor)
                     .font(.largeTitle)
-                    .fontWeight(.bold)
+                    .foregroundColor(Color("FillColor"))
+                    .bold()
                 
-                VStack {
-                    Group {
-                        TextField("Imię", text: $name)
-                            .focused($focusedFieldNumber, equals: 1)
-                            .submitLabel(.next)
-                            .onSubmit {
-                                focusedFieldNumber = 2
-                            }
-                        
-                        TextField("Nazwisko", text: $surname)
-                            .focused($focusedFieldNumber, equals: 2)
-                            .submitLabel(.next)
-                            .onSubmit {
-                                focusedFieldNumber = 3
-                            }
-                        
-                        TextField("Adres e-mail", text: $email)
-                            .keyboardType(.emailAddress)
-                            .textInputAutocapitalization(.never)
-                            .focused($focusedFieldNumber, equals: 3)
-                            .submitLabel(.next)
-                            .onSubmit {
-                                focusedFieldNumber = 4
-                            }
-                        
-                        SecureField("Hasło", text: $password1)
-                            .focused($focusedFieldNumber, equals: 4)
-                            .submitLabel(.next)
-                            .onSubmit {
-                                focusedFieldNumber = 5
-                            }
-                        
-                        SecureField("Powtórz hasło", text: $password2)
-                            .focused($focusedFieldNumber, equals: 5)
-                            .submitLabel(.done)
-                            .onSubmit {
-                                focusedFieldNumber = nil
-                            }
-                    }
-                    .padding([.top, .bottom, .leading], 5)
-                    .foregroundColor(Appearance.textColor)
-                    .background(.white)
-                    .cornerRadius(8)
-                    .padding(.horizontal, 40)
+                Group {
+                    TextField("Imię", text: $name)
+                        .focused($focusedFieldNumber, equals: 1)
+                        .submitLabel(.next)
+                        .onSubmit {
+                            focusedFieldNumber = 2
+                        }
+                    
+                    TextField("Nazwisko", text: $surname)
+                        .focused($focusedFieldNumber, equals: 2)
+                        .submitLabel(.next)
+                        .onSubmit {
+                            focusedFieldNumber = 3
+                        }
+                    
+                    TextField("Adres e-mail", text: $email)
+                        .keyboardType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                        .focused($focusedFieldNumber, equals: 3)
+                        .submitLabel(.next)
+                        .onSubmit {
+                            focusedFieldNumber = 4
+                        }
+                    
+                    SecureField("Hasło", text: $password1)
+                        .focused($focusedFieldNumber, equals: 4)
+                        .submitLabel(.next)
+                        .onSubmit {
+                            focusedFieldNumber = 5
+                        }
+                    
+                    SecureField("Powtórz hasło", text: $password2)
+                        .focused($focusedFieldNumber, equals: 5)
+                        .submitLabel(.done)
+                        .onSubmit {
+                            focusedFieldNumber = nil
+                        }
                 }
+                .textFieldStyle(.roundedBorder)
+                .padding(.horizontal, 40)
                 
                 HStack(spacing: 8) {
                     Button {
@@ -146,10 +141,9 @@ struct SignUp: View {
                         }
                     } label: {
                         Text("Załóż konto")
-                            .font(.headline)
                             .bold()
-                            .foregroundColor(Appearance.textColor)
                     }
+                    .buttonStyle(.borderedProminent)
                     .disabled(didCreateUserAccount || isCreatingUserAccount || nameTrimmed.isEmpty || surnameTrimmed.isEmpty || emailTrimmed.isEmpty || password1.isEmpty || password2.isEmpty)
                     
                     if isCreatingUserAccount {
@@ -163,13 +157,11 @@ struct SignUp: View {
                     dismiss()
                 } label: {
                     Text("Zaloguj się")
-                        .foregroundColor(Appearance.textColor)
                         .padding(.bottom, 20)
                 }
                 .disabled(didCreateUserAccount || isCreatingUserAccount)
             }
         }
-        .background(Appearance.backgroundColor)
         .alert(alertType.title, isPresented: $isShowingAlert) {
             if alertType == .success {
                 Button("OK") {

@@ -53,6 +53,7 @@ struct NewConversation: View {
             List(selection: $selectedUsers) {
                 if viewModel.currentUser!.savedUsers.isEmpty {
                     Text("Aby móc tworzyć konwersacje, dodaj przynajmniej 1 osobę do listy zapisanych. Możesz też skorzystać z odpowiedniego przycisku w profilu użytkownika.")
+                        .foregroundColor(.secondary)
                 } else {
                     Section {
                         ForEach(sortedUsers, id: \.self) { user in
@@ -60,7 +61,7 @@ struct NewConversation: View {
                         }
                     } header: {
                         Text(header)
-                            .foregroundColor(conversationExists ? .red : Appearance.textColor)
+                            .foregroundColor(conversationExists ? .red : .secondary)
                     } footer: {
                         Text("Na tej liście znajdują się wyłącznie osoby z Twojej listy zapisanych.")
                     }
@@ -69,7 +70,6 @@ struct NewConversation: View {
             .environment(\.editMode, .constant(.active))
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
-            .foregroundColor(Appearance.textColor)
             .onChange(of: selectedUsers.count) { _ in
                 checkSelection()
             }
@@ -79,7 +79,6 @@ struct NewConversation: View {
                         dismiss()
                     } label: {
                         Text("Anuluj")
-                            .foregroundColor(Appearance.textColor)
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -89,7 +88,6 @@ struct NewConversation: View {
                         dismiss()
                     } label: {
                         Text("Utwórz")
-                            .foregroundColor(Appearance.textColor)
                             .bold()
                     }
                     .disabled(selectedUsers.isEmpty || conversationExists)

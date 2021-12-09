@@ -23,7 +23,7 @@ struct Avatar: View {
                 .resizable()
                 .frame(width: size, height: size, alignment: .center)
                 .background(Color.white, in: Circle())
-                .foregroundColor(Appearance.fillColor)
+                .foregroundColor(Color("FillColor"))
         }
     }
 }

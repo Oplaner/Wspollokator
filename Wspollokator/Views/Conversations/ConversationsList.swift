@@ -57,7 +57,7 @@ struct ConversationsList: View {
                 List {
                     if viewModel.conversations.isEmpty {
                         Text("Brak wiadomości.")
-                            .foregroundColor(Appearance.textColor)
+                            .foregroundColor(.secondary)
                     } else {
                         ForEach(sortedConversations) { conversation in
                             NavigationLink(destination: ConversationView(conversation: conversation)) {
@@ -68,18 +68,15 @@ struct ConversationsList: View {
                     }
                 }
                 .navigationTitle("Wiadomości")
-                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
                             isShowingNewConversationSheet = true
                         } label: {
                             Label("Nowa konwersacja", systemImage: "square.and.pencil")
-                                .foregroundColor(Appearance.textColor)
                         }
                         .sheet(isPresented: $isShowingNewConversationSheet) {
                             NewConversation(isShowingConversationView: $isShowingConversationView, newConversationParticipants: $newConversationParticipants)
-                                .environment(\.colorScheme, .light) // TODO: 🤔
                         }
                     }
                 }

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ListRow: View {
     @EnvironmentObject var viewModel: ViewModel
-    @Environment(\.colorScheme) var colorScheme
     
     let height: CGFloat = 60
     let padding: CGFloat = 10
@@ -28,9 +27,9 @@ struct ListRow: View {
                 
                 HStack(spacing: 0) {
                     Avatar(image: images[0], size: avatarSize)
-                        .overlay(Circle().stroke(colorScheme == .dark ? Color(uiColor: .secondarySystemBackground) : Color.white, lineWidth: outlineWidth))
+                        .overlay(Circle().stroke(Color(uiColor: .secondarySystemBackground), lineWidth: outlineWidth))
                     Avatar(image: images[1], size: avatarSize)
-                        .overlay(Circle().stroke(colorScheme == .dark ? Color(uiColor: .secondarySystemBackground) : Color.white, lineWidth: outlineWidth))
+                        .overlay(Circle().stroke(Color(uiColor: .secondarySystemBackground), lineWidth: outlineWidth))
                         .offset(x: -0.5 * avatarSize, y: -0.5 * avatarSize)
                 }
                 .padding(.trailing, -0.5 * avatarSize)
@@ -43,17 +42,15 @@ struct ListRow: View {
             
             VStack(alignment: .leading) {
                 Text(headline)
-                    .font(.headline)
                     .lineLimit(2)
                 
                 if caption != nil {
                     Text(caption!)
                         .font(.caption)
+                        .foregroundColor(.secondary)
                         .lineLimit(1)
-                        .foregroundColor(Appearance.alternateColor)
                 }
             }
-            .foregroundColor(Appearance.textColor)
             
             Spacer()
             
@@ -70,7 +67,6 @@ struct ListRow: View {
                     Image(systemName: viewModel.currentUser!.savedUsers.contains(relevantUser!) ? "star.fill" : "star")
                         .frame(width: 50, height: 50, alignment: .center)
                         .font(.system(size: 25))
-                        .foregroundColor(Appearance.buttonColor)
                 }
                 .buttonStyle(.borderless)
             }
