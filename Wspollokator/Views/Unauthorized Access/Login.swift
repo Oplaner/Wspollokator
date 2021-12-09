@@ -48,36 +48,34 @@ struct Login: View {
     
     var body: some View {
         VStack {
-            Image("pat_mat")
+            Image("logo-200")
                 .resizable()
                 .frame(width: 200, height: 200)
-                .clipShape(Circle())
+                .padding(.top, 40)
             
             Text("WSPÓŁLOKATORZY")
                 .font(.largeTitle)
+                .foregroundColor(Color("FillColor"))
                 .bold()
-            VStack {
-                Group {
-                    TextField("Adres e-mail", text: $email)
-                        .keyboardType(.emailAddress)
-                        .textInputAutocapitalization(.never)
-                        .focused($focusedFieldNumber, equals: 1)
-                        .submitLabel(.next)
-                        .onSubmit {
-                            focusedFieldNumber = 2
-                        }
-                    SecureField("Hasło", text: $password)
-                        .focused($focusedFieldNumber, equals: 2)
-                        .submitLabel(.done)
-                        .onSubmit {
-                            focusedFieldNumber = nil
-                        }
-                }
-                .padding([.top, .bottom, .leading], 5)
-                .background(.white)
-                .cornerRadius(8)
-                .padding(.horizontal, 40)
+            
+            Group {
+                TextField("Adres e-mail", text: $email)
+                    .keyboardType(.emailAddress)
+                    .textInputAutocapitalization(.never)
+                    .focused($focusedFieldNumber, equals: 1)
+                    .submitLabel(.next)
+                    .onSubmit {
+                        focusedFieldNumber = 2
+                    }
+                SecureField("Hasło", text: $password)
+                    .focused($focusedFieldNumber, equals: 2)
+                    .submitLabel(.done)
+                    .onSubmit {
+                        focusedFieldNumber = nil
+                    }
             }
+            .textFieldStyle(.roundedBorder)
+            .padding(.horizontal, 40)
             
             HStack(spacing: 8) {
                 Button {
@@ -86,9 +84,9 @@ struct Login: View {
                     }
                 } label: {
                     Text("Zaloguj się")
-                        .font(.headline)
                         .bold()
                 }
+                .buttonStyle(.borderedProminent)
                 .disabled(didAuthenticate || isAuthenticating || emailTrimmed.isEmpty || password.isEmpty)
                 
                 if isAuthenticating {
