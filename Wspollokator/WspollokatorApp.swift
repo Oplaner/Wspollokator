@@ -10,6 +10,10 @@ import SwiftUI
 @main struct WspollokatorApp: App {
     @StateObject var viewModel = ViewModel.sample
     
+    init() {
+        UIView.appearance().tintColor = UIColor(named: "AccentColor")!
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

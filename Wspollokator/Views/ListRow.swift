@@ -12,6 +12,7 @@ struct ListRow: View {
     
     let height: CGFloat = 60
     let padding: CGFloat = 10
+    let outlineWidth: CGFloat = 3
     
     var images: [Image?]
     var headline: String
@@ -23,21 +24,22 @@ struct ListRow: View {
         HStack(spacing: padding) {
             if images.count == 2 { // Group conversations.
                 let avatarSize = 2 * height / 3
-                let outlineWidth: CGFloat = 3
                 
                 HStack(spacing: 0) {
                     Avatar(image: images[0], size: avatarSize)
-                        .overlay(Circle().stroke(Color(uiColor: .secondarySystemBackground), lineWidth: outlineWidth))
+                        .overlay(Circle().stroke(Color(uiColor: .secondarySystemGroupedBackground), lineWidth: outlineWidth))
                     Avatar(image: images[1], size: avatarSize)
-                        .overlay(Circle().stroke(Color(uiColor: .secondarySystemBackground), lineWidth: outlineWidth))
+                        .overlay(Circle().stroke(Color(uiColor: .secondarySystemGroupedBackground), lineWidth: outlineWidth))
                         .offset(x: -0.5 * avatarSize, y: -0.5 * avatarSize)
                 }
                 .padding(.trailing, -0.5 * avatarSize)
                 .padding(.top, 0.5 * avatarSize)
             } else if images.count == 1 { // Single person avatar.
                 Avatar(image: images.first!, size: height)
+                    .overlay(Circle().stroke(Color(uiColor: .secondarySystemGroupedBackground), lineWidth: outlineWidth))
             } else { // Default.
                 Avatar(size: height)
+                    .overlay(Circle().stroke(Color(uiColor: .secondarySystemGroupedBackground), lineWidth: outlineWidth))
             }
             
             VStack(alignment: .leading) {
