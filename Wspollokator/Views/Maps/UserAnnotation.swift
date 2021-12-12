@@ -20,8 +20,8 @@ struct UserAnnotation: View {
             ZStack {
                 Circle()
                     .frame(width: size, height: size)
-                    .foregroundColor(Color(uiColor: .secondarySystemBackground))
-                    .overlay(Circle().stroke(Color(uiColor: .systemBackground), lineWidth: overlayWidth))
+                    .foregroundColor(Color(uiColor: .systemBackground))
+                    .overlay(Circle().stroke(.gray, lineWidth: overlayWidth))
                 Text("TY")
                     .font(.headline)
             }
@@ -30,7 +30,7 @@ struct UserAnnotation: View {
                 UserProfile(user: user)
             } label: {
                 Avatar(image: user.avatarImage, size: size)
-                    .overlay(Circle().stroke(Color(uiColor: .secondarySystemBackground), lineWidth: overlayWidth))
+                    .overlay(Circle().stroke(.gray, lineWidth: overlayWidth))
             }
         }
     }
