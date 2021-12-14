@@ -43,7 +43,7 @@ struct MapView: View {
             }
             .onAppear {
                 if let center = viewModel.currentUser!.pointOfInterest {
-                    region.center = center
+                    region = MKCoordinateRegion(center: center, span: MapDetails.defaultSpan)
                 }
             }
         }

@@ -70,7 +70,7 @@ struct ListMapSearchView: View {
             .navigationTitle("Szukaj")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button {
                         isShowingFilters = true
                     } label: {
