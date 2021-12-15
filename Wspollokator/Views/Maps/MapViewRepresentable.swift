@@ -65,7 +65,6 @@ struct MapViewRepresentable: UIViewRepresentable {
         map.showsUserLocation = true
         
         let gestureRecognizer = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.longPress(gesture:)))
-        gestureRecognizer.minimumPressDuration = 1
         map.addGestureRecognizer(gestureRecognizer)
         
         return map
@@ -77,8 +76,11 @@ struct MapViewRepresentable: UIViewRepresentable {
         if let coordinate = inputCoordinate {
             let mapView = mapData.mapView
             mapView.removeAnnotations(mapView.annotations)
-            coordinator.makeAnnotation(onMapView: mapView, atCoordinate: coordinate)
             coordinator.centerView(onCoordinate: coordinate, withZoom: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                coordinator.makeAnnotation(onMapView: mapView, atCoordinate: coordinate)
+            }
         } else if let userLocation = mapData.manager?.location?.coordinate {
             coordinator.centerView(onCoordinate: userLocation)
         }

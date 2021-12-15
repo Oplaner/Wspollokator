@@ -12,7 +12,7 @@ struct MapViewContainer: View {
     @EnvironmentObject var viewModel: ViewModel
     @StateObject var mapData = LocationManager()
     
-    let panelMaterial = Material.regularMaterial
+    let panelMaterial = Material.thickMaterial
     let panelCornerRadius: CGFloat = 14
     let panelSpacing: CGFloat = 14
     

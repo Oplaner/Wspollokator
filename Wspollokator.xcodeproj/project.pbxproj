@@ -24,6 +24,7 @@
 		8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E502F792726F6FC003227AA /* ContentView.swift */; };
 		8E502F7C2726F6FE003227AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E502F7B2726F6FE003227AA /* Assets.xcassets */; };
 		8E502F7F2726F6FE003227AA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E502F7E2726F6FE003227AA /* Preview Assets.xcassets */; };
+		8E662C97276922F900B2B235 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E662C96276922F800B2B235 /* SwiftUIView.swift */; };
 		8E7532C92760073400BF66CE /* MapDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7532C82760073400BF66CE /* MapDetails.swift */; };
 		8E7532CB27600C6C00BF66CE /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7532CA27600C6C00BF66CE /* UserAnnotation.swift */; };
 		8E7532CD2760DC9600BF66CE /* CoordinateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7532CC2760DC9600BF66CE /* CoordinateExtension.swift */; };
@@ -66,6 +67,7 @@
 		8E502F792726F6FC003227AA /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8E502F7B2726F6FE003227AA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8E502F7E2726F6FE003227AA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		8E662C96276922F800B2B235 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		8E7532C82760073400BF66CE /* MapDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDetails.swift; sourceTree = "<group>"; };
 		8E7532CA27600C6C00BF66CE /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
 		8E7532CC2760DC9600BF66CE /* CoordinateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateExtension.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				C252D9452757BF5D00CC99A8 /* LocationManager.swift */,
 				8E7532C82760073400BF66CE /* MapDetails.swift */,
 				C2610BD027315D8A00C4C941 /* MapView.swift */,
+				8E662C96276922F800B2B235 /* SwiftUIView.swift */,
 				C2170E84273FF5AD0076ECBF /* MapViewContainer.swift */,
 				C2170E81273FE82D0076ECBF /* MapViewRepresentable.swift */,
 				8E7532CA27600C6C00BF66CE /* UserAnnotation.swift */,
@@ -323,6 +326,7 @@
 			files = (
 				1C6B2EE92733F1ED000B96C1 /* ChatRow.swift in Sources */,
 				C25458BE2732EDEC00C5317F /* FilterView.swift in Sources */,
+				8E662C97276922F900B2B235 /* SwiftUIView.swift in Sources */,
 				1C6B2EDF2733F0A2000B96C1 /* Login.swift in Sources */,
 				C2610BD327315DE700C4C941 /* ListMapSearchView.swift in Sources */,
 				1C5071CC2734239E005E5114 /* MyProfile.swift in Sources */,
@@ -497,7 +501,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wspollokator/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 3G7PBCGPQ9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Współlokator";
@@ -529,7 +533,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wspollokator/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 3G7PBCGPQ9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Współlokator";
