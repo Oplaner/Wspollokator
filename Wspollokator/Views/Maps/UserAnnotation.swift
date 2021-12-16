@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct UserAnnotation: View {
-    @EnvironmentObject var viewModel: ViewModel
-    
     let overlayWidth: CGFloat = 2
     
     var user: User
+    var isCurrentUser: Bool
     var size: CGFloat
     
     var body: some View {
-        if user == viewModel.currentUser! {
+        if isCurrentUser {
             ZStack {
                 Circle()
                     .frame(width: size, height: size)
@@ -41,10 +40,9 @@ struct MapAnnotation_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            UserAnnotation(user: ViewModel.sampleUsers[0], size: previewSize)
-            UserAnnotation(user: ViewModel.sampleUsers[1], size: previewSize)
+            UserAnnotation(user: ViewModel.sampleUsers[0], isCurrentUser: true, size: previewSize)
+            UserAnnotation(user: ViewModel.sampleUsers[1], isCurrentUser: false, size: previewSize)
         }
-        .environmentObject(ViewModel.sample)
         .previewLayout(.fixed(width: previewSize + 10, height: previewSize + 10))
     }
 }

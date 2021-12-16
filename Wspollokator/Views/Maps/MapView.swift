@@ -24,6 +24,14 @@ struct MapView: View {
         return annotations
     }
     
+    private func centerOnCurrentUser() {
+        if let center = viewModel.currentUser!.pointOfInterest {
+            withAnimation {
+                region = MKCoordinateRegion(center: center, span: MapDetails.defaultSpan)
+            }
+        }
+    }
+    
     var body: some View {
         if searchResults == nil {
             List {
@@ -38,13 +46,17 @@ struct MapView: View {
         } else {
             Map(coordinateRegion: $region, interactionModes: .all, showsUserLocation: false, annotationItems: usersForAnnotations!) { user in
                 MapAnnotation(coordinate: user.pointOfInterest!) {
-                    UserAnnotation(user: user, size: 50)
+                    UserAnnotation(user: user, isCurrentUser: user == viewModel.currentUser!, size: 50)
                 }
             }
             .onAppear {
-                if let center = viewModel.currentUser!.pointOfInterest {
-                    region = MKCoordinateRegion(center: center, span: MapDetails.defaultSpan)
-                }
+                centerOnCurrentUser()
+            }
+            .onChange(of: viewModel.searchTargetDistance) { _ in
+                centerOnCurrentUser()
+            }
+            .onChange(of: viewModel.searchPreferences) { _ in
+                centerOnCurrentUser()
             }
         }
     }
