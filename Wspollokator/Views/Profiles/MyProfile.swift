@@ -23,10 +23,68 @@ struct MyProfile: View {
     
     @EnvironmentObject var viewModel: ViewModel
     
+    @State private var isSearchable = false
+    @State private var targetDistance = ViewModel.defaultTargetDistance
+    @State private var isChangingTargetDistance = false
+    @State private var preferences = ViewModel.defaultPreferences
     @State private var alertType = SettingsAlertType.logout
     @State private var alertMessage = ""
     @State private var isShowingAlert = false
-    @State private var isUpdatingPointOfInterest = false
+    @State private var isUpdating = false
+    
+    private func viewDidAppear() {
+        isSearchable = viewModel.currentUser!.isSearchable
+        targetDistance = viewModel.currentUser!.targetDistance
+        preferences = viewModel.currentUser!.preferences
+    }
+    
+    private func updateSearchableState() async {
+        guard isSearchable != viewModel.currentUser!.isSearchable else { return }
+        isUpdating = true
+        
+        if await viewModel.changeCurrentUser(searchableState: isSearchable) {
+            viewModel.objectWillChange.send()
+            viewModel.currentUser!.isSearchable = isSearchable
+        } else {
+            alertType = .error
+            alertMessage = "Wystąpił błąd podczas aktualizacji statusu widoczności. Spróbuj ponownie."
+            isShowingAlert = true
+        }
+        
+        isUpdating = false
+    }
+    
+    private func updateTargetDistance() async {
+        guard targetDistance != viewModel.currentUser!.targetDistance else { return }
+        isUpdating = true
+        
+        if await viewModel.changeCurrentUser(targetDistance: targetDistance) {
+            viewModel.objectWillChange.send()
+            viewModel.currentUser!.targetDistance = targetDistance
+        } else {
+            alertType = .error
+            alertMessage = "Wystąpił błąd podczas aktualizacji preferowanej odległości. Spróbuj ponownie."
+            isShowingAlert = true
+        }
+        
+        isUpdating = false
+    }
+    
+    private func updatePreferences() async {
+        guard preferences != viewModel.currentUser!.preferences else { return }
+        isUpdating = true
+        
+        if await viewModel.changeCurrentUser(preferences: preferences) {
+            viewModel.objectWillChange.send()
+            viewModel.currentUser!.preferences = preferences
+        } else {
+            alertType = .error
+            alertMessage = "Wystąpił błąd podczas aktualizacji preferencji. Spróbuj ponownie."
+            isShowingAlert = true
+        }
+        
+        isUpdating = false
+    }
     
     var body: some View {
         NavigationView {
@@ -40,58 +98,47 @@ struct MyProfile: View {
                     .padding(.vertical, 10)
                 }
                 Section {
-                    let binding = Binding<Bool>(
-                        get: { viewModel.currentUser!.isSearchable },
-                        set: {
-                            viewModel.objectWillChange.send()
-                            viewModel.currentUser!.isSearchable = $0
-                        }
-                    )
-                    Toggle("Szukam współlokatora", isOn: binding)
+                    Toggle("Szukam współlokatora", isOn: $isSearchable)
                         .tint(Color.accentColor)
                 } footer: {
-                    let negation = viewModel.currentUser!.isSearchable ? "" : "nie "
+                    let negation = isSearchable ? "" : "nie "
                     Text("Twój profil \(negation)będzie widoczny w wynikach wyszukiwania.")
                 }
                 Section {
-                    NavigationLink {
-                        MapViewContainer(alertType: $alertType, alertMessage: $alertMessage, isShowingAlert: $isShowingAlert, isUpdatingPointOfInterest: $isUpdatingPointOfInterest)
-                    } label: {
-                        HStack {
-                            Text("Mój punkt")
-                            
-                            if isUpdatingPointOfInterest {
-                                Spacer()
-                                ProgressView()
-                            }
-                        }
+                    NavigationLink("Mój punkt") {
+                        MapViewContainer(alertType: $alertType, alertMessage: $alertMessage, isShowingAlert: $isShowingAlert, isUpdating: $isUpdating)
                     }
-                    
-                    let distanceBinding = Binding<Double>(
-                        get: { viewModel.currentUser!.targetDistance },
-                        set: {
-                            viewModel.objectWillChange.send()
-                            viewModel.currentUser!.targetDistance = $0
-                        }
-                    )
-                    let preferencesBinding = Binding<[FilterOption: FilterAttitude]>(
-                        get: { viewModel.currentUser!.preferences },
-                        set: {
-                            viewModel.objectWillChange.send()
-                            viewModel.currentUser!.preferences = $0
-                        }
-                    )
-                    
-                    FilterView(targetDistance: distanceBinding, preferencesSource: preferencesBinding)
+                    FilterView(targetDistance: $targetDistance, isChangingTargetDistance: $isChangingTargetDistance, preferencesSource: $preferences)
                 } header: {
                     Text("Moje preferencje")
                 }
             }
             .navigationTitle("Mój profil")
-            .onAppear {
-                viewModel.objectWillChange.send()
+            .onAppear(perform: viewDidAppear)
+            .onChange(of: isSearchable) { _ in
+                Task {
+                    await updateSearchableState()
+                }
+            }
+            .onChange(of: isChangingTargetDistance) { _ in
+                if !isChangingTargetDistance {
+                    Task {
+                        await updateTargetDistance()
+                    }
+                }
+            }
+            .onChange(of: preferences) { _ in
+                Task {
+                    await updatePreferences()
+                }
             }
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if isUpdating {
+                        ProgressView()
+                    }
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: Settings(alertType: $alertType, alertMessage: $alertMessage, isShowingAlert: $isShowingAlert)) {
                         Label("Ustawienia", systemImage: "gear")

@@ -20,7 +20,7 @@ struct FilterViewContainer: View {
         NavigationView {
             List {
                 Section {
-                    FilterView(targetDistance: $inputTargetDistance, preferencesSource: $inputPreferences)
+                    FilterView(targetDistance: $inputTargetDistance, isChangingTargetDistance: .constant(false), preferencesSource: $inputPreferences)
                 }
                 
                 if inputTargetDistance != viewModel.currentUser!.targetDistance || inputPreferences != viewModel.currentUser!.preferences {

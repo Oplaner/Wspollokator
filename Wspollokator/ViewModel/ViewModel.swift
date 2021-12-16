@@ -94,6 +94,18 @@ import SwiftUI
         await Networking.update(pointOfInterest: pointOfInterest, forUser: currentUser!)
     }
     
+    func changeCurrentUser(searchableState: Bool) async -> Bool {
+        await Networking.update(searchableState: searchableState, forUser: currentUser!)
+    }
+    
+    func changeCurrentUser(targetDistance: Double) async -> Bool {
+        await Networking.update(targetDistance: targetDistance, forUser: currentUser!)
+    }
+    
+    func changeCurrentUser(preferences: [FilterOption: FilterAttitude]) async -> Bool {
+        await Networking.update(preferences: preferences, forUser: currentUser!)
+    }
+    
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
         var encryptedPassword = encryptPassword(old)
         
