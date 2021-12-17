@@ -10,13 +10,13 @@ import UIKit
 
 class Networking {
     /// Tries to create a new user in the database and returns their ID, or nil if the operation failed.
-    static func createUserAccount(name: String, surname: String, email: String, encryptedPassword password: String) async -> Int? {
+    static func createUserAccount(name: String, surname: String, email: String, password: String) async -> Int? {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
         return Int.random(in: 6...1000)
     }
     
-    /// Checks if the database contains a user with given `email` and `encryptedPassword` and returns an object representing the user, or nil if they were not found.
-    static func fetchUser(withEmail email: String, encryptedPassword password: String) async -> User? {
+    /// Checks if the database contains a user with given `email` and `password` and returns an object representing the user, or nil if they were not found.
+    static func fetchUser(withEmail email: String, password: String) async -> User? {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
         return ViewModel.sampleUsers.first(where: { $0.email == email })
     }
@@ -51,13 +51,13 @@ class Networking {
         return true
     }
     
-    /// Checks if an already encrypted `password` is correct for `user`.
-    static func checkEncryptedPassword(_ password: String, forUser user: User) async -> Bool {
+    /// Checks if `password` is correct for `user`.
+    static func checkPassword(_ password: String, forUser user: User) async -> Bool {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
         return true
     }
     
-    /// Sets a new, already encrypted `password` for `user` and returns the operation status.
+    /// Sets a new `password` for `user` and returns the operation status.
     static func setNewPassword(_ password: String, forUser user: User) async -> Bool {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
         return true
@@ -89,6 +89,18 @@ class Networking {
     
     /// Updates `user`'s `preferences` and returns the operation status.
     static func update(preferences: [FilterOption: FilterAttitude], forUser user: User) async -> Bool {
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        return true
+    }
+    
+    /// Updates `listOwner`s `savedList` by adding `otherUser` and returns the operation status.
+    static func updateSavedList(ofUser listOwner: User, adding otherUser: User) async -> Bool {
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        return true
+    }
+    
+    /// Updates `listOwner`s `savedList` by removing `otherUser` and returns the operation status.
+    static func updateSavedList(ofUser listOwner: User, removing otherUser: User) async -> Bool {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
         return true
     }

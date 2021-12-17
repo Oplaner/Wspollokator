@@ -36,12 +36,12 @@ struct UserProfile: View {
                             .foregroundColor(Color(uiColor: .systemBackground))
                         
                         Button {
-                            viewModel.objectWillChange.send()
-                            
-                            if let index = viewModel.currentUser!.savedUsers.firstIndex(of: user) {
-                                viewModel.currentUser!.savedUsers.remove(at: index)
-                            } else {
-                                viewModel.currentUser!.savedUsers.append(user)
+                            Task {
+                                if viewModel.currentUser!.savedUsers.contains(user) {
+                                    await viewModel.changeCurrentUserSavedList(removing: user)
+                                } else {
+                                    await viewModel.changeCurrentUserSavedList(adding: user)
+                                }
                             }
                         } label: {
                             Image(systemName: viewModel.currentUser!.savedUsers.contains(user) ? "star.fill" : "star")
@@ -102,6 +102,13 @@ struct UserProfile: View {
         }
         .navigationTitle("Profil")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if viewModel.isUpdatingSavedList {
+                    ProgressView()
+                }
+            }
+        }
         .task {
             nearestLocationName = await user.fetchNearestLocationName()
         }

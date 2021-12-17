@@ -46,6 +46,7 @@ struct MyProfile: View {
             viewModel.objectWillChange.send()
             viewModel.currentUser!.isSearchable = isSearchable
         } else {
+            isSearchable = viewModel.currentUser!.isSearchable
             alertType = .error
             alertMessage = "Wystąpił błąd podczas aktualizacji statusu widoczności. Spróbuj ponownie."
             isShowingAlert = true
@@ -62,6 +63,7 @@ struct MyProfile: View {
             viewModel.objectWillChange.send()
             viewModel.currentUser!.targetDistance = targetDistance
         } else {
+            targetDistance = viewModel.currentUser!.targetDistance
             alertType = .error
             alertMessage = "Wystąpił błąd podczas aktualizacji preferowanej odległości. Spróbuj ponownie."
             isShowingAlert = true
@@ -78,6 +80,7 @@ struct MyProfile: View {
             viewModel.objectWillChange.send()
             viewModel.currentUser!.preferences = preferences
         } else {
+            preferences = viewModel.currentUser!.preferences
             alertType = .error
             alertMessage = "Wystąpił błąd podczas aktualizacji preferencji. Spróbuj ponownie."
             isShowingAlert = true

@@ -47,18 +47,20 @@ import SwiftUI
     @Published var conversations: [Conversation]
     @Published var searchTargetDistance = defaultTargetDistance
     @Published var searchPreferences = defaultPreferences
+    @Published var isUpdatingSavedList: Bool
+    @Published var didReportErrorUpdatingSavedList: Bool
     
     init(currentUser: User?, users: [User], conversations: [Conversation]) {
         isUserAuthenticated = currentUser != nil
         self.currentUser = currentUser
         self.users = users
         self.conversations = conversations
+        isUpdatingSavedList = false
+        didReportErrorUpdatingSavedList = false
     }
     
     func authenticateUser(withEmail email: String, password: String) async throws -> Bool {
-        let encryptedPassword = encryptPassword(password)
-        
-        if let user = await Networking.fetchUser(withEmail: email, encryptedPassword: encryptedPassword) {
+        if let user = await Networking.fetchUser(withEmail: email, password: password) {
             currentUser = user
             return await downloadCurrentUserData()
         } else {
@@ -107,23 +109,46 @@ import SwiftUI
     }
     
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
-        var encryptedPassword = encryptPassword(old)
-        
-        guard await Networking.checkEncryptedPassword(encryptedPassword, forUser: currentUser!) else { throw PasswordChangeError.invalidOldPassword }
+        guard await Networking.checkPassword(old, forUser: currentUser!) else { throw PasswordChangeError.invalidOldPassword }
         guard new1 == new2 else { throw PasswordChangeError.unmatchingNewPasswords }
         guard new1 != old else { throw PasswordChangeError.oldAndNewPasswordsEqual }
         
-        encryptedPassword = encryptPassword(new1)
-        return await Networking.setNewPassword(encryptedPassword, forUser: currentUser!)
+        return await Networking.setNewPassword(new1, forUser: currentUser!)
+    }
+    
+    func changeCurrentUserSavedList(adding user: User) async {
+        guard !currentUser!.savedUsers.contains(user) else { return }
+        
+        currentUser!.savedUsers.append(user)
+        isUpdatingSavedList = true
+        
+        if await !Networking.updateSavedList(ofUser: currentUser!, adding: user) {
+            currentUser!.savedUsers.removeAll(where: { $0 == user })
+            didReportErrorUpdatingSavedList = true
+        }
+        
+        isUpdatingSavedList = false
+    }
+    
+    func changeCurrentUserSavedList(removing user: User) async {
+        guard currentUser!.savedUsers.contains(user) else { return }
+        
+        currentUser!.savedUsers.removeAll(where: { $0 == user })
+        isUpdatingSavedList = true
+        
+        if await !Networking.updateSavedList(ofUser: currentUser!, removing: user) {
+            currentUser!.savedUsers.append(user)
+            didReportErrorUpdatingSavedList = true
+        }
+        
+        isUpdatingSavedList = false
     }
     
     func createUserAccount(name: String, surname: String, email: String, password1: String, password2: String) async throws -> Bool {
         guard await Networking.checkEmailAvailability(email) else { throw SignUpError.emailAlreadyTaken }
         guard password1 == password2 else { throw SignUpError.unmatchingPasswords }
         
-        let encryptedPassword = encryptPassword(password1)
-        
-        if let userID = await Networking.createUserAccount(name: name, surname: surname, email: email, encryptedPassword: encryptedPassword) {
+        if let userID = await Networking.createUserAccount(name: name, surname: surname, email: email, password: password1) {
             currentUser = User(id: userID, name: name, surname: surname, email: email)
             return await downloadCurrentUserData()
         } else {
@@ -196,11 +221,6 @@ import SwiftUI
     private func downloadCurrentUserData() async -> Bool {
         // TODO: Download all the required data for the current user, for example other users' data, conversations.
         true
-    }
-    
-    private func encryptPassword(_ password: String) -> String {
-        // TODO: Add an actual password encryption matching the one used in the database.
-        password
     }
     
 #if DEBUG

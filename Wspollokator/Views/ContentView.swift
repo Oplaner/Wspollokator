@@ -34,6 +34,13 @@ struct ContentView: View {
                             Label("Mój profil", systemImage: "person.fill")
                         }
                 }
+                .alert("Błąd", isPresented: $viewModel.didReportErrorUpdatingSavedList) {
+                    Button("OK") {
+                        viewModel.didReportErrorUpdatingSavedList = false
+                    }
+                } message: {
+                    Text("Wystąpił błąd podczas aktualizacji listy zapisanych osób. Spróbuj ponownie.")
+                }
             } else {
                 Login()
             }

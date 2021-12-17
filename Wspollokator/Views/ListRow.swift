@@ -58,12 +58,12 @@ struct ListRow: View {
             
             if includesStarButton && relevantUser != nil {
                 Button {
-                    viewModel.objectWillChange.send()
-                    
-                    if let index = viewModel.currentUser!.savedUsers.firstIndex(of: relevantUser!) {
-                        viewModel.currentUser!.savedUsers.remove(at: index)
-                    } else {
-                        viewModel.currentUser!.savedUsers.append(relevantUser!)
+                    Task {
+                        if viewModel.currentUser!.savedUsers.contains(relevantUser!) {
+                            await viewModel.changeCurrentUserSavedList(removing: relevantUser!)
+                        } else {
+                            await viewModel.changeCurrentUserSavedList(adding: relevantUser!)
+                        }
                     }
                 } label: {
                     Image(systemName: viewModel.currentUser!.savedUsers.contains(relevantUser!) ? "star.fill" : "star")

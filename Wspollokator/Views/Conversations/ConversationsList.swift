@@ -69,6 +69,12 @@ struct ConversationsList: View {
                 }
                 .navigationTitle("Wiadomości")
                 .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        if viewModel.isUpdatingSavedList {
+                            ProgressView()
+                        }
+                    }
+                    
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
                             isShowingNewConversationSheet = true
