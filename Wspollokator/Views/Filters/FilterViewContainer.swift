@@ -13,20 +13,22 @@ struct FilterViewContainer: View {
     
     @Binding var targetDistance: Double
     @Binding var preferencesSource: [FilterOption: FilterAttitude]
+    @State private var inputTargetDistance = ViewModel.defaultTargetDistance
+    @State private var inputPreferences = ViewModel.defaultPreferences
     
     var body: some View {
         NavigationView {
             List {
                 Section {
-                    FilterView(targetDistance: $targetDistance, preferencesSource: $preferencesSource)
+                    FilterView(targetDistance: $inputTargetDistance, isChangingTargetDistance: .constant(false), preferencesSource: $inputPreferences)
                 }
                 
-                if viewModel.searchTargetDistance != viewModel.currentUser!.targetDistance || viewModel.searchPreferences != viewModel.currentUser!.preferences {
+                if inputTargetDistance != viewModel.currentUser!.targetDistance || inputPreferences != viewModel.currentUser!.preferences {
                     Section {
                         Button {
                             withAnimation {
-                                viewModel.searchTargetDistance = viewModel.currentUser!.targetDistance
-                                viewModel.searchPreferences = viewModel.currentUser!.preferences
+                                inputTargetDistance = viewModel.currentUser!.targetDistance
+                                inputPreferences = viewModel.currentUser!.preferences
                             }
                         } label: {
                             Text("Ustaw zgodnie z moimi preferencjami")
@@ -36,9 +38,21 @@ struct FilterViewContainer: View {
             }
             .navigationTitle("Filtry")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                inputTargetDistance = targetDistance
+                inputPreferences = preferencesSource
+            }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Anuluj") {
+                        dismiss()
+                    }
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
                     Button {
+                        targetDistance = inputTargetDistance
+                        preferencesSource = inputPreferences
                         dismiss()
                     } label: {
                         Text("Gotowe")

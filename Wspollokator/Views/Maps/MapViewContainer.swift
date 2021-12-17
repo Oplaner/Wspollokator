@@ -12,14 +12,14 @@ struct MapViewContainer: View {
     @EnvironmentObject var viewModel: ViewModel
     @StateObject var mapData = LocationManager()
     
-    let panelMaterial = Material.regularMaterial
+    let panelMaterial = Material.thickMaterial
     let panelCornerRadius: CGFloat = 14
     let panelSpacing: CGFloat = 14
     
     @Binding var alertType: MyProfile.SettingsAlertType
     @Binding var alertMessage: String
     @Binding var isShowingAlert: Bool
-    @Binding var isUpdatingPointOfInterest: Bool
+    @Binding var isUpdating: Bool
     @State private var inputCoordinate: CLLocationCoordinate2D?
     @State private var inputDescription: String?
     
@@ -61,7 +61,7 @@ struct MapViewContainer: View {
     
     private func updatePointOfInterest() async {
         guard inputCoordinate != viewModel.currentUser!.pointOfInterest else { return }
-        isUpdatingPointOfInterest = true
+        isUpdating = true
         
         if await viewModel.changeCurrentUser(pointOfInterest: inputCoordinate) {
             viewModel.objectWillChange.send()
@@ -73,7 +73,7 @@ struct MapViewContainer: View {
             isShowingAlert = true
         }
         
-        isUpdatingPointOfInterest = false
+        isUpdating = false
     }
     
     var body: some View {
@@ -132,7 +132,7 @@ struct MapViewContainer: View {
 
 struct MapViewContainer_Previews: PreviewProvider {
     static var previews: some View {
-        MapViewContainer(alertType: .constant(.error), alertMessage: .constant(""), isShowingAlert: .constant(false), isUpdatingPointOfInterest: .constant(false))
+        MapViewContainer(alertType: .constant(.error), alertMessage: .constant(""), isShowingAlert: .constant(false), isUpdating: .constant(false))
             .environmentObject(ViewModel.sample)
     }
 }

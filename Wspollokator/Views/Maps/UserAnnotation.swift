@@ -8,20 +8,19 @@
 import SwiftUI
 
 struct UserAnnotation: View {
-    @EnvironmentObject var viewModel: ViewModel
-    
     let overlayWidth: CGFloat = 2
     
     var user: User
+    var isCurrentUser: Bool
     var size: CGFloat
     
     var body: some View {
-        if user == viewModel.currentUser! {
+        if isCurrentUser {
             ZStack {
                 Circle()
                     .frame(width: size, height: size)
-                    .foregroundColor(.white)
-                    .overlay(Circle().stroke(Color("FillColor"), lineWidth: overlayWidth))
+                    .foregroundColor(Color(uiColor: .systemBackground))
+                    .overlay(Circle().stroke(.gray, lineWidth: overlayWidth))
                 Text("TY")
                     .font(.headline)
             }
@@ -30,7 +29,7 @@ struct UserAnnotation: View {
                 UserProfile(user: user)
             } label: {
                 Avatar(image: user.avatarImage, size: size)
-                    .overlay(Circle().stroke(Color("FillColor"), lineWidth: overlayWidth))
+                    .overlay(Circle().stroke(.gray, lineWidth: overlayWidth))
             }
         }
     }
@@ -41,10 +40,9 @@ struct MapAnnotation_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            UserAnnotation(user: ViewModel.sampleUsers[0], size: previewSize)
-            UserAnnotation(user: ViewModel.sampleUsers[1], size: previewSize)
+            UserAnnotation(user: ViewModel.sampleUsers[0], isCurrentUser: true, size: previewSize)
+            UserAnnotation(user: ViewModel.sampleUsers[1], isCurrentUser: false, size: previewSize)
         }
-        .environmentObject(ViewModel.sample)
         .previewLayout(.fixed(width: previewSize + 10, height: previewSize + 10))
     }
 }

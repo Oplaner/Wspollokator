@@ -11,31 +11,41 @@ struct ContentView: View {
     @EnvironmentObject var viewModel: ViewModel
     
     var body: some View {
-        if viewModel.isUserAuthenticated {
-            TabView {
-                ListMapSearchView()
-                    .tabItem {
-                        Label("Szukaj", systemImage: "magnifyingglass")
+        Group {
+            if viewModel.isUserAuthenticated {
+                TabView {
+                    ListMapSearchView()
+                        .tabItem {
+                            Label("Szukaj", systemImage: "magnifyingglass")
+                        }
+                    
+                    ConversationsList()
+                        .tabItem {
+                            Label("Wiadomości", systemImage: "message.fill")
+                        }
+                    
+                    SavedList()
+                        .tabItem {
+                            Label("Zapisane", systemImage: "star.fill")
+                        }
+                    
+                    MyProfile()
+                        .tabItem {
+                            Label("Mój profil", systemImage: "person.fill")
+                        }
+                }
+                .alert("Błąd", isPresented: $viewModel.didReportErrorUpdatingSavedList) {
+                    Button("OK") {
+                        viewModel.didReportErrorUpdatingSavedList = false
                     }
-                
-                ConversationsList()
-                    .tabItem {
-                        Label("Wiadomości", systemImage: "message.fill")
-                    }
-                
-                SavedList()
-                    .tabItem {
-                        Label("Zapisane", systemImage: "star.fill")
-                    }
-                
-                MyProfile()
-                    .tabItem {
-                        Label("Mój profil", systemImage: "person.fill")
-                    }
+                } message: {
+                    Text("Wystąpił błąd podczas aktualizacji listy zapisanych osób. Spróbuj ponownie.")
+                }
+            } else {
+                Login()
             }
-        } else {
-            Login()
         }
+        .navigationViewStyle(.stack)
     }
 }
 

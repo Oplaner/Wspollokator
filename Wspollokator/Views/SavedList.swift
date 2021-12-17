@@ -67,20 +67,22 @@ struct SavedList: View {
                         }
                     }
                     .onDelete { indexSet in
-                        var destinationIndexSet = IndexSet()
-                        
-                        for index in indexSet {
-                            if let userIndex = viewModel.currentUser!.savedUsers.firstIndex(of: sortedUsers[index]) {
-                                destinationIndexSet.insert(userIndex)
+                        Task {
+                            for index in indexSet {
+                                await viewModel.changeCurrentUserSavedList(removing: sortedUsers[index])
                             }
                         }
-                        
-                        viewModel.objectWillChange.send()
-                        viewModel.currentUser!.savedUsers.remove(atOffsets: destinationIndexSet)
                     }
                 }
             }
             .navigationTitle("Zapisane osoby")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if viewModel.isUpdatingSavedList {
+                        ProgressView()
+                    }
+                }
+            }
         }
     }
 }

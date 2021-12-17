@@ -34,7 +34,7 @@ struct ChatRow: View {
                     Text(message.content)
                         .foregroundColor(.white)
                         .padding(textPadding)
-                        .background(Color(UIColor.lightGray))
+                        .background(Color("FillColor"))
                         .cornerRadius(cornerRadius)
                     Text(formatTimeString(from: message.timeSent))
                         .font(.caption2)
@@ -45,9 +45,8 @@ struct ChatRow: View {
                     Avatar(image: message.author.avatarImage, size: avatarSize)
                     VStack(alignment: .leading, spacing: spacing) {
                         Text(message.content)
-                            .foregroundColor(.white)
                             .padding(textPadding)
-                            .background(Color("FillColor"))
+                            .background(Color(uiColor: .secondarySystemBackground))
                             .cornerRadius(cornerRadius)
                         Text(formatTimeString(from: message.timeSent))
                             .font(.caption2)
@@ -57,9 +56,8 @@ struct ChatRow: View {
                 } else {
                     VStack(alignment: .leading, spacing: spacing) {
                         Text(message.content)
-                            .foregroundColor(.white)
                             .padding(textPadding)
-                            .background(Color("FillColor"))
+                            .background(Color(uiColor: .secondarySystemBackground))
                             .cornerRadius(cornerRadius)
                         Text(formatTimeString(from: message.timeSent))
                             .font(.caption2)

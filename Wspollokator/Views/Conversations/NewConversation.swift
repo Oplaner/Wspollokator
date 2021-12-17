@@ -74,14 +74,14 @@ struct NewConversation: View {
                 checkSelection()
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button {
                         dismiss()
                     } label: {
                         Text("Anuluj")
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .primaryAction) {
                     Button {
                         newConversationParticipants = ([viewModel.currentUser!] + selectedUsers).sorted(by: User.sortingPredicate)
                         isShowingConversationView = true

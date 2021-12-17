@@ -70,7 +70,13 @@ struct ListMapSearchView: View {
             .navigationTitle("Szukaj")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if viewModel.isUpdatingSavedList {
+                        ProgressView()
+                    }
+                }
+                
+                ToolbarItem(placement: .primaryAction) {
                     Button {
                         isShowingFilters = true
                     } label: {
