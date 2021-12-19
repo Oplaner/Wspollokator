@@ -18,7 +18,7 @@ class Networking {
     /// Checks if the database contains a user with given `email` and `password` and returns an object representing the user, or nil if they were not found.
     static func fetchUser(withEmail email: String, password: String) async -> User? {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return ViewModel.sampleUsers.first(where: { $0.email == email })
+        return await ViewModel.sampleUsers.first(where: { $0.email == email })
     }
     
     /// Updates `user`'s `avatarImage` and returns the operation status.
@@ -42,7 +42,7 @@ class Networking {
     /// Checks if `email` is already taken by any user.
     static func checkEmailAvailability(_ email: String) async -> Bool {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return !ViewModel.sampleUsers.contains(where: { $0.email == email })
+        return await !ViewModel.sampleUsers.contains(where: { $0.email == email })
     }
     
     /// Updates `user`'s `email` and returns the operation status.

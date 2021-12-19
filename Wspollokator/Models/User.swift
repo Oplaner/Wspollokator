@@ -20,9 +20,14 @@ class User: Hashable, Identifiable {
     var preferences: [FilterOption: FilterAttitude]
     var description: String
     var savedUsers: [User]
+    var ratings: [Rating]
     var isSearchable: Bool
     
-    init(id: Int, avatarImage: Image? = nil, name: String, surname: String, email: String, pointOfInterest: CLLocationCoordinate2D? = nil, targetDistance: Double = ViewModel.defaultTargetDistance, preferences: [FilterOption: FilterAttitude] = ViewModel.defaultPreferences, description: String = "", savedUsers: [User] = [User](), isSearchable: Bool = false) {
+    var averageRating: Double {
+        Double(ratings.map({ $0.rating }).reduce(0, +)) / Double(ratings.count)
+    }
+    
+    init(id: Int, avatarImage: Image? = nil, name: String, surname: String, email: String, pointOfInterest: CLLocationCoordinate2D? = nil, targetDistance: Double = ViewModel.defaultTargetDistance, preferences: [FilterOption: FilterAttitude] = ViewModel.defaultPreferences, description: String = "", savedUsers: [User] = [User](), ratings: [Rating] = [Rating](), isSearchable: Bool = false) {
         self.id = id
         self.avatarImage = avatarImage
         self.name = name
@@ -33,6 +38,7 @@ class User: Hashable, Identifiable {
         self.preferences = preferences
         self.description = description
         self.savedUsers = savedUsers
+        self.ratings = ratings
         self.isSearchable = isSearchable
     }
     

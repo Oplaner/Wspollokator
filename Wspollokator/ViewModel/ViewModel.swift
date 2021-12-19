@@ -224,8 +224,7 @@ import SwiftUI
     }
     
 #if DEBUG
-    // TODO: Remove "nonisolated" when map views are finished.
-    nonisolated static var sampleUsers: [User] {
+    static var sampleUsers: [User] {
         let john = User(
             id: 1,
             avatarImage: Image("avatar1"),
@@ -236,6 +235,7 @@ import SwiftUI
             targetDistance: 3,
             preferences: [.animals: .positive, .smoking: .negative],
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer viverra leo sed lacus aliquet, ut hendrerit dolor porttitor. Nullam vel ligula justo. Donec sit amet eleifend magna. Suspendisse potenti. Mauris eu rutrum sapien. Integer consectetur eu sapien sit amet venenatis. Etiam rhoncus lacus sit amet dui aliquet, vitae lacinia sapien semper.",
+            ratings: [sampleRatings[1], sampleRatings[2], sampleRatings[4]],
             isSearchable: true
         )
         let anna = User(
@@ -248,6 +248,7 @@ import SwiftUI
             targetDistance: 7.2,
             preferences: [.animals: .negative, .smoking: .neutral],
             description: "Etiam vitae tempor augue. Integer nibh magna, vehicula sed elementum quis, imperdiet eget leo. Cras sed suscipit tellus. In laoreet mattis nunc sed auctor. Integer facilisis magna massa.",
+            ratings: [sampleRatings[3]],
             isSearchable: true
         )
         let mark = User(
@@ -260,6 +261,7 @@ import SwiftUI
             targetDistance: 10,
             preferences: [.animals: .neutral, .smoking: .positive],
             description: "Nunc sed velit rutrum, maximus magna at, hendrerit nisl. Suspendisse potenti.",
+            ratings: [sampleRatings[0]],
             isSearchable: true
         )
         let amy = User(
@@ -293,6 +295,52 @@ import SwiftUI
         carol.savedUsers = [anna, amy]
         
         return [john, anna, mark, amy, carol]
+    }
+    
+    static var sampleRatings: [Rating] {
+        let john = sampleUsers[0]
+        let anna = sampleUsers[1]
+        let mark = sampleUsers[2]
+        let amy = sampleUsers[3]
+        let carol = sampleUsers[4]
+        
+        return [
+            Rating(
+                id: 1,
+                author: john,
+                rating: 3,
+                comment: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce luctus facilisis felis vel volutpat.",
+                timeAdded: Date(timeIntervalSince1970: 1639848215)
+            ),
+            Rating(
+                id: 2,
+                author: anna,
+                rating: 4,
+                comment: "Maecenas vel nulla et enim.",
+                timeAdded: Date(timeIntervalSince1970: 1639848593)
+            ),
+            Rating(
+                id: 3,
+                author: mark,
+                rating: 5,
+                comment: "Sed a felis porttitor, bibendum velit sed! 💚",
+                timeAdded: Date(timeIntervalSince1970: 1639848793)
+            ),
+            Rating(
+                id: 4,
+                author: amy,
+                rating: 3,
+                comment: "Rutrum odio.",
+                timeAdded: Date(timeIntervalSince1970: 1639848838)
+            ),
+            Rating(
+                id: 5,
+                author: carol,
+                rating: 2,
+                comment: "Nullam pulvinar pellentesque erat vitae faucibus. Maecenas a risus non mi ultricies eleifend. 🤨",
+                timeAdded: Date(timeIntervalSince1970: 1639849160)
+            )
+        ]
     }
     
     static var sampleConversations: [Conversation] {
