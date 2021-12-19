@@ -15,6 +15,17 @@ struct FilterViewContainer: View {
     @Binding var preferencesSource: [FilterOption: FilterAttitude]
     @State private var inputTargetDistance = ViewModel.defaultTargetDistance
     @State private var inputPreferences = ViewModel.defaultPreferences
+    @State private var isShowingResetToUserPreferencesButton = false
+    
+    private func updateResetToUserPreferencesButton() {
+        withAnimation {
+            if inputTargetDistance != viewModel.currentUser!.targetDistance || inputPreferences != viewModel.currentUser!.preferences {
+                isShowingResetToUserPreferencesButton = true
+            } else {
+                isShowingResetToUserPreferencesButton = false
+            }
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -23,7 +34,7 @@ struct FilterViewContainer: View {
                     FilterView(targetDistance: $inputTargetDistance, isChangingTargetDistance: .constant(false), preferencesSource: $inputPreferences)
                 }
                 
-                if inputTargetDistance != viewModel.currentUser!.targetDistance || inputPreferences != viewModel.currentUser!.preferences {
+                if isShowingResetToUserPreferencesButton {
                     Section {
                         Button {
                             withAnimation {
@@ -41,6 +52,16 @@ struct FilterViewContainer: View {
             .onAppear {
                 inputTargetDistance = targetDistance
                 inputPreferences = preferencesSource
+                
+                if inputTargetDistance != viewModel.currentUser!.targetDistance || inputPreferences != viewModel.currentUser!.preferences {
+                    isShowingResetToUserPreferencesButton = true
+                }
+            }
+            .onChange(of: inputTargetDistance) { _ in
+                updateResetToUserPreferencesButton()
+            }
+            .onChange(of: inputPreferences) { _ in
+                updateResetToUserPreferencesButton()
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
