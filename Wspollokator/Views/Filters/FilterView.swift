@@ -21,18 +21,18 @@ struct FilterView: View {
                     Text("do \(String.localizedStringWithFormat("%.1f km", targetDistance))")
                         .foregroundColor(.secondary)
                 }
-                Slider(value: $targetDistance, in: 0...10) {
+                Slider(value: $targetDistance, in: 0...10, step: 0.1) {
                     isChangingTargetDistance = $0
                 }
             }
             .padding(.vertical)
             
             ForEach(FilterOption.allCases, id: \.self) { filter in
-                let binding = Binding<FilterAttitude>(
+                let selection = Binding<FilterAttitude>(
                     get: { preferencesSource[filter]! },
                     set: { preferencesSource[filter]! = $0 }
                 )
-                FilterRow(filter: filter, selection: binding)
+                FilterRow(filter: filter, sourceSelection: selection)
             }
         }
     }
