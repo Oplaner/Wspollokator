@@ -12,7 +12,7 @@ struct RatingView: View {
     
     private func formatTimeString(from date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yy, hh:mm"
+        formatter.dateFormat = "dd.MM.yy"
         return formatter.string(from: date)
     }
     
@@ -24,13 +24,12 @@ struct RatingView: View {
                     .font(.headline)
             }
             
-            RatingStars(rating: .constant(rating.rating), isInteractive: false)
+            RatingStars(score: .constant(rating.score), isInteractive: false)
             Text(rating.comment)
             Text(formatTimeString(from: rating.timeAdded))
                 .font(.caption)
                 .foregroundColor(.secondary)
         }
-        .padding()
     }
 }
 

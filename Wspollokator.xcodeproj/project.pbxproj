@@ -18,6 +18,7 @@
 		8E026E71272A2DD600C183A6 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E026E70272A2DD600C183A6 /* Avatar.swift */; };
 		8E154796275EE5B400CBDF58 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E154795275EE5B400CBDF58 /* ImagePicker.swift */; };
 		8E17C2CB2745D26F006C2C9C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E17C2CA2745D26F006C2C9C /* ViewModel.swift */; };
+		8E20789B276FDFED00071A34 /* RatingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E20789A276FDFED00071A34 /* RatingList.swift */; };
 		8E2D95F6274B072A00F4FABC /* LocalizableStrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8E2D95F8274B072A00F4FABC /* LocalizableStrings.strings */; };
 		8E3EEF54274DBB3100E403C9 /* DescriptionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3EEF53274DBB3100E403C9 /* DescriptionChange.swift */; };
 		8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E502F772726F6FC003227AA /* WspollokatorApp.swift */; };
@@ -62,6 +63,7 @@
 		8E026E70272A2DD600C183A6 /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		8E154795275EE5B400CBDF58 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		8E17C2CA2745D26F006C2C9C /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		8E20789A276FDFED00071A34 /* RatingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingList.swift; sourceTree = "<group>"; };
 		8E2D95F7274B072A00F4FABC /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LocalizableStrings.strings; sourceTree = "<group>"; };
 		8E3EEF53274DBB3100E403C9 /* DescriptionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionChange.swift; sourceTree = "<group>"; };
 		8E502F742726F6FC003227AA /* Wspollokator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wspollokator.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +170,7 @@
 			children = (
 				8E883308276E644000FCB568 /* RatingStars.swift */,
 				8EA31D28276FCF9C0087BE7F /* RatingView.swift */,
+				8E20789A276FDFED00071A34 /* RatingList.swift */,
 			);
 			path = Ratings;
 			sourceTree = "<group>";
@@ -345,6 +348,7 @@
 				1C5071CC2734239E005E5114 /* MyProfile.swift in Sources */,
 				C252D9462757BF5D00CC99A8 /* LocationManager.swift in Sources */,
 				1C6B2EE32733F141000B96C1 /* ConversationView.swift in Sources */,
+				8E20789B276FDFED00071A34 /* RatingList.swift in Sources */,
 				8ED4B715272BEF73007A0CCC /* ListRow.swift in Sources */,
 				C2FD03B7273EFBD100A4B44E /* FilterViewContainer.swift in Sources */,
 				C2170E85273FF5AD0076ECBF /* MapViewContainer.swift in Sources */,
