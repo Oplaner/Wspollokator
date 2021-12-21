@@ -14,10 +14,10 @@ class Rating: Identifiable {
     let comment: String
     let timeAdded: Date
     
-    init(id: Int, author: User, rating: Int, comment: String, timeAdded: Date) {
+    init(id: Int, author: User, score: Int, comment: String, timeAdded: Date) {
         self.id = id
         self.author = author
-        self.score = rating
+        self.score = score
         self.comment = comment
         self.timeAdded = timeAdded
     }

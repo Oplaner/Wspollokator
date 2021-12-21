@@ -117,7 +117,7 @@ struct ConversationView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             if shouldFocus {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.focusedFieldNumber = 1
                 }
             }

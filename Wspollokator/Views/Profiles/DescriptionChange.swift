@@ -19,7 +19,7 @@ struct DescriptionChange: View {
     
     private func updateDescription() async {
         isUpdatingDescription = true
-        description = description.trimmingCharacters(in: .whitespaces)
+        description = description.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if description == viewModel.currentUser!.description {
             description = viewModel.currentUser!.description
@@ -56,7 +56,7 @@ struct DescriptionChange: View {
                 description = viewModel.currentUser!.description
                 reader.scrollTo(1, anchor: .bottom)
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.focusedFieldNumber = 1
                 }
             }

@@ -295,21 +295,21 @@ import SwiftUI
             Rating(
                 id: 2,
                 author: anna,
-                rating: 4,
+                score: 4,
                 comment: "Maecenas vel nulla et enim.",
                 timeAdded: Date(timeIntervalSince1970: 1639848593)
             ),
             Rating(
                 id: 3,
                 author: mark,
-                rating: 5,
+                score: 5,
                 comment: "Sed a felis porttitor, bibendum velit sed! 💚",
                 timeAdded: Date(timeIntervalSince1970: 1639848793)
             ),
             Rating(
                 id: 5,
                 author: carol,
-                rating: 2,
+                score: 2,
                 comment: "Nullam pulvinar pellentesque erat vitae faucibus. Maecenas a risus non mi ultricies eleifend. 🤨",
                 timeAdded: Date(timeIntervalSince1970: 1639849160)
             )
@@ -318,7 +318,7 @@ import SwiftUI
             Rating(
                 id: 4,
                 author: amy,
-                rating: 3,
+                score: 3,
                 comment: "Rutrum odio.",
                 timeAdded: Date(timeIntervalSince1970: 1639848838)
             )
@@ -327,7 +327,7 @@ import SwiftUI
             Rating(
                 id: 1,
                 author: john,
-                rating: 3,
+                score: 3,
                 comment: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce luctus facilisis felis vel volutpat.",
                 timeAdded: Date(timeIntervalSince1970: 1639848215)
             )

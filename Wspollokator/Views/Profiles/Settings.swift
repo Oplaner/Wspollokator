@@ -142,6 +142,7 @@ struct Settings: View {
                                 }
                             }
                         }
+                        .disabled(isUpdatingAvatarImage)
                     }
                     Spacer()
                 }
@@ -154,6 +155,7 @@ struct Settings: View {
                     TextField("Imię", text: $name)
                         .multilineTextAlignment(.trailing)
                         .foregroundColor(.secondary)
+                        .disabled(isUpdatingName)
                         .onAppear(perform: formDidAppear)
                         .onSubmit {
                             Task {
@@ -173,6 +175,7 @@ struct Settings: View {
                     TextField("Nazwisko", text: $surname)
                         .multilineTextAlignment(.trailing)
                         .foregroundColor(.secondary)
+                        .disabled(isUpdatingSurname)
                         .onAppear(perform: formDidAppear)
                         .onSubmit {
                             Task {
@@ -194,6 +197,7 @@ struct Settings: View {
                         .foregroundColor(.secondary)
                         .keyboardType(.emailAddress)
                         .textInputAutocapitalization(.never)
+                        .disabled(isUpdatingEmail)
                         .onAppear(perform: formDidAppear)
                         .onSubmit {
                             Task {
