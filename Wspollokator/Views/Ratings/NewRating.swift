@@ -12,6 +12,7 @@ struct NewRating: View {
     @Environment(\.dismiss) var dismiss
     @FocusState var focusedFieldNumber: Int?
     
+    var relevantUser: User
     @State private var score = 0
     @State private var comment = ""
     @State private var isAdding = false
@@ -22,24 +23,49 @@ struct NewRating: View {
     }
     
     private func addRating() async {
+        isAdding = true
         
+        let (rating, success) = await viewModel.addRating(of: relevantUser, withScore: score, comment: commentTrimmed)
+        
+        if success {
+            relevantUser.ratings.append(rating!)
+            dismiss()
+        } else {
+            isShowingAlert = true
+        }
+        
+        isAdding = false
     }
     
     var body: some View {
         ScrollViewReader { reader in
             Form {
-                RatingStars(score: $score, isInteractive: true)
-                    .disabled(isAdding)
-                
-                TextEditor(text: $comment)
-                    .frame(minHeight: 0.3 * UIScreen.main.bounds.height)
-                    .lineLimit(nil)
-                    .focused($focusedFieldNumber, equals: 1)
-                    .id(1)
-                    .disabled(isAdding)
-                    .onChange(of: comment) { _ in
-                        reader.scrollTo(1, anchor: .bottom)
+                Section {
+                    HStack {
+                        Avatar(image: relevantUser.avatarImage, size: 40)
+                        Text("\(relevantUser.name) \(relevantUser.surname)")
+                            .font(.headline)
                     }
+                } header: {
+                    Text("Oceniana osoba")
+                }
+                
+                Section {
+                    RatingStars(score: $score, isInteractive: true)
+                        .disabled(isAdding)
+                    
+                    TextEditor(text: $comment)
+                        .frame(minHeight: 0.3 * UIScreen.main.bounds.height)
+                        .lineLimit(nil)
+                        .focused($focusedFieldNumber, equals: 1)
+                        .id(1)
+                        .disabled(isAdding)
+                        .onChange(of: comment) { _ in
+                            reader.scrollTo(1, anchor: .bottom)
+                        }
+                } header: {
+                    Text("Opinia")
+                }
             }
             .navigationTitle("Nowa opinia")
             .navigationBarTitleDisplayMode(.inline)
@@ -82,7 +108,7 @@ struct NewRating: View {
 struct NewRating_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            NewRating()
+            NewRating(relevantUser: ViewModel.sampleUsers[1])
                 .environmentObject(ViewModel.sample)
         }
     }

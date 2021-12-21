@@ -116,8 +116,8 @@ class Networking {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
     }
     
-    /// Sends a new message and returns a tuple with its ID and time of creation, or two nil values if the operation failed. The newly created message _is not_ attached to any conversation.
-    static func sendMessage(_ text: String, writtenBy author: User) async -> (messageID: Int?, timeSent: Date?) {
+    /// Sends a new message and returns a tuple with its ID and time of creation, or nil if the operation failed. The newly created message _is not_ attached to any conversation.
+    static func sendMessage(_ text: String, writtenBy author: User) async -> (messageID: Int, timeSent: Date)? {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
         return (Int.random(in: 11...1000), Date())
     }
@@ -131,5 +131,11 @@ class Networking {
     /// Removes `message`, without unlinking it from a conversation, from the database.
     static func deleteMessage(_ message: Message) async {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
+    }
+    
+    /// Adds a new rating and returns a tuple with its ID and time of creation, or nil if the operation failed.
+    static func addRating(of rated: User, writtenBy rating: User, withScore score: Int, comment: String) async -> (ratingID: Int, timeAdded: Date)? {
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        return (Int.random(in: 6...1000), Date())
     }
 }

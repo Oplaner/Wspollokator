@@ -130,7 +130,9 @@ struct ConversationView: View {
 
 struct Conversation_Previews: PreviewProvider {
     static var previews: some View {
-        ConversationView(conversation: ViewModel.sampleConversations[0])
-            .environmentObject(ViewModel.sample)
+        NavigationView {
+            ConversationView(conversation: ViewModel.sampleConversations[0])
+                .environmentObject(ViewModel.sample)
+        }
     }
 }
