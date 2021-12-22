@@ -100,7 +100,7 @@ struct PasswordChange: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(isSettingNewPassword)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                 self.focusedFieldNumber = 1
             }
         }

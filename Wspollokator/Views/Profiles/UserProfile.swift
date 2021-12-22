@@ -17,6 +17,7 @@ struct UserProfile: View {
     
     var user: User
     @State private var nearestLocationName: String?
+    @State private var isShowingNewRatingView = false
     @State private var isShowingConversationView = false
     
     /// An existing conversation with `user` or a template for a new one.
@@ -86,6 +87,34 @@ struct UserProfile: View {
                 
                 Text(user.description)
                 
+                Divider()
+                
+                HStack {
+                    Text("Średnia ocena")
+                        .bold()
+                    Spacer()
+                    
+                    if user.ratings.count == 0 {
+                        Text("—")
+                            .bold()
+                            .foregroundColor(.secondary)
+                    } else {
+                        RatingStars(score: .constant(user.averageScore), isInteractive: false)
+                    }
+                }
+                
+                if user.ratings.count == 0 {
+                    Button("Dodaj opinię") {
+                        isShowingNewRatingView = true
+                    }
+                } else {
+                    NavigationLink("Pokaż opinie (\(user.ratings.count))") {
+                        RatingList(relevantUser: user)
+                    }
+                }
+                
+                Divider()
+                
                 NavigationLink(isActive: $isShowingConversationView) {
                     ConversationView(conversation: conversation)
                 } label: {
@@ -108,6 +137,9 @@ struct UserProfile: View {
                     ProgressView()
                 }
             }
+        }
+        .sheet(isPresented: $isShowingNewRatingView) {
+            NewRating(relevantUser: user)
         }
         .task {
             nearestLocationName = await user.fetchNearestLocationName()

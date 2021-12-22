@@ -56,7 +56,7 @@ struct DescriptionChange: View {
                 description = viewModel.currentUser!.description
                 reader.scrollTo(1, anchor: .bottom)
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                     self.focusedFieldNumber = 1
                 }
             }

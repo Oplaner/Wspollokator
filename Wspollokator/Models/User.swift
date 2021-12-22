@@ -23,8 +23,9 @@ class User: Hashable, Identifiable {
     var ratings: [Rating]
     var isSearchable: Bool
     
-    var averageRating: Double {
-        Double(ratings.map({ $0.score }).reduce(0, +)) / Double(ratings.count)
+    var averageScore: Int {
+        guard ratings.count > 0 else { return 0 }
+        return Int(round(Double(ratings.map({ $0.score }).reduce(0, +)) / Double(ratings.count)))
     }
     
     init(id: Int, avatarImage: Image? = nil, name: String, surname: String, email: String, pointOfInterest: CLLocationCoordinate2D? = nil, targetDistance: Double = ViewModel.defaultTargetDistance, preferences: [FilterOption: FilterAttitude] = ViewModel.defaultPreferences, description: String = "", savedUsers: [User] = [User](), ratings: [Rating] = [Rating](), isSearchable: Bool = false) {

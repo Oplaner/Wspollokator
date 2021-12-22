@@ -99,6 +99,24 @@ struct MyProfile: View {
                             .font(.title2)
                     }
                     .padding(.vertical, 10)
+                    
+                    HStack {
+                        Text("Średnia ocena")
+                        Spacer()
+                        
+                        if viewModel.currentUser!.ratings.count == 0 {
+                            Text("—")
+                                .foregroundColor(.secondary)
+                        } else {
+                            RatingStars(score: .constant(viewModel.currentUser!.averageScore), isInteractive: false)
+                        }
+                    }
+                    
+                    if viewModel.currentUser!.ratings.count > 0 {
+                        NavigationLink("Opinie o mnie (\(viewModel.currentUser!.ratings.count))") {
+                            RatingList(relevantUser: viewModel.currentUser!)
+                        }
+                    }
                 }
                 Section {
                     Toggle("Szukam współlokatora", isOn: $isSearchable)

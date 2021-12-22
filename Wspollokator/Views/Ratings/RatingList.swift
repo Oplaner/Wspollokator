@@ -18,40 +18,41 @@ struct RatingList: View {
     }
     
     var body: some View {
-        NavigationView {
-            List {
-                if sortedRatings.isEmpty {
-                    Text("Brak opinii.")
-                        .foregroundColor(.secondary)
-                } else {
-                    ForEach(sortedRatings) { rating in
-                        RatingView(rating: rating)
-                            .padding(.vertical)
+        List {
+            if sortedRatings.isEmpty {
+                Text("Brak opinii.")
+                    .foregroundColor(.secondary)
+            } else {
+                ForEach(sortedRatings) { rating in
+                    RatingView(rating: rating)
+                        .padding(.vertical, 10)
+                }
+            }
+        }
+        .navigationTitle(relevantUser == viewModel.currentUser! ? "Opinie o mnie" : "Opinie")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                if relevantUser != viewModel.currentUser! {
+                    Button {
+                        isShowingNewRatingView = true
+                    } label: {
+                        Image(systemName: "plus")
                     }
                 }
             }
-            .navigationTitle(relevantUser == viewModel.currentUser! ? "Opinie o mnie" : "Opinie")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    if relevantUser != viewModel.currentUser! {
-                        Button {
-                            isShowingNewRatingView = true
-                        } label: {
-                            Image(systemName: "plus")
-                        }
-                    }
-                }
-            }
-            .sheet(isPresented: $isShowingNewRatingView) {
-                // TODO: Add NewRating View.
-            }
+        }
+        .sheet(isPresented: $isShowingNewRatingView) {
+            NewRating(relevantUser: relevantUser)
         }
     }
 }
 
 struct RatingList_Previews: PreviewProvider {
     static var previews: some View {
-        RatingList(relevantUser: ViewModel.sampleUsers[0])
-            .environmentObject(ViewModel.sample)
+        NavigationView {
+            RatingList(relevantUser: ViewModel.sampleUsers[0])
+                .environmentObject(ViewModel.sample)
+        }
     }
 }
