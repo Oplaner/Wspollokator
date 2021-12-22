@@ -190,9 +190,8 @@ import SwiftUI
     }
     
     func sendMessage(_ text: String, in conversation: Conversation) async -> (createdConversation: Conversation?, sentMessage: Message?, success: Bool) {
-        let (messageID, timeSent) = await Networking.sendMessage(text, writtenBy: currentUser!)
-        guard messageID != nil else { return (nil, nil, false) }
-        let sentMessage = Message(id: messageID!, author: currentUser!, content: text, timeSent: timeSent!)
+        guard let messageInfo = await Networking.sendMessage(text, writtenBy: currentUser!) else { return (nil, nil, false) }
+        let sentMessage = Message(id: messageInfo.messageID, author: currentUser!, content: text, timeSent: messageInfo.timeSent)
         
         if conversation.id == 0 { // A new conversation.
             guard let conversationID = await Networking.createConversation(withParticipants: conversation.participants) else {
@@ -218,14 +217,19 @@ import SwiftUI
         }
     }
     
+    func addRating(of user: User, withScore score: Int, comment: String) async -> (addedRating: Rating?, success: Bool) {
+        guard let ratingInfo = await Networking.addRating(of: user, writtenBy: currentUser!, withScore: score, comment: comment) else { return (nil, false) }
+        let rating = Rating(id: ratingInfo.ratingID, author: currentUser!, score: score, comment: comment, timeAdded: ratingInfo.timeAdded)
+        return (rating, true)
+    }
+    
     private func downloadCurrentUserData() async -> Bool {
         // TODO: Download all the required data for the current user, for example other users' data, conversations.
         true
     }
     
 #if DEBUG
-    // TODO: Remove "nonisolated" when map views are finished.
-    nonisolated static var sampleUsers: [User] {
+    static var sampleUsers: [User] {
         let john = User(
             id: 1,
             avatarImage: Image("avatar1"),
@@ -291,6 +295,48 @@ import SwiftUI
         anna.savedUsers = [john]
         amy.savedUsers = [anna]
         carol.savedUsers = [anna, amy]
+        
+        john.ratings = [
+            Rating(
+                id: 2,
+                author: anna,
+                score: 4,
+                comment: "Maecenas vel nulla et enim.",
+                timeAdded: Date(timeIntervalSince1970: 1639848593)
+            ),
+            Rating(
+                id: 3,
+                author: mark,
+                score: 5,
+                comment: "Sed a felis porttitor, bibendum velit sed! 💚",
+                timeAdded: Date(timeIntervalSince1970: 1639848793)
+            ),
+            Rating(
+                id: 5,
+                author: carol,
+                score: 2,
+                comment: "Nullam pulvinar pellentesque erat vitae faucibus. Maecenas a risus non mi ultricies eleifend. 🤨",
+                timeAdded: Date(timeIntervalSince1970: 1639849160)
+            )
+        ]
+        anna.ratings = [
+            Rating(
+                id: 4,
+                author: amy,
+                score: 3,
+                comment: "Rutrum odio.",
+                timeAdded: Date(timeIntervalSince1970: 1639848838)
+            )
+        ]
+        mark.ratings = [
+            Rating(
+                id: 1,
+                author: john,
+                score: 3,
+                comment: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce luctus facilisis felis vel volutpat.",
+                timeAdded: Date(timeIntervalSince1970: 1639848215)
+            )
+        ]
         
         return [john, anna, mark, amy, carol]
     }

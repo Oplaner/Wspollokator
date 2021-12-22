@@ -18,8 +18,9 @@ struct DescriptionChange: View {
     @State private var description = ""
     
     private func updateDescription() async {
+        focusedFieldNumber = nil
         isUpdatingDescription = true
-        description = description.trimmingCharacters(in: .whitespaces)
+        description = description.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if description == viewModel.currentUser!.description {
             description = viewModel.currentUser!.description

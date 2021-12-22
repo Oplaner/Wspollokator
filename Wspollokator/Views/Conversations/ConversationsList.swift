@@ -81,10 +81,10 @@ struct ConversationsList: View {
                         } label: {
                             Label("Nowa konwersacja", systemImage: "square.and.pencil")
                         }
-                        .sheet(isPresented: $isShowingNewConversationSheet) {
-                            NewConversation(isShowingConversationView: $isShowingConversationView, newConversationParticipants: $newConversationParticipants)
-                        }
                     }
+                }
+                .sheet(isPresented: $isShowingNewConversationSheet) {
+                    NewConversation(isShowingConversationView: $isShowingConversationView, newConversationParticipants: $newConversationParticipants)
                 }
             }
         }

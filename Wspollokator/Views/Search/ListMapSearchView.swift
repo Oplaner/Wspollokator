@@ -82,10 +82,10 @@ struct ListMapSearchView: View {
                     } label: {
                         Label("Filtry", systemImage: "slider.horizontal.3")
                     }
-                    .sheet(isPresented: $isShowingFilters) {
-                        FilterViewContainer(targetDistance: $viewModel.searchTargetDistance, preferencesSource: $viewModel.searchPreferences)
-                    }
                 }
+            }
+            .sheet(isPresented: $isShowingFilters) {
+                FilterViewContainer(targetDistance: $viewModel.searchTargetDistance, preferencesSource: $viewModel.searchPreferences)
             }
         }
     }

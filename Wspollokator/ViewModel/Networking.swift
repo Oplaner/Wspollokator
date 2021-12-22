@@ -18,7 +18,7 @@ class Networking {
     /// Checks if the database contains a user with given `email` and `password` and returns an object representing the user, or nil if they were not found.
     static func fetchUser(withEmail email: String, password: String) async -> User? {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return ViewModel.sampleUsers.first(where: { $0.email == email })
+        return await ViewModel.sampleUsers.first(where: { $0.email == email })
     }
     
     /// Updates `user`'s `avatarImage` and returns the operation status.
@@ -42,7 +42,7 @@ class Networking {
     /// Checks if `email` is already taken by any user.
     static func checkEmailAvailability(_ email: String) async -> Bool {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return !ViewModel.sampleUsers.contains(where: { $0.email == email })
+        return await !ViewModel.sampleUsers.contains(where: { $0.email == email })
     }
     
     /// Updates `user`'s `email` and returns the operation status.
@@ -116,8 +116,8 @@ class Networking {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
     }
     
-    /// Sends a new message and returns a tuple with its ID and time of creation, or two nil values if the operation failed. The newly created message _is not_ attached to any conversation.
-    static func sendMessage(_ text: String, writtenBy author: User) async -> (messageID: Int?, timeSent: Date?) {
+    /// Sends a new message and returns a tuple with its ID and time of creation, or nil if the operation failed. The newly created message _is not_ attached to any conversation.
+    static func sendMessage(_ text: String, writtenBy author: User) async -> (messageID: Int, timeSent: Date)? {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
         return (Int.random(in: 11...1000), Date())
     }
@@ -131,5 +131,11 @@ class Networking {
     /// Removes `message`, without unlinking it from a conversation, from the database.
     static func deleteMessage(_ message: Message) async {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
+    }
+    
+    /// Adds a new rating and returns a tuple with its ID and time of creation, or nil if the operation failed.
+    static func addRating(of rated: User, writtenBy rating: User, withScore score: Int, comment: String) async -> (ratingID: Int, timeAdded: Date)? {
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        return (Int.random(in: 6...1000), Date())
     }
 }
