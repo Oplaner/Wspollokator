@@ -13,6 +13,7 @@ struct NewRating: View {
     @FocusState var focusedFieldNumber: Int?
     
     var relevantUser: User
+    @Binding var isShowingRatingsList: Bool
     @State private var score = 0
     @State private var comment = ""
     @State private var isAdding = false
@@ -22,7 +23,13 @@ struct NewRating: View {
         comment.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
+    init(relevantUser: User, isShowingRatingsList: Binding<Bool> = .constant(false)) {
+        self.relevantUser = relevantUser
+        self._isShowingRatingsList = isShowingRatingsList
+    }
+    
     private func addRating() async {
+        focusedFieldNumber = nil
         isAdding = true
         
         let (rating, success) = await viewModel.addRating(of: relevantUser, withScore: score, comment: commentTrimmed)
@@ -31,6 +38,7 @@ struct NewRating: View {
             viewModel.objectWillChange.send()
             relevantUser.ratings.append(rating!)
             dismiss()
+            isShowingRatingsList = true
         } else {
             isShowingAlert = true
         }

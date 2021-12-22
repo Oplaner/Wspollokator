@@ -17,6 +17,7 @@ struct UserProfile: View {
     
     var user: User
     @State private var nearestLocationName: String?
+    @State private var isShowingRatingsList = false
     @State private var isShowingNewRatingView = false
     @State private var isShowingConversationView = false
     
@@ -108,8 +109,10 @@ struct UserProfile: View {
                         isShowingNewRatingView = true
                     }
                 } else {
-                    NavigationLink("Pokaż opinie (\(user.ratings.count))") {
+                    NavigationLink(isActive: $isShowingRatingsList) {
                         RatingList(relevantUser: user)
+                    } label: {
+                        Text("Pokaż opinie (\(user.ratings.count))")
                     }
                 }
                 
@@ -139,7 +142,7 @@ struct UserProfile: View {
             }
         }
         .sheet(isPresented: $isShowingNewRatingView) {
-            NewRating(relevantUser: user)
+            NewRating(relevantUser: user, isShowingRatingsList: $isShowingRatingsList)
         }
         .task {
             nearestLocationName = await user.fetchNearestLocationName()
