@@ -9,6 +9,43 @@ import CoreLocation
 import UIKit
 
 class Networking {
+    enum HTTPMethod: String {
+        case get = "GET"
+        case post = "POST"
+        case put = "PUT"
+        case patch = "PATCH"
+        case delete = "DELETE"
+    }
+    
+    enum ContentType: String {
+        case json = "application/json"
+        case multipart = "multipart/form-data"
+    }
+    
+    static let baseURL = URL(string: "http://wspolokator.livs.pl:8000")
+    static var session: URLSession! = nil
+    
+    /// Sets up a new networking session to communicate with the server.
+    static func makeSession() {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.networkServiceType = .responsiveData
+        configuration.timeoutIntervalForRequest = 30
+        configuration.urlCache = nil
+        session = URLSession(configuration: configuration)
+    }
+    
+    /// A helper function for making URLRequests.
+    ///
+    /// Parameter `endpoint` _must_ end with a slash.
+    static func makeRequest(endpoint: String, method: HTTPMethod, contentType: ContentType, body: Data) -> URLRequest {
+        let url = URL(string: endpoint, relativeTo: baseURL)!
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        request.setValue(contentType.rawValue, forHTTPHeaderField: "Content-Type")
+        request.httpBody = body
+        return request
+    }
+    
     /// Tries to create a new user in the database and returns their ID, or nil if the operation failed.
     static func createUserAccount(name: String, surname: String, email: String, password: String) async -> Int? {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
