@@ -46,6 +46,10 @@ struct Login: View {
         }
     }
     
+    private func fetchLoginInformation() -> (email: String, password: String)? {
+        return nil
+    }
+    
     var body: some View {
         VStack {
             Image("logo-200")
@@ -106,6 +110,15 @@ struct Login: View {
                     .padding(.bottom, 20)
             }
             .disabled(didAuthenticate || isAuthenticating)
+        }
+        .onAppear {
+            Task {
+                if !viewModel.isUserAuthenticated, let (email, password) = fetchLoginInformation() {
+                    self.email = email
+                    self.password = password
+                    await authenticateUser()
+                }
+            }
         }
         .alert("Błąd", isPresented: $isShowingAlert) {
             Button("OK") {
