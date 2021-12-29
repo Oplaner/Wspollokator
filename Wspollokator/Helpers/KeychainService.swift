@@ -45,8 +45,8 @@ class KeychainService {
         }
     }
     
-    /// Updates login information stored in the keychain and returns the operation status.
-    static func updateLoginInformation(email: String, password: String) -> Bool {
+    /// Updates login information stored in the keychain.
+    static func updateLoginInformation(email: String, password: String) {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrLabel as String: securityItemLoginInformationLabel
@@ -55,17 +55,15 @@ class KeychainService {
             kSecAttrAccount as String: email,
             kSecValueData as String: password.data(using: .utf8)!
         ]
-        let status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
-        return status == errSecSuccess
+        SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
     }
     
-    /// Removes login information from the keychain and returns the operation status.
-    static func deleteLoginInformation() -> Bool {
+    /// Removes login information from the keychain.
+    static func deleteLoginInformation() {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrLabel as String: securityItemLoginInformationLabel
         ]
-        let status = SecItemDelete(query as CFDictionary)
-        return status == errSecSuccess
+        SecItemDelete(query as CFDictionary)
     }
 }

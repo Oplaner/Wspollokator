@@ -31,6 +31,7 @@ struct Login: View {
             if try await viewModel.authenticateUser(withEmail: emailTrimmed, password: password) {
                 viewModel.isUserAuthenticated = true
             } else {
+                viewModel.currentUser = nil
                 alertMessage = "Wystąpił błąd. Spróbuj ponownie."
                 isShowingAlert = true
                 isAuthenticating = false
@@ -44,10 +45,6 @@ struct Login: View {
             isShowingAlert = true
             isAuthenticating = false
         }
-    }
-    
-    private func fetchLoginInformation() -> (email: String, password: String)? {
-        return nil
     }
     
     var body: some View {
@@ -113,7 +110,7 @@ struct Login: View {
         }
         .onAppear {
             Task {
-                if !viewModel.isUserAuthenticated, let (email, password) = fetchLoginInformation() {
+                if !viewModel.isUserAuthenticated, let (email, password) = KeychainService.fetchLoginInformation() {
                     self.email = email
                     self.password = password
                     await authenticateUser()

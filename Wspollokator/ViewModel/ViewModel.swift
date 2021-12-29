@@ -62,8 +62,15 @@ import SwiftUI
     func authenticateUser(withEmail email: String, password: String) async throws -> Bool {
         if let user = await Networking.fetchUser(withEmail: email, password: password) {
             currentUser = user
+            
+            if KeychainService.fetchLoginInformation() == nil && !KeychainService.saveLoginInformation(email: email, password: password) {
+                KeychainService.deleteLoginInformation()
+                _ = KeychainService.saveLoginInformation(email: email, password: password)
+            }
+            
             return await downloadCurrentUserData()
         } else {
+            KeychainService.deleteLoginInformation()
             throw LoginError.invalidCredentials
         }
     }
@@ -113,7 +120,12 @@ import SwiftUI
         guard new1 == new2 else { throw PasswordChangeError.unmatchingNewPasswords }
         guard new1 != old else { throw PasswordChangeError.oldAndNewPasswordsEqual }
         
-        return await Networking.setNewPassword(new1, forUser: currentUser!)
+        if await Networking.setNewPassword(new1, forUser: currentUser!) {
+            KeychainService.updateLoginInformation(email: currentUser!.email, password: new1)
+            return true
+        }
+        
+        return false
     }
     
     func changeCurrentUserSavedList(adding user: User) async {
@@ -159,6 +171,7 @@ import SwiftUI
     func logout() {
         // TODO: Stop background communication and remove scheduled refresh tasks.
         // TODO: Remove current user information from a local storage.
+        KeychainService.deleteLoginInformation()
         
         searchTargetDistance = ViewModel.defaultTargetDistance
         searchPreferences = ViewModel.defaultPreferences
@@ -423,6 +436,6 @@ import SwiftUI
         ]
     }
     
-    static let sample = ViewModel(currentUser: sampleUsers[0], users: sampleUsers, conversations: sampleConversations)
+    static let sample = ViewModel(currentUser: nil, users: sampleUsers, conversations: sampleConversations)
 #endif
 }
