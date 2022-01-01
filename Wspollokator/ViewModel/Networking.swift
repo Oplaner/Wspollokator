@@ -39,12 +39,22 @@ class Networking {
     /// A helper function for making URLRequests.
     ///
     /// Parameter `endpoint` _must_ end with a slash. For `.multipart` value of `contentType` parameter `UImage` objects are supported.
-    static func makeRequest(endpoint: String, method: HTTPMethod, contentType: ContentType? = nil, body: [String: Any]? = nil) -> URLRequest {
-        let url = URL(string: endpoint, relativeTo: baseURL)!
+    static func makeRequest(endpoint: String, method: HTTPMethod, body: [String: Any]? = nil, contentType: ContentType? = nil) -> URLRequest {
+        var url = URL(string: endpoint, relativeTo: baseURL)!
+        
+        if method == .get, let body = body {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
+            components.queryItems = body.map { key, value in
+                URLQueryItem(name: key, value: String(describing: value))
+            }
+            components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+            url = components.url!
+        }
+        
         var request = URLRequest(url: url)
         request.httpMethod = method.rawValue
         
-        if let body = body {
+        if method != .get, let body = body {
             request.setValue(contentType!.rawValue, forHTTPHeaderField: "Content-Type")
             
             switch contentType! {
@@ -99,7 +109,7 @@ class Networking {
                 "email": email,
                 "password": password
             ]
-            var request = makeRequest(endpoint: "auth/register/", method: .post, contentType: .json, body: body)
+            var request = makeRequest(endpoint: "auth/register/", method: .post, body: body, contentType: .json)
             var (data, response) = try await session.data(for: request)
             
             guard let code = (response as? HTTPURLResponse)?.statusCode else { return nil }
@@ -118,7 +128,7 @@ class Networking {
                     "description": "Brak opisu.",
                     "is_searchable": false
                 ]
-                request = makeRequest(endpoint: "profile/", method: .post, contentType: .multipart, body: body)
+                request = makeRequest(endpoint: "profile/", method: .post, body: body, contentType: .multipart)
                 (_, response) = try await session.data(for: request)
                 
                 guard (response as? HTTPURLResponse)?.statusCode == 201 /* A profile has been created. */ else { return nil }
@@ -268,12 +278,12 @@ class Networking {
     
     /// Updates `user`'s `pointOfInterest` and returns the operation status.
     static func update(pointOfInterest: CLLocationCoordinate2D?, forUser user: User) async -> Bool {
-//        EXAMPLE BODY FOR CREATING A POINT:
-//        body = [
-//            "location": "POINT(52.22322350545386 21.01232058780615)",
-//            "radius": 3.1
-//        ]
-//        RESPONSE CODE ON SUCCESS: 201
+        //        EXAMPLE BODY FOR CREATING A POINT:
+        //        body = [
+        //            "location": "POINT(52.22322350545386 21.01232058780615)",
+        //            "radius": 3.1
+        //        ]
+        //        RESPONSE CODE ON SUCCESS: 201
         
         try? await Task.sleep(nanoseconds: 1_000_000_000)
         return true
@@ -350,7 +360,7 @@ class Networking {
                 "email": email,
                 "password": password
             ]
-            let request = makeRequest(endpoint: "auth/login/", method: .post, contentType: .json, body: body)
+            let request = makeRequest(endpoint: "auth/login/", method: .post, body: body, contentType: .json)
             let (data, response) = try await session.data(for: request)
             
             guard (response as? HTTPURLResponse)?.statusCode == 200 /* Login has been successful. */,
