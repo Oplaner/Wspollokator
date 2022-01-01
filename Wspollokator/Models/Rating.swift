@@ -8,13 +8,13 @@
 import Foundation
 
 class Rating: Identifiable {
-    let id: Int
+    let id: String
     let author: User
     let score: Int
     let comment: String
     let timeAdded: Date
     
-    init(id: Int, author: User, score: Int, comment: String, timeAdded: Date) {
+    init(id: String, author: User, score: Int, comment: String, timeAdded: Date) {
         self.id = id
         self.author = author
         self.score = score

@@ -8,12 +8,12 @@
 import Foundation
 
 class Message: Identifiable {
-    let id: Int
+    let id: String
     let author: User
     let content: String
     let timeSent: Date
     
-    init(id: Int, author: User, content: String, timeSent: Date) {
+    init(id: String, author: User, content: String, timeSent: Date) {
         self.id = id
         self.author = author
         self.content = content

@@ -9,12 +9,12 @@ import CoreLocation
 import SwiftUI
 
 class User: Hashable, Identifiable {
-    let id: Int
+    let id: String
     
     var avatarImage: Image?
     var name: String
     var surname: String
-    var email: String
+    var email: String!
     var pointOfInterest: CLLocationCoordinate2D?
     var targetDistance: Double
     var preferences: [FilterOption: FilterAttitude]
@@ -28,7 +28,7 @@ class User: Hashable, Identifiable {
         return Int(round(Double(ratings.map({ $0.score }).reduce(0, +)) / Double(ratings.count)))
     }
     
-    init(id: Int, avatarImage: Image? = nil, name: String, surname: String, email: String, pointOfInterest: CLLocationCoordinate2D? = nil, targetDistance: Double = ViewModel.defaultTargetDistance, preferences: [FilterOption: FilterAttitude] = ViewModel.defaultPreferences, description: String = "", savedUsers: [User] = [User](), ratings: [Rating] = [Rating](), isSearchable: Bool = false) {
+    init(id: String, avatarImage: Image? = nil, name: String, surname: String, email: String? = nil, pointOfInterest: CLLocationCoordinate2D? = nil, targetDistance: Double = ViewModel.defaultTargetDistance, preferences: [FilterOption: FilterAttitude] = ViewModel.defaultPreferences, description: String = "", savedUsers: [User] = [User](), ratings: [Rating] = [Rating](), isSearchable: Bool = false) {
         self.id = id
         self.avatarImage = avatarImage
         self.name = name

@@ -12,6 +12,7 @@ import SwiftUI
     
     init() {
         UIView.appearance().tintColor = UIColor(named: "AccentColor")!
+        Networking.makeSession()
     }
     
     var body: some Scene {

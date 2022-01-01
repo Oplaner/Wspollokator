@@ -10,8 +10,10 @@ import SwiftUI
 
 @MainActor class ViewModel: ObservableObject {
     enum SignUpError: Error {
+        case invalidEmail
         case emailAlreadyTaken
         case unmatchingPasswords
+        case invalidPassword
     }
     
     enum LoginError: Error {
@@ -60,7 +62,7 @@ import SwiftUI
     }
     
     func authenticateUser(withEmail email: String, password: String) async throws -> Bool {
-        if let user = await Networking.fetchUser(withEmail: email, password: password) {
+        if let user = await Networking.fetchCurrentUser(withEmail: email, password: password) {
             currentUser = user
             
             if KeychainService.fetchLoginInformation() == nil && !KeychainService.saveLoginInformation(email: email, password: password) {
@@ -88,11 +90,7 @@ import SwiftUI
     }
     
     func changeCurrentUser(email: String) async throws -> Bool {
-        if await !Networking.checkEmailAvailability(email) {
-            throw EmailChangeError.emailAlreadyTaken
-        } else {
-            return await Networking.update(email: email, forUser: currentUser!)
-        }
+        return await Networking.update(email: email, forUser: currentUser!)
     }
     
     func changeCurrentUser(description: String) async -> Bool {
@@ -157,10 +155,9 @@ import SwiftUI
     }
     
     func createUserAccount(name: String, surname: String, email: String, password1: String, password2: String) async throws -> Bool {
-        guard await Networking.checkEmailAvailability(email) else { throw SignUpError.emailAlreadyTaken }
         guard password1 == password2 else { throw SignUpError.unmatchingPasswords }
         
-        if let userID = await Networking.createUserAccount(name: name, surname: surname, email: email, password: password1) {
+        if let userID = try await Networking.createUserAccount(name: name, surname: surname, email: email, password: password1) {
             currentUser = User(id: userID, name: name, surname: surname, email: email)
             return await downloadCurrentUserData()
         } else {
@@ -206,7 +203,7 @@ import SwiftUI
         guard let messageInfo = await Networking.sendMessage(text, writtenBy: currentUser!) else { return (nil, nil, false) }
         let sentMessage = Message(id: messageInfo.messageID, author: currentUser!, content: text, timeSent: messageInfo.timeSent)
         
-        if conversation.id == 0 { // A new conversation.
+        if conversation.id == "0" { // A new conversation.
             guard let conversationID = await Networking.createConversation(withParticipants: conversation.participants) else {
                 await Networking.deleteMessage(sentMessage)
                 return (nil, nil, false)
@@ -244,7 +241,7 @@ import SwiftUI
 #if DEBUG
     static var sampleUsers: [User] {
         let john = User(
-            id: 1,
+            id: "1",
             avatarImage: Image("avatar1"),
             name: "John",
             surname: "Appleseed",
@@ -256,7 +253,7 @@ import SwiftUI
             isSearchable: true
         )
         let anna = User(
-            id: 2,
+            id: "2",
             avatarImage: Image("avatar2"),
             name: "Anna",
             surname: "Brown",
@@ -268,7 +265,7 @@ import SwiftUI
             isSearchable: true
         )
         let mark = User(
-            id: 3,
+            id: "3",
             avatarImage: Image("avatar3"),
             name: "Mark",
             surname: "Williams",
@@ -280,7 +277,7 @@ import SwiftUI
             isSearchable: true
         )
         let amy = User(
-            id: 4,
+            id: "4",
             avatarImage: Image("avatar4"),
             name: "Amy",
             surname: "Smith",
@@ -292,7 +289,7 @@ import SwiftUI
             isSearchable: true
         )
         let carol = User(
-            id: 5,
+            id: "5",
             avatarImage: nil,
             name: "Carol",
             surname: "Johnson",
@@ -311,21 +308,21 @@ import SwiftUI
         
         john.ratings = [
             Rating(
-                id: 2,
+                id: "2",
                 author: anna,
                 score: 4,
                 comment: "Maecenas vel nulla et enim.",
                 timeAdded: Date(timeIntervalSince1970: 1639848593)
             ),
             Rating(
-                id: 3,
+                id: "3",
                 author: mark,
                 score: 5,
                 comment: "Sed a felis porttitor, bibendum velit sed! 💚",
                 timeAdded: Date(timeIntervalSince1970: 1639848793)
             ),
             Rating(
-                id: 5,
+                id: "5",
                 author: carol,
                 score: 2,
                 comment: "Nullam pulvinar pellentesque erat vitae faucibus. Maecenas a risus non mi ultricies eleifend. 🤨",
@@ -334,7 +331,7 @@ import SwiftUI
         ]
         anna.ratings = [
             Rating(
-                id: 4,
+                id: "4",
                 author: amy,
                 score: 3,
                 comment: "Rutrum odio.",
@@ -343,7 +340,7 @@ import SwiftUI
         ]
         mark.ratings = [
             Rating(
-                id: 1,
+                id: "1",
                 author: john,
                 score: 3,
                 comment: "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce luctus facilisis felis vel volutpat.",
@@ -362,41 +359,41 @@ import SwiftUI
         
         return [
             Conversation(
-                id: 1,
+                id: "1",
                 participants: [john, anna, mark],
                 messages: [
                     Message(
-                        id: 1,
+                        id: "1",
                         author: john,
                         content: "Lorem ipsum dolor sit amet",
                         timeSent: Date(timeIntervalSince1970: 1636633543)
                     ),
                     Message(
-                        id: 2,
+                        id: "2",
                         author: anna,
                         content: "Donec et est magna 😜",
                         timeSent: Date(timeIntervalSince1970: 1636634665)
                     ),
                     Message(
-                        id: 3,
+                        id: "3",
                         author: john,
                         content: "Nam sollicitudin orci urna",
                         timeSent: Date(timeIntervalSince1970: 1636634987)
                     ),
                     Message(
-                        id: 4,
+                        id: "4",
                         author: mark,
                         content: "Vestibulum ante ipsum primis in faucibus orci luctus",
                         timeSent: Date(timeIntervalSince1970: 1636635106)
                     ),
                     Message(
-                        id: 5,
+                        id: "5",
                         author: anna,
                         content: "Nunc ac ex lobortis, tempor lorem eu, consequat tellus 🐶",
                         timeSent: Date(timeIntervalSince1970: 1636641097)
                     ),
                     Message(
-                        id: 6,
+                        id: "6",
                         author: john,
                         content: "Praesent",
                         timeSent: Date(timeIntervalSince1970: 1636656847)
@@ -404,29 +401,29 @@ import SwiftUI
                 ]
             ),
             Conversation(
-                id: 2,
+                id: "2",
                 participants: [john, carol],
                 messages: [
                     Message(
-                        id: 7,
+                        id: "7",
                         author: carol,
                         content: "Curabitur rhoncus at ex nec volutpat. Aenean eget purus et justo varius elementum.",
                         timeSent: Date(timeIntervalSince1970: 1636981561)
                     ),
                     Message(
-                        id: 8,
+                        id: "8",
                         author: john,
                         content: "Ut consectetur tellus nibh, vel luctus massa fermentum quis. Nam et iaculis mi. Nunc sem nisl, tempus sed interdum consequat, pulvinar at nulla. 🍪",
                         timeSent: Date(timeIntervalSince1970: 1637005586)
                     ),
                     Message(
-                        id: 9,
+                        id: "9",
                         author: carol,
                         content: "Cras feugiat urna et",
                         timeSent: Date(timeIntervalSince1970: 1637005622)
                     ),
                     Message(
-                        id: 10,
+                        id: "10",
                         author: john,
                         content: "Suspendisse! 🎉",
                         timeSent: Date(timeIntervalSince1970: 1637068971)

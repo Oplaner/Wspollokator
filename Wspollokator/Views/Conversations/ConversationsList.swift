@@ -51,7 +51,7 @@ struct ConversationsList: View {
         NavigationView {
             ZStack {
                 NavigationLink(isActive: $isShowingConversationView) {
-                    ConversationView(conversation: Conversation(id: 0, participants: newConversationParticipants, messages: []))
+                    ConversationView(conversation: Conversation(id: "0", participants: newConversationParticipants, messages: []))
                 } label: {}
                 
                 List {

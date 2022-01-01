@@ -30,4 +30,26 @@ enum FilterAttitude: String, CaseIterable {
     case negative = "🚫"
     case neutral = "⚪️"
     case positive = "✅"
+    
+    static func mapFrom(serverValue value: String) -> FilterAttitude {
+        switch value {
+        case "A":
+            return .positive
+        case "N":
+            return .negative
+        default:
+            return .neutral
+        }
+    }
+    
+    func mapToServerValue() -> String {
+        switch self {
+        case .negative:
+            return "N"
+        case .neutral:
+            return "I"
+        case .positive:
+            return "A"
+        }
+    }
 }

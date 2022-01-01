@@ -23,7 +23,7 @@ struct ListMapSearchView: View {
         
         guard currentUser.pointOfInterest != nil else { return nil }
         
-        var distances = [Int: Double]()
+        var distances = [String: Double]()
         
         return viewModel.users.filter({ user in
             guard user != currentUser && user.isSearchable, let distance = user.distance(from: currentUser), distance <= viewModel.searchTargetDistance else { return false }

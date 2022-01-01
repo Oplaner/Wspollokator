@@ -36,7 +36,7 @@ struct ConversationView: View {
     
     init(conversation: Conversation) {
         self.conversation = conversation
-        shouldFocus = conversation.id == 0
+        shouldFocus = conversation.id == "0"
     }
     
     private func scrollToBottom(withReader reader: ScrollViewProxy) {

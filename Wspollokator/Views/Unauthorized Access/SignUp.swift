@@ -63,10 +63,14 @@ struct SignUp: View {
             alertType = .error
             
             switch error as! ViewModel.SignUpError {
+            case .invalidEmail:
+                alertMessage = "Wprowadzony adres e-mail jest nieprawidłowy."
             case .emailAlreadyTaken:
                 alertMessage = "Wprowadzony adres e-mail jest już zajęty przez innego użytkownika."
             case .unmatchingPasswords:
                 alertMessage = "Podane hasła są niezgodne."
+            case .invalidPassword:
+                alertMessage = "Podane hasło nie jest wystarczająco bezpieczne. Hasło musi składać się z co najmniej 8 znaków, zawierać przynajmniej 1 literę i nie może tworzyć popularnych wyrażeń."
             }
         }
         

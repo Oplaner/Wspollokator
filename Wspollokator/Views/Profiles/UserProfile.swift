@@ -23,7 +23,7 @@ struct UserProfile: View {
     
     /// An existing conversation with `user` or a template for a new one.
     private var conversation: Conversation {
-        viewModel.conversations.filter({ $0.participants.count == 2 && $0.participants.contains(user) }).first ?? Conversation(id: 0, participants: [viewModel.currentUser!, user], messages: [])
+        viewModel.conversations.filter({ $0.participants.count == 2 && $0.participants.contains(user) }).first ?? Conversation(id: "0", participants: [viewModel.currentUser!, user], messages: [])
     }
     
     var body: some View {

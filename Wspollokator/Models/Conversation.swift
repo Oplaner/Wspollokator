@@ -8,7 +8,7 @@
 import Foundation
 
 class Conversation: Identifiable, Equatable {
-    let id: Int
+    let id: String
     
     var participants: [User]
     var messages: [Message]
@@ -17,7 +17,7 @@ class Conversation: Identifiable, Equatable {
         messages.max(by: { $0.timeSent < $1.timeSent })!
     }
     
-    init(id: Int, participants: [User], messages: [Message]) {
+    init(id: String, participants: [User], messages: [Message]) {
         self.id = id
         self.participants = participants
         self.messages = messages
