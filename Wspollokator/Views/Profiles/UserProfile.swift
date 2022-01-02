@@ -40,9 +40,9 @@ struct UserProfile: View {
                         Button {
                             Task {
                                 if viewModel.currentUser!.savedUsers.contains(user) {
-                                    await viewModel.changeCurrentUserSavedList(removing: user)
+                                    await viewModel.changeCurrentUserSavedList(byRemoving: user)
                                 } else {
-                                    await viewModel.changeCurrentUserSavedList(adding: user)
+                                    await viewModel.changeCurrentUserSavedList(byAdding: user)
                                 }
                             }
                         } label: {

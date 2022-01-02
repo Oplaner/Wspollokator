@@ -60,9 +60,9 @@ struct ListRow: View {
                 Button {
                     Task {
                         if viewModel.currentUser!.savedUsers.contains(relevantUser!) {
-                            await viewModel.changeCurrentUserSavedList(removing: relevantUser!)
+                            await viewModel.changeCurrentUserSavedList(byRemoving: relevantUser!)
                         } else {
-                            await viewModel.changeCurrentUserSavedList(adding: relevantUser!)
+                            await viewModel.changeCurrentUserSavedList(byAdding: relevantUser!)
                         }
                     }
                 } label: {

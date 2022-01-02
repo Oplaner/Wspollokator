@@ -61,6 +61,25 @@ import SwiftUI
         didReportErrorUpdatingSavedList = false
     }
     
+    static func resizeImage(_ image: UIImage) -> UIImage {
+        let nativeImageSize = CGSize(width: image.scale * image.size.width, height: image.scale * image.size.height)
+        let screenScale = UIScreen.main.scale
+        let nativeTargetSize = screenScale * UserProfile.avatarSize // The largest size, in pixels, at which an avatar is displayed within the app.
+        
+        if nativeImageSize.width <= nativeTargetSize || nativeImageSize.height <= nativeTargetSize {
+            return image
+        } else {
+            let scaleFactor = nativeTargetSize / min(nativeImageSize.width, nativeImageSize.height) / screenScale
+            let newImageSize = CGSize(width: scaleFactor * image.size.width, height: scaleFactor * image.size.height)
+            let renderer = UIGraphicsImageRenderer(size: newImageSize)
+            let resizedImage = renderer.image { _ in
+                image.draw(in: CGRect(origin: .zero, size: newImageSize))
+            }
+            
+            return resizedImage
+        }
+    }
+    
     func authenticateUser(withEmail email: String, password: String) async throws -> Bool {
         if let user = await Networking.fetchCurrentUser(withEmail: email, password: password) {
             currentUser = user
@@ -126,13 +145,13 @@ import SwiftUI
         return false
     }
     
-    func changeCurrentUserSavedList(adding user: User) async {
+    func changeCurrentUserSavedList(byAdding user: User) async {
         guard !currentUser!.savedUsers.contains(user) else { return }
         
         currentUser!.savedUsers.append(user)
         isUpdatingSavedList = true
         
-        if await !Networking.updateSavedList(ofUser: currentUser!, adding: user) {
+        if await !Networking.updateSavedList(byAdding: user) {
             currentUser!.savedUsers.removeAll(where: { $0 == user })
             didReportErrorUpdatingSavedList = true
         }
@@ -140,13 +159,13 @@ import SwiftUI
         isUpdatingSavedList = false
     }
     
-    func changeCurrentUserSavedList(removing user: User) async {
+    func changeCurrentUserSavedList(byRemoving user: User) async {
         guard currentUser!.savedUsers.contains(user) else { return }
         
         currentUser!.savedUsers.removeAll(where: { $0 == user })
         isUpdatingSavedList = true
         
-        if await !Networking.updateSavedList(ofUser: currentUser!, removing: user) {
+        if await !Networking.updateSavedList(byRemoving: user) {
             currentUser!.savedUsers.append(user)
             didReportErrorUpdatingSavedList = true
         }
@@ -177,25 +196,6 @@ import SwiftUI
         // Unsetting the current user must be delayed, otherwise the app will crash, because many views explicitly unwrap this optional and their bodies recompute prior to displaying the login view.
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.currentUser = nil
-        }
-    }
-    
-    func resizeImage(_ image: UIImage) -> UIImage {
-        let nativeImageSize = CGSize(width: image.scale * image.size.width, height: image.scale * image.size.height)
-        let screenScale = UIScreen.main.scale
-        let nativeTargetSize = screenScale * UserProfile.avatarSize // The largest size, in pixels, at which an avatar is displayed within the app.
-        
-        if nativeImageSize.width <= nativeTargetSize || nativeImageSize.height <= nativeTargetSize {
-            return image
-        } else {
-            let scaleFactor = nativeTargetSize / min(nativeImageSize.width, nativeImageSize.height) / screenScale
-            let newImageSize = CGSize(width: scaleFactor * image.size.width, height: scaleFactor * image.size.height)
-            let renderer = UIGraphicsImageRenderer(size: newImageSize)
-            let resizedImage = renderer.image { _ in
-                image.draw(in: CGRect(origin: .zero, size: newImageSize))
-            }
-            
-            return resizedImage
         }
     }
     
@@ -234,8 +234,35 @@ import SwiftUI
     }
     
     private func downloadCurrentUserData() async -> Bool {
-        // TODO: Download all the required data for the current user, for example other users' data, conversations.
-        true
+        do {
+            var fetchedUsers = Set<User>()
+            
+            // Fetch all searchable users who are in range of 12 km from the current user's point of interest, if it is set.
+            if currentUser!.pointOfInterest != nil {
+                let nearbyUsers = try await Networking.fetchNearbyUsers(inRange: 12)
+                
+                for user in nearbyUsers {
+                    fetchedUsers.insert(user)
+                }
+            }
+            
+            // Fetch users from the current user's saved list.
+            let savedUsers = try await Networking.fetchSavedUsers()
+            
+            for user in savedUsers {
+                fetchedUsers.insert(user)
+            }
+            
+            currentUser!.savedUsers = savedUsers
+            
+            // TODO: Fetch ratings for the current user; append their authors to the set.
+            // TODO: Fetch conversations, messages and their authors.
+            
+            users = Array(fetchedUsers)
+            return true
+        } catch {
+            return false
+        }
     }
     
 #if DEBUG

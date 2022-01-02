@@ -205,7 +205,8 @@ class Networking {
                 let (imageURL, _) = try await session.download(from: avatarURL)
                 
                 if let image = UIImage(contentsOfFile: imageURL.absoluteString) {
-                    avatar = Image(uiImage: image)
+                    let scaledImage = await ViewModel.resizeImage(image)
+                    avatar = Image(uiImage: scaledImage)
                 }
             }
             
@@ -232,6 +233,50 @@ class Networking {
         } catch {
             return nil
         }
+    }
+    
+    /// Fetches all searchable users who are in the given kilometer `range` from the current user's `pointOfInterest`.
+    static func fetchNearbyUsers(inRange range: Double) async throws -> [User] {
+        var users = [User]()
+        
+        let body = [
+            "radius": 12
+        ]
+        let request = makeRequest(endpoint: "profile/", method: .get, body: body)
+        let (data, response) = try await session.data(for: request)
+        
+        if (response as? HTTPURLResponse)?.statusCode == 200 /* Nearby users have been downloaded. */,
+           let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+            for result in json {
+                if let userData = result["user"] as? [String: Any],
+                   let userID = userData["id"] as? String,
+                   let user = await fetchUser(withID: userID) {
+                    users.append(user)
+                }
+            }
+        }
+        
+        return users
+    }
+    
+    /// Fetches current user's `savedUsers` list.
+    static func fetchSavedUsers() async throws -> [User] {
+        var users = [User]()
+        
+        let request = makeRequest(endpoint: "favourite/list/", method: .get)
+        let (data, response) = try await session.data(for: request)
+        
+        if (response as? HTTPURLResponse)?.statusCode == 200 /* Saved users have been downloaded. */,
+           let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+            for result in json {
+                if let userID = result["user_id"] as? String,
+                   let user = await fetchUser(withID: userID) {
+                    users.append(user)
+                }
+            }
+        }
+        
+        return users
     }
     
     /// Updates `user`'s `avatarImage` and returns the operation status.
@@ -307,16 +352,42 @@ class Networking {
         return true
     }
     
-    /// Updates `listOwner`s `savedList` by adding `otherUser` and returns the operation status.
-    static func updateSavedList(ofUser listOwner: User, adding otherUser: User) async -> Bool {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
+    /// Updates current user's `savedList` by adding `user` and returns the operation status.
+    static func updateSavedList(byAdding user: User) async -> Bool {
+        do {
+            let body = [
+                "user_id": user.id
+            ]
+            let request = makeRequest(endpoint: "favourite/add/", method: .post, body: body, contentType: .json)
+            let (_, response) = try await session.data(for: request)
+            
+            if (response as? HTTPURLResponse)?.statusCode == 201 /* User has been added to the list. */ {
+                return true
+            } else {
+                return false
+            }
+        } catch {
+            return false
+        }
     }
     
-    /// Updates `listOwner`s `savedList` by removing `otherUser` and returns the operation status.
-    static func updateSavedList(ofUser listOwner: User, removing otherUser: User) async -> Bool {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
+    /// Updates current user's `savedList` by removing `user` and returns the operation status.
+    static func updateSavedList(byRemoving user: User) async -> Bool {
+        do {
+            let body = [
+                "user_id": user.id
+            ]
+            let request = makeRequest(endpoint: "favourite/remove/", method: .post, body: body, contentType: .json)
+            let (_, response) = try await session.data(for: request)
+            
+            if (response as? HTTPURLResponse)?.statusCode == 204 /* User has been removed from the list. */ {
+                return true
+            } else {
+                return false
+            }
+        } catch {
+            return false
+        }
     }
     
     /// Creates a new conversation and returns its ID, or nil if the operation failed.

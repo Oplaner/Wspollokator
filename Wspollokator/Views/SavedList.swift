@@ -69,7 +69,7 @@ struct SavedList: View {
                     .onDelete { indexSet in
                         Task {
                             for index in indexSet {
-                                await viewModel.changeCurrentUserSavedList(removing: sortedUsers[index])
+                                await viewModel.changeCurrentUserSavedList(byRemoving: sortedUsers[index])
                             }
                         }
                     }

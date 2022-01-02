@@ -34,7 +34,7 @@ struct Settings: View {
     private func updateAvatarImage() async {
         isUpdatingAvatarImage = true
         
-        let image = inputImage == nil ? nil : viewModel.resizeImage(inputImage!)
+        let image = inputImage == nil ? nil : ViewModel.resizeImage(inputImage!)
         
         if await viewModel.changeCurrentUser(avatarImage: image) {
             viewModel.objectWillChange.send()
