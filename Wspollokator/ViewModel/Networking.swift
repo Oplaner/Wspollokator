@@ -254,7 +254,7 @@ class Networking {
             
             for result in json {
                 guard let userData = result["user"] as? [String: Any],
-                      let userID = userData["id"] as? String else { break }
+                      let userID = userData["id"] as? String else { continue }
                 
                 // Match an already downloaded user or fetch a new one.
                 let user: User
@@ -264,7 +264,7 @@ class Networking {
                 } else if let newUser = await fetchUser(withID: userID) {
                     user = newUser
                 } else {
-                    break
+                    continue
                 }
                 
                 users.append(user)
@@ -291,7 +291,7 @@ class Networking {
             else { return nil }
             
             for result in json {
-                guard let userID = result["user_id"] as? String else { break }
+                guard let userID = result["user_id"] as? String else { continue }
                 
                 // Match an already downloaded user or fetch a new one.
                 let user: User
@@ -301,7 +301,7 @@ class Networking {
                 } else if let newUser = await fetchUser(withID: userID) {
                     user = newUser
                 } else {
-                    break
+                    continue
                 }
                 
                 users.append(user)
@@ -331,13 +331,13 @@ class Networking {
             for result in json {
                 guard let conversationID = result["id"] as? String,
                       let participants = result["users"] as? [[String: Any]]
-                else { break }
+                else { continue }
                 
                 let conversation = Conversation(id: conversationID, participants: [], messages: [])
                 
                 // Assign participants of the conversation.
                 for participant in participants {
-                    guard let participantID = participant["id"] as? String else { break }
+                    guard let participantID = participant["id"] as? String else { continue }
                     
                     // Match an already downloaded user or fetch a new one.
                     let participant: User
@@ -348,14 +348,14 @@ class Networking {
                         fetchedUsers.append(newUser)
                         participant = newUser
                     } else {
-                        break
+                        continue
                     }
                     
                     conversation.participants.append(participant)
                 }
                 
                 // Make sure that we have participants and download messages.
-                guard conversation.participants.count >= 2, let messages = await fetchMessages(forConversation: conversation) else { break }
+                guard conversation.participants.count >= 2, let messages = await fetchMessages(for: conversation), messages.count > 0 else { continue }
                 
                 conversation.messages = messages
                 conversations.append(conversation)
@@ -372,7 +372,7 @@ class Networking {
     /// When the `conversation`'s `messages` is an empty array, _all_ messages are downloaded.
     ///
     /// This method takes advantage of `conversation`'s `participants` list to prevent downloading the same user multiple times.
-    static func fetchMessages(forConversation conversation: Conversation) async -> [Message]? {
+    static func fetchMessages(for conversation: Conversation) async -> [Message]? {
         do {
             let recentMessageTimeSent = conversation.messages.count > 0 ? conversation.recentMessage.timeSent : Date.distantPast
             var messages = [Message]()
@@ -395,7 +395,7 @@ class Networking {
                     let timeSent = ISO8601DateFormatter().date(from: newTimeSentString)!
                     
                     // Download only the messages which we haven't downloaded before.
-                    guard timeSent > recentMessageTimeSent else { break }
+                    guard timeSent > recentMessageTimeSent else { continue }
                     
                     // Try to find a User object representing an author of the message inside a participants list of the conversation. If it is not found, download the user with authorID.
                     let author: User
@@ -532,31 +532,62 @@ class Networking {
     }
     
     /// Creates a new conversation and returns its ID, or nil if the operation failed.
+    ///
+    /// Parameter `participants` should not contain the current user.
     static func createConversation(withParticipants participants: [User]) async -> String? {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return String(Int.random(in: 3...1000))
+        do {
+            let body: [String: Any]
+            var endpoint = "conversation/"
+            
+            if participants.count == 1 /* A conversation with one person. */ {
+                body = [
+                    "user_id": participants.first!.id
+                ]
+            } else /* A group conversation. */ {
+                var participantsIDs = [String]()
+                
+                for participant in participants {
+                    participantsIDs.append(participant.id)
+                }
+                
+                body = [
+                    "user_ids": participantsIDs,
+                    "name": participants.prefix(2).map({ $0.name }).joined(separator: ", ")
+                ]
+                endpoint += "group/"
+            }
+            
+            let request = makeRequest(endpoint: endpoint, method: .post, body: body, contentType: .json)
+            let (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 201 /* A conversation has been created. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let conversationID = json["id"] as? String
+            else { return nil }
+            
+            return conversationID
+        } catch {
+            return nil
+        }
     }
     
-    /// Removes `conversation`, without unlinking its messages, from the database.
-    static func deleteConversation(_ conversation: Conversation) async {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-    }
-    
-    /// Sends a new message and returns a tuple with its ID and time of creation, or nil if the operation failed. The newly created message _is not_ attached to any conversation.
-    static func sendMessage(_ text: String, writtenBy author: User) async -> (messageID: String, timeSent: Date)? {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return (String(Int.random(in: 11...1000)), Date())
-    }
-    
-    /// Links `message` to `conversation` and returns the operation status.
-    static func addMessage(_ message: Message, to conversation: Conversation) async -> Bool {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
-    }
-    
-    /// Removes `message`, without unlinking it from a conversation, from the database.
-    static func deleteMessage(_ message: Message) async {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
+    /// Sends a new message in `conversation` and returns the operation status.
+    static func sendMessage(_ text: String, in conversation: Conversation) async -> Bool {
+        do {
+            let body = [
+                "text": text
+            ]
+            let request = makeRequest(endpoint: "conversation/\(conversation.id)/message/", method: .post, body: body, contentType: .json)
+            let (_, response) = try await session.data(for: request)
+            
+            if (response as? HTTPURLResponse)?.statusCode == 200 /* The message has been sent. */ {
+                return true
+            } else {
+                return false
+            }
+        } catch {
+            return false
+        }
     }
     
     /// Adds a new rating and returns a tuple with its ID and time of creation, or nil if the operation failed.

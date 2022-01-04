@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main struct WspollokatorApp: App {
-    @StateObject private var viewModel = ViewModel.sample
+    @StateObject private var viewModel = ViewModel()
     
     init() {
         UIView.appearance().tintColor = UIColor(named: "AccentColor")!

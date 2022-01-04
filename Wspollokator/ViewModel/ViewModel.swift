@@ -52,7 +52,7 @@ import SwiftUI
     @Published var isUpdatingSavedList: Bool
     @Published var didReportErrorUpdatingSavedList: Bool
     
-    init(currentUser: User?, users: [User], conversations: [Conversation]) {
+    init(currentUser: User? = nil, users: [User] = [], conversations: [Conversation] = []) {
         isUserAuthenticated = currentUser != nil
         self.currentUser = currentUser
         self.users = users
@@ -185,31 +185,22 @@ import SwiftUI
     }
     
     func sendMessage(_ text: String, in conversation: Conversation) async -> (createdConversation: Conversation?, sentMessage: Message?, success: Bool) {
-        guard let messageInfo = await Networking.sendMessage(text, writtenBy: currentUser!) else { return (nil, nil, false) }
-        let sentMessage = Message(id: messageInfo.messageID, author: currentUser!, content: text, timeSent: messageInfo.timeSent)
-        
-        if conversation.id == "0" { // A new conversation.
-            guard let conversationID = await Networking.createConversation(withParticipants: conversation.participants) else {
-                await Networking.deleteMessage(sentMessage)
-                return (nil, nil, false)
-            }
-            let createdConversation = Conversation(id: conversationID, participants: conversation.participants, messages: [sentMessage])
+        if conversation.id == "0" /* A new conversation. */ {
+            guard let conversationID = await Networking.createConversation(withParticipants: conversation.participants.filter({ $0 != currentUser! })) else { return (nil, nil, false) }
             
-            if await Networking.addMessage(sentMessage, to: createdConversation) {
+            let createdConversation = Conversation(id: conversationID, participants: conversation.participants, messages: [])
+            
+            if await Networking.sendMessage(text, in: createdConversation) {
+                let sentMessage = Message(id: UUID().uuidString, author: currentUser!, content: text, timeSent: Date())
+                createdConversation.messages.append(sentMessage)
                 return (createdConversation, sentMessage, true)
-            } else {
-                await Networking.deleteMessage(sentMessage)
-                await Networking.deleteConversation(createdConversation)
-                return (nil, nil, false)
             }
-        } else { // An existing conversation.
-            if await Networking.addMessage(sentMessage, to: conversation) {
-                return (nil, sentMessage, true)
-            } else {
-                await Networking.deleteMessage(sentMessage)
-                return (nil, nil, false)
-            }
+        } else if await Networking.sendMessage(text, in: conversation) /* An existing conversation. */ {
+            let sentMessage = Message(id: UUID().uuidString, author: currentUser!, content: text, timeSent: Date())
+            return (nil, sentMessage, true)
         }
+        
+        return (nil, nil, false)
     }
     
     func addRating(of user: User, withScore score: Int, comment: String) async -> (addedRating: Rating?, success: Bool) {
@@ -482,6 +473,6 @@ import SwiftUI
         ]
     }
     
-    static let sample = ViewModel(currentUser: nil, users: sampleUsers, conversations: sampleConversations)
+    static let sample = ViewModel(currentUser: sampleUsers[0], users: sampleUsers, conversations: sampleConversations)
 #endif
 }
