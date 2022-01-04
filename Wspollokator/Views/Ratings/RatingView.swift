@@ -10,12 +10,6 @@ import SwiftUI
 struct RatingView: View {
     var rating: Rating
     
-    private func formatTimeString(from date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yy"
-        return formatter.string(from: date)
-    }
-    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -26,7 +20,7 @@ struct RatingView: View {
             
             RatingStars(score: .constant(rating.score), isInteractive: false)
             Text(rating.comment)
-            Text(formatTimeString(from: rating.timeAdded))
+            Text(rating.formattedTimeAdded)
                 .font(.caption)
                 .foregroundColor(.secondary)
         }

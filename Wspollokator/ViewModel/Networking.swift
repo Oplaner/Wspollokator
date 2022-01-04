@@ -235,48 +235,189 @@ class Networking {
         }
     }
     
-    /// Fetches all searchable users who are in the given kilometer `range` from the current user's `pointOfInterest`.
-    static func fetchNearbyUsers(inRange range: Double) async throws -> [User] {
-        var users = [User]()
-        
-        let body = [
-            "radius": 12
-        ]
-        let request = makeRequest(endpoint: "profile/", method: .get, body: body)
-        let (data, response) = try await session.data(for: request)
-        
-        if (response as? HTTPURLResponse)?.statusCode == 200 /* Nearby users have been downloaded. */,
-           let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+    /// Fetches all searchable users who are in the given kilometer `range` from the current user's `pointOfInterest`, or nil if the operation failed.
+    ///
+    /// Parameter `userExtension` is an array of locally stored User objects and is used to prevent downloading the same user's data multiple times. Setting it to an empty array causes the function to download every user.
+    static func fetchNearbyUsers(inRange range: Double, usingLocalUsersExtension usersExtension: [User]) async -> [User]? {
+        do {
+            var users = [User]()
+            
+            let body = [
+                "radius": 12
+            ]
+            let request = makeRequest(endpoint: "profile/", method: .get, body: body)
+            let (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 200 /* Nearby users have been downloaded. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
+            else { return nil }
+            
             for result in json {
-                if let userData = result["user"] as? [String: Any],
-                   let userID = userData["id"] as? String,
-                   let user = await fetchUser(withID: userID) {
-                    users.append(user)
+                guard let userData = result["user"] as? [String: Any],
+                      let userID = userData["id"] as? String else { break }
+                
+                // Match an already downloaded user or fetch a new one.
+                let user: User
+                
+                if let existingUser = usersExtension.first(where: { $0.id == userID }) {
+                    user = existingUser
+                } else if let newUser = await fetchUser(withID: userID) {
+                    user = newUser
+                } else {
+                    break
                 }
+                
+                users.append(user)
             }
+            
+            return users
+        } catch {
+            return nil
         }
-        
-        return users
     }
     
-    /// Fetches current user's `savedUsers` list.
-    static func fetchSavedUsers() async throws -> [User] {
-        var users = [User]()
-        
-        let request = makeRequest(endpoint: "favourite/list/", method: .get)
-        let (data, response) = try await session.data(for: request)
-        
-        if (response as? HTTPURLResponse)?.statusCode == 200 /* Saved users have been downloaded. */,
-           let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+    /// Fetches current user's `savedUsers` list, or nil if the operation failed.
+    ///
+    /// Parameter `userExtension` is an array of locally stored User objects and is used to prevent downloading the same user's data multiple times. Setting it to an empty array causes the function to download every user.
+    static func fetchSavedUsers(usingLocalUsersExtension usersExtension: [User]) async -> [User]? {
+        do {
+            var users = [User]()
+            
+            let request = makeRequest(endpoint: "favourite/list/", method: .get)
+            let (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 200 /* Saved users have been downloaded. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
+            else { return nil }
+            
             for result in json {
-                if let userID = result["user_id"] as? String,
-                   let user = await fetchUser(withID: userID) {
-                    users.append(user)
+                guard let userID = result["user_id"] as? String else { break }
+                
+                // Match an already downloaded user or fetch a new one.
+                let user: User
+                
+                if let existingUser = usersExtension.first(where: { $0.id == userID }) {
+                    user = existingUser
+                } else if let newUser = await fetchUser(withID: userID) {
+                    user = newUser
+                } else {
+                    break
+                }
+                
+                users.append(user)
+            }
+            
+            return users
+        } catch {
+            return nil
+        }
+    }
+    
+    /// Fetches a list of current user's conversations, or nil if the operation failed.
+    ///
+    /// Parameter `userExtension` is an array of locally stored User objects and is used to prevent downloading the same user's data multiple times. Setting it to an empty array causes the function to download every user.
+    static func fetchConversations(usingLocalUsersExtension usersExtension: [User]) async -> [Conversation]? {
+        do {
+            var conversations = [Conversation]()
+            var fetchedUsers = usersExtension
+            
+            let request = makeRequest(endpoint: "conversation/", method: .get)
+            let (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 200 /* Conversations have been downloaded. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
+            else { return nil }
+            
+            for result in json {
+                guard let conversationID = result["id"] as? String,
+                      let participants = result["users"] as? [[String: Any]]
+                else { break }
+                
+                let conversation = Conversation(id: conversationID, participants: [], messages: [])
+                
+                // Assign participants of the conversation.
+                for participant in participants {
+                    guard let participantID = participant["id"] as? String else { break }
+                    
+                    // Match an already downloaded user or fetch a new one.
+                    let participant: User
+                    
+                    if let existingUser = fetchedUsers.first(where: { $0.id == participantID }) {
+                        participant = existingUser
+                    } else if let newUser = await fetchUser(withID: participantID) {
+                        fetchedUsers.append(newUser)
+                        participant = newUser
+                    } else {
+                        break
+                    }
+                    
+                    conversation.participants.append(participant)
+                }
+                
+                // Make sure that we have participants and download messages.
+                guard conversation.participants.count >= 2, let messages = await fetchMessages(forConversation: conversation) else { break }
+                
+                conversation.messages = messages
+                conversations.append(conversation)
+            }
+            
+            return conversations
+        } catch {
+            return nil
+        }
+    }
+    
+    /// Fetches _new_ messages and their authors for a conversation with given `conversationID`, or nil if the operation failed.
+    ///
+    /// When the `conversation`'s `messages` is an empty array, _all_ messages are downloaded.
+    ///
+    /// This method takes advantage of `conversation`'s `participants` list to prevent downloading the same user multiple times.
+    static func fetchMessages(forConversation conversation: Conversation) async -> [Message]? {
+        do {
+            let recentMessageTimeSent = conversation.messages.count > 0 ? conversation.recentMessage.timeSent : Date.distantPast
+            var messages = [Message]()
+            
+            let request = makeRequest(endpoint: "conversation/\(conversation.id)/", method: .get)
+            let (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 200 /* Messages have been downloaded. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
+            else { return nil }
+            
+            for result in json {
+                if let authorID = result["user"] as? String,
+                   let content = result["text"] as? String,
+                   let timeSentString = result["created_at"] as? String {
+                    // Decode the time at which the message was sent.
+                    let regex = try! NSRegularExpression(pattern: #"(\.[0-9]+)?Z$"#)
+                    let range = NSRange(timeSentString.startIndex..., in: timeSentString)
+                    let newTimeSentString = regex.stringByReplacingMatches(in: timeSentString, range: range, withTemplate: "Z")
+                    let timeSent = ISO8601DateFormatter().date(from: newTimeSentString)!
+                    
+                    // Download only the messages which we haven't downloaded before.
+                    guard timeSent > recentMessageTimeSent else { break }
+                    
+                    // Try to find a User object representing an author of the message inside a participants list of the conversation. If it is not found, download the user with authorID.
+                    let author: User
+                    
+                    if let participant = conversation.participants.first(where: { $0.id == authorID }) {
+                        author = participant
+                    } else if let user = await fetchUser(withID: authorID) {
+                        author = user
+                    } else {
+                        return nil
+                    }
+                    
+                    // Finally, make a Message object and add it to the array.
+                    let message = Message(id: UUID().uuidString, author: author, content: content, timeSent: timeSent)
+                    messages.append(message)
                 }
             }
+            
+            return messages
+        } catch {
+            return nil
         }
-        
-        return users
     }
     
     /// Updates `user`'s `avatarImage` and returns the operation status.

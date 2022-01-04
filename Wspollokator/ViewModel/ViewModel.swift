@@ -80,6 +80,17 @@ import SwiftUI
         }
     }
     
+    func createUserAccount(name: String, surname: String, email: String, password1: String, password2: String) async throws -> Bool {
+        guard password1 == password2 else { throw SignUpError.unmatchingPasswords }
+        
+        if let userID = try await Networking.createUserAccount(name: name, surname: surname, email: email, password: password1) {
+            currentUser = User(id: userID, name: name, surname: surname, email: email)
+            return await downloadCurrentUserData()
+        } else {
+            return false
+        }
+    }
+    
     func authenticateUser(withEmail email: String, password: String) async throws -> Bool {
         if let user = await Networking.fetchCurrentUser(withEmail: email, password: password) {
             currentUser = user
@@ -173,32 +184,6 @@ import SwiftUI
         isUpdatingSavedList = false
     }
     
-    func createUserAccount(name: String, surname: String, email: String, password1: String, password2: String) async throws -> Bool {
-        guard password1 == password2 else { throw SignUpError.unmatchingPasswords }
-        
-        if let userID = try await Networking.createUserAccount(name: name, surname: surname, email: email, password: password1) {
-            currentUser = User(id: userID, name: name, surname: surname, email: email)
-            return await downloadCurrentUserData()
-        } else {
-            return false
-        }
-    }
-    
-    func logout() {
-        // TODO: Stop background communication and remove scheduled refresh tasks.
-        // TODO: Remove current user information from a local storage.
-        KeychainService.deleteLoginInformation()
-        
-        searchTargetDistance = ViewModel.defaultTargetDistance
-        searchPreferences = ViewModel.defaultPreferences
-        isUserAuthenticated = false
-        
-        // Unsetting the current user must be delayed, otherwise the app will crash, because many views explicitly unwrap this optional and their bodies recompute prior to displaying the login view.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.currentUser = nil
-        }
-    }
-    
     func sendMessage(_ text: String, in conversation: Conversation) async -> (createdConversation: Conversation?, sentMessage: Message?, success: Bool) {
         guard let messageInfo = await Networking.sendMessage(text, writtenBy: currentUser!) else { return (nil, nil, false) }
         let sentMessage = Message(id: messageInfo.messageID, author: currentUser!, content: text, timeSent: messageInfo.timeSent)
@@ -233,34 +218,71 @@ import SwiftUI
         return (rating, true)
     }
     
+    func logout() {
+        // TODO: Stop background communication and remove scheduled refresh tasks.
+        // TODO: Remove current user information from a local storage.
+        KeychainService.deleteLoginInformation()
+        
+        searchTargetDistance = ViewModel.defaultTargetDistance
+        searchPreferences = ViewModel.defaultPreferences
+        isUserAuthenticated = false
+        
+        // Unsetting the current user must be delayed, otherwise the app will crash, because many views explicitly unwrap this optional and their bodies recompute prior to displaying the login view.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.currentUser = nil
+        }
+    }
+    
+    func refresh() async -> Bool {
+        if await refreshCurrentUser() {
+            return await downloadCurrentUserData()
+        } else {
+            return false
+        }
+    }
+    
     private func downloadCurrentUserData() async -> Bool {
-        do {
-            var fetchedUsers = Set<User>()
+        var fetchedUsers: Set = [currentUser!]
+        
+        // Fetch all searchable users who are in range of 12 km from the current user's point of interest, if it is set.
+        if currentUser!.pointOfInterest != nil {
+            guard let nearbyUsers = await Networking.fetchNearbyUsers(inRange: 12, usingLocalUsersExtension: Array(fetchedUsers)) else { return false }
             
-            // Fetch all searchable users who are in range of 12 km from the current user's point of interest, if it is set.
-            if currentUser!.pointOfInterest != nil {
-                let nearbyUsers = try await Networking.fetchNearbyUsers(inRange: 12)
-                
-                for user in nearbyUsers {
-                    fetchedUsers.insert(user)
-                }
-            }
-            
-            // Fetch users from the current user's saved list.
-            let savedUsers = try await Networking.fetchSavedUsers()
-            
-            for user in savedUsers {
+            for user in nearbyUsers {
                 fetchedUsers.insert(user)
             }
-            
-            currentUser!.savedUsers = savedUsers
-            
-            // TODO: Fetch ratings for the current user; append their authors to the set.
-            // TODO: Fetch conversations, messages and their authors.
-            
-            users = Array(fetchedUsers)
+        }
+        
+        // Fetch users from the current user's saved list.
+        guard let savedUsers = await Networking.fetchSavedUsers(usingLocalUsersExtension: Array(fetchedUsers)) else { return false }
+        
+        for user in savedUsers {
+            fetchedUsers.insert(user)
+        }
+        
+        currentUser!.savedUsers = savedUsers
+        
+        // TODO: Fetch ratings for the current user.
+        
+        // Fetch conversations, messages and their authors.
+        guard let fetchedConversations = await Networking.fetchConversations(usingLocalUsersExtension: Array(fetchedUsers)) else { return false }
+        
+        for conversation in fetchedConversations {
+            for message in conversation.messages {
+                fetchedUsers.insert(message.author)
+            }
+        }
+        
+        users = Array(fetchedUsers)
+        conversations = fetchedConversations
+        return true
+    }
+    
+    private func refreshCurrentUser() async -> Bool {
+        if let updatedUser = await Networking.fetchUser(withID: currentUser!.id, settingEmail: currentUser!.email) {
+            currentUser = updatedUser
             return true
-        } catch {
+        } else {
             return false
         }
     }
