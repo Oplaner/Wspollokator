@@ -28,6 +28,7 @@
 		8E7532C92760073400BF66CE /* MapDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7532C82760073400BF66CE /* MapDetails.swift */; };
 		8E7532CB27600C6C00BF66CE /* UserAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7532CA27600C6C00BF66CE /* UserAnnotation.swift */; };
 		8E7532CD2760DC9600BF66CE /* CoordinateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7532CC2760DC9600BF66CE /* CoordinateExtension.swift */; };
+		8E7F08D9278516AD0011C787 /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7F08D8278516AC0011C787 /* UserDefaultsService.swift */; };
 		8E883309276E644000FCB568 /* RatingStars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E883308276E644000FCB568 /* RatingStars.swift */; };
 		8E89BCCF272D5C3500C707BB /* SavedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCCE272D5C3500C707BB /* SavedList.swift */; };
 		8E89BCD1272D62FE00C707BB /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E89BCD0272D62FE00C707BB /* UserProfile.swift */; };
@@ -76,6 +77,7 @@
 		8E7532C82760073400BF66CE /* MapDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDetails.swift; sourceTree = "<group>"; };
 		8E7532CA27600C6C00BF66CE /* UserAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAnnotation.swift; sourceTree = "<group>"; };
 		8E7532CC2760DC9600BF66CE /* CoordinateExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateExtension.swift; sourceTree = "<group>"; };
+		8E7F08D8278516AC0011C787 /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
 		8E883308276E644000FCB568 /* RatingStars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingStars.swift; sourceTree = "<group>"; };
 		8E89BCCE272D5C3500C707BB /* SavedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedList.swift; sourceTree = "<group>"; };
 		8E89BCD0272D62FE00C707BB /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				8E7532CC2760DC9600BF66CE /* CoordinateExtension.swift */,
 				C25458C127332ED300C5317F /* Filters.swift */,
 				8ECEB5A6277BCBD20064E2DB /* KeychainService.swift */,
+				8E7F08D8278516AC0011C787 /* UserDefaultsService.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -385,6 +388,7 @@
 				C25458C227332ED300C5317F /* Filters.swift in Sources */,
 				8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */,
 				8ECEB5A7277BCBD30064E2DB /* KeychainService.swift in Sources */,
+				8E7F08D9278516AD0011C787 /* UserDefaultsService.swift in Sources */,
 				8EA31D27276FA6F40087BE7F /* Rating.swift in Sources */,
 				8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */,
 				8E89BCCF272D5C3500C707BB /* SavedList.swift in Sources */,

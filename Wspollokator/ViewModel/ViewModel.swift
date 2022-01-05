@@ -100,6 +100,10 @@ import SwiftUI
                 _ = KeychainService.saveLoginInformation(email: email, password: password)
             }
             
+            let searchSettings = UserDefaultsService.readSearchSettings()
+            searchTargetDistance = searchSettings.targetDistance
+            searchPreferences = searchSettings.preferences
+            
             return await downloadCurrentUserData()
         } else {
             KeychainService.deleteLoginInformation()
@@ -211,11 +215,13 @@ import SwiftUI
     
     func logout() {
         // TODO: Stop background communication and remove scheduled refresh tasks.
-        // TODO: Remove current user information from a local storage.
-        KeychainService.deleteLoginInformation()
         
+        users = []
+        conversations = []
         searchTargetDistance = ViewModel.defaultTargetDistance
         searchPreferences = ViewModel.defaultPreferences
+        UserDefaultsService.clearSearchSettings()
+        KeychainService.deleteLoginInformation()
         isUserAuthenticated = false
         
         // Unsetting the current user must be delayed, otherwise the app will crash, because many views explicitly unwrap this optional and their bodies recompute prior to displaying the login view.

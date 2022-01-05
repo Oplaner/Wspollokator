@@ -203,8 +203,9 @@ class Networking {
             if avatarURLString != defaultAvatarURLString {
                 let avatarURL = URL(string: avatarURLString)!
                 let (imageURL, _) = try await session.download(from: avatarURL)
+                let imageData = try Data(contentsOf: imageURL, options: .uncached)
                 
-                if let image = UIImage(contentsOfFile: imageURL.absoluteString) {
+                if let image = UIImage(data: imageData) {
                     let scaledImage = await ViewModel.resizeImage(image)
                     avatar = Image(uiImage: scaledImage)
                 }

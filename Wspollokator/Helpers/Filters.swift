@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum FilterOption: Int, CaseIterable {
+enum FilterOption: String, CaseIterable {
     case animals
     case smoking
     
