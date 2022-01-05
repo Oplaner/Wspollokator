@@ -10,10 +10,10 @@ import SwiftUI
 
 @MainActor class ViewModel: ObservableObject {
     enum SignUpError: Error {
-        case invalidEmail
+        case invalidEmailFormat
         case emailAlreadyTaken
         case unmatchingPasswords
-        case invalidPassword
+        case invalidPasswordFormat
     }
     
     enum LoginError: Error {
@@ -28,6 +28,7 @@ import SwiftUI
         case invalidOldPassword
         case unmatchingNewPasswords
         case oldAndNewPasswordsEqual
+        case invalidNewPasswordFormat
     }
     
     static let defaultTargetDistance: Double = 5
@@ -152,7 +153,7 @@ import SwiftUI
         guard new1 == new2 else { throw PasswordChangeError.unmatchingNewPasswords }
         guard new1 != old else { throw PasswordChangeError.oldAndNewPasswordsEqual }
         
-        if await Networking.setNewPassword(new1, forUser: currentUser!) {
+        if try await Networking.setNewPassword(new1, forUser: currentUser!) {
             KeychainService.updateLoginInformation(email: currentUser!.email, password: new1)
             return true
         }

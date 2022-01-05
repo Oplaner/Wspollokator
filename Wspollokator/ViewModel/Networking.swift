@@ -138,14 +138,14 @@ class Networking {
             } else if code == 400 /* An error has occurred. */, let json = try JSONSerialization.jsonObject(with: data) as? [String: [String]] {
                 if let emailErrors = json["email"] {
                     if emailErrors.contains(where: { $0.contains("valid") }) {
-                        throw ViewModel.SignUpError.invalidEmail
+                        throw ViewModel.SignUpError.invalidEmailFormat
                     } else if emailErrors.contains(where: { $0.contains("exists") }) {
                         throw ViewModel.SignUpError.emailAlreadyTaken
                     }
                 }
                 
                 if json["password"] != nil {
-                    throw ViewModel.SignUpError.invalidPassword
+                    throw ViewModel.SignUpError.invalidPasswordFormat
                 }
             }
             
@@ -447,14 +447,53 @@ class Networking {
     
     /// Checks if `password` is correct for `user`.
     static func checkPassword(_ password: String, forUser user: User) async -> Bool {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
+        do {
+            let body: [String: String] = [
+                "email": user.email,
+                "password": password
+            ]
+            let request = makeRequest(endpoint: "auth/login/", method: .post, body: body, contentType: .json)
+            let (_, response) = try await session.data(for: request)
+            
+            if (response as? HTTPURLResponse)?.statusCode == 200 /* Password is correct. */ {
+                return true
+            } else {
+                return false
+            }
+        } catch {
+            return false
+        }
     }
     
     /// Sets a new `password` for `user` and returns the operation status.
-    static func setNewPassword(_ password: String, forUser user: User) async -> Bool {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
+    static func setNewPassword(_ password: String, forUser user: User) async throws -> Bool {
+        do {
+            let body = [
+                "new_password1": password,
+                "new_password2": password
+            ]
+            let request = makeRequest(endpoint: "auth/password/change/", method: .post, body: body, contentType: .json)
+            let (data, response) = try await session.data(for: request)
+            
+            guard let code = (response as? HTTPURLResponse)?.statusCode else { return false }
+            
+            if code == 200 /* Password has been changed. */ {
+                return true
+            } else if code == 400 /* An error has occurred. */,
+                      let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                      json["new_password2"] != nil {
+                throw ViewModel.PasswordChangeError.invalidNewPasswordFormat
+            }
+            
+            // An unexpected status code has arrived.
+            return false
+        } catch let error where error is ViewModel.PasswordChangeError {
+            // If there has been a known password change error, rethrow it to the caller.
+            throw error
+        } catch {
+            // Return a failure for other errors.
+            return false
+        }
     }
     
     /// Updates `user`'s `description` and returns the operation status.
