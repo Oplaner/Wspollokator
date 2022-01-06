@@ -130,8 +130,13 @@ struct MyProfile: View {
                         MapViewContainer(alertType: $alertType, alertMessage: $alertMessage, isShowingAlert: $isShowingAlert, isUpdating: $isUpdating)
                     }
                     FilterView(targetDistance: $targetDistance, isChangingTargetDistance: $isChangingTargetDistance, preferencesSource: $preferences)
+                        .disabled(viewModel.currentUser!.pointOfInterest == nil)
                 } header: {
                     Text("Moje preferencje")
+                } footer: {
+                    if viewModel.currentUser!.pointOfInterest == nil {
+                        Text("Aby móc zmieniać preferencje, ustaw swój punkt.")
+                    }
                 }
             }
             .navigationTitle("Mój profil")

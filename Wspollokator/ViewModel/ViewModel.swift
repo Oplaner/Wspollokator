@@ -32,6 +32,7 @@ import SwiftUI
     }
     
     static let defaultTargetDistance: Double = 5
+    private static let nearbyUsersDownloadRange: Double = 12
     
     /// Returns a preferences dictionary with neutral attitude to each filter option.
     nonisolated static var defaultPreferences: [FilterOption: FilterAttitude] {
@@ -132,8 +133,21 @@ import SwiftUI
         await Networking.update(description: description, forUser: currentUser!)
     }
     
-    func changeCurrentUser(pointOfInterest: CLLocationCoordinate2D?) async -> Bool {
-        await Networking.update(pointOfInterest: pointOfInterest, forUser: currentUser!)
+    func changeCurrentUser(pointOfInterest: CLLocationCoordinate2D) async -> Bool {
+        guard await Networking.update(pointOfInterest: pointOfInterest, targetDistance: currentUser!.targetDistance) else { return false }
+        
+        // Fetch new nearby users.
+        if let newUsers = await Networking.fetchNearbyUsers(inRange: ViewModel.nearbyUsersDownloadRange, usingLocalUsersExtension: users) {
+            for user in newUsers {
+                if !users.contains(user) {
+                    users.append(user)
+                }
+            }
+            
+            return true
+        } else {
+            return false
+        }
     }
     
     func changeCurrentUser(searchableState: Bool) async -> Bool {
@@ -141,7 +155,7 @@ import SwiftUI
     }
     
     func changeCurrentUser(targetDistance: Double) async -> Bool {
-        await Networking.update(targetDistance: targetDistance, forUser: currentUser!)
+        await Networking.update(pointOfInterest: currentUser!.pointOfInterest!, targetDistance: currentUser!.targetDistance)
     }
     
     func changeCurrentUser(preferences: [FilterOption: FilterAttitude]) async -> Bool {
@@ -242,9 +256,9 @@ import SwiftUI
     private func downloadCurrentUserData() async -> Bool {
         var fetchedUsers: Set = [currentUser!]
         
-        // Fetch all searchable users who are in range of 12 km from the current user's point of interest, if it is set.
+        // Fetch all searchable users who are in range of nearbyUsersDownloadRange km from the current user's point of interest, if it is set.
         if currentUser!.pointOfInterest != nil {
-            guard let nearbyUsers = await Networking.fetchNearbyUsers(inRange: 12, usingLocalUsersExtension: Array(fetchedUsers)) else { return false }
+            guard let nearbyUsers = await Networking.fetchNearbyUsers(inRange: ViewModel.nearbyUsersDownloadRange, usingLocalUsersExtension: Array(fetchedUsers)) else { return false }
             
             for user in nearbyUsers {
                 fetchedUsers.insert(user)

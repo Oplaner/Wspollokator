@@ -502,27 +502,48 @@ class Networking {
         return true
     }
     
-    /// Updates `user`'s `pointOfInterest` and returns the operation status.
-    static func update(pointOfInterest: CLLocationCoordinate2D?, forUser user: User) async -> Bool {
-        //        EXAMPLE BODY FOR CREATING A POINT:
-        //        body = [
-        //            "location": "POINT(52.22322350545386 21.01232058780615)",
-        //            "radius": 3.1
-        //        ]
-        //        RESPONSE CODE ON SUCCESS: 201
-        
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
+    /// Updates current user's `pointOfInterest` and `targetDistance` and returns the operation status.
+    static func update(pointOfInterest: CLLocationCoordinate2D, targetDistance: Double) async -> Bool {
+        do {
+            // Check if any point exists.
+            var request = makeRequest(endpoint: "point/", method: .get)
+            var (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 200 /* A list of points has been downloaded. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
+            else { return false }
+            
+            let body: [String: Any] = [
+                "location": "POINT(\(pointOfInterest.latitude) \(pointOfInterest.longitude))",
+                "radius": targetDistance
+            ]
+            
+            if let pointID = json.first?["id"] as? String /* A point exists. */ {
+                request = makeRequest(endpoint: "point/\(pointID)/", method: .put, body: body, contentType: .json)
+                (_, response) = try await session.data(for: request)
+                
+                if (response as? HTTPURLResponse)?.statusCode == 200 /* The point of interest and target distance have been updated. */ {
+                    return true
+                } else {
+                    return false
+                }
+            } else /* A new point should be created. */ {
+                request = makeRequest(endpoint: "point/", method: .post, body: body, contentType: .json)
+                (_, response) = try await session.data(for: request)
+                
+                if (response as? HTTPURLResponse)?.statusCode == 201 /* The point of interest and target distance have been set. */ {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        } catch {
+            return false
+        }
     }
     
     /// Updates `user`'s `isSearchable` and returns the operation status.
     static func update(searchableState: Bool, forUser user: User) async -> Bool {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
-    }
-    
-    /// Updates `user`'s `targetDistance` and returns the operation status.
-    static func update(targetDistance: Double, forUser user: User) async -> Bool {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
         return true
     }
