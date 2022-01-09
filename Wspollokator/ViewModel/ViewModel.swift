@@ -20,10 +20,6 @@ import SwiftUI
         case invalidCredentials
     }
     
-    enum EmailChangeError: Error {
-        case emailAlreadyTaken
-    }
-    
     enum PasswordChangeError: Error {
         case invalidOldPassword
         case unmatchingNewPasswords
@@ -199,6 +195,20 @@ import SwiftUI
         isUpdatingSavedList = false
     }
     
+    func fetchRatings(of user: User) async -> [Rating]? {
+        guard let ratings = await Networking.fetchRatings(of: user, usingLocalUsersExtension: users) else { return nil }
+        
+        for rating in ratings {
+            let author = rating.author
+            
+            if !users.contains(author) {
+                users.append(author)
+            }
+        }
+        
+        return ratings
+    }
+    
     func sendMessage(_ text: String, in conversation: Conversation) async -> (createdConversation: Conversation?, sentMessage: Message?, success: Bool) {
         if conversation.id == "0" /* A new conversation. */ {
             guard let conversationID = await Networking.createConversation(withParticipants: conversation.participants.filter({ $0 != currentUser! })) else { return (nil, nil, false) }
@@ -219,7 +229,7 @@ import SwiftUI
     }
     
     func addRating(of user: User, withScore score: Int, comment: String) async -> (addedRating: Rating?, success: Bool) {
-        guard let ratingInfo = await Networking.addRating(of: user, writtenBy: currentUser!, withScore: score, comment: comment) else { return (nil, false) }
+        guard let ratingInfo = await Networking.addRating(of: user, withScore: score, comment: comment) else { return (nil, false) }
         let rating = Rating(id: ratingInfo.ratingID, author: currentUser!, score: score, comment: comment, timeAdded: ratingInfo.timeAdded)
         return (rating, true)
     }
@@ -270,7 +280,14 @@ import SwiftUI
         
         currentUser!.savedUsers = savedUsers
         
-        // TODO: Fetch ratings for the current user.
+        // Fetch ratings of the current user and their authors.
+        guard let ratings = await Networking.fetchRatings(of: currentUser!, usingLocalUsersExtension: Array(fetchedUsers)) else { return false }
+        
+        for rating in ratings {
+            fetchedUsers.insert(rating.author)
+        }
+        
+        currentUser!.ratings = ratings
         
         // Fetch conversations, messages and their authors.
         guard let fetchedConversations = await Networking.fetchConversations(usingLocalUsersExtension: Array(fetchedUsers)) else { return false }

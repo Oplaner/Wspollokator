@@ -14,20 +14,13 @@ struct RatingList: View {
     @State private var isShowingNewRatingView = false
     
     private var sortedRatings: [Rating] {
-        relevantUser.ratings.sorted { $0.timeAdded > $1.timeAdded }
+        relevantUser.ratings!.sorted { $0.timeAdded > $1.timeAdded }
     }
     
     var body: some View {
-        List {
-            if sortedRatings.isEmpty {
-                Text("Brak opinii.")
-                    .foregroundColor(.secondary)
-            } else {
-                ForEach(sortedRatings) { rating in
-                    RatingView(rating: rating)
-                        .padding(.vertical, 10)
-                }
-            }
+        List(sortedRatings) { rating in
+            RatingView(rating: rating)
+                .padding(.vertical, 10)
         }
         .navigationTitle(relevantUser == viewModel.currentUser! ? "Opinie o mnie" : "Opinie")
         .navigationBarTitleDisplayMode(.inline)

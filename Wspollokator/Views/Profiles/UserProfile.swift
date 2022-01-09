@@ -95,24 +95,30 @@ struct UserProfile: View {
                         .bold()
                     Spacer()
                     
-                    if user.ratings.count == 0 {
-                        Text("—")
-                            .bold()
-                            .foregroundColor(.secondary)
+                    if let ratings = user.ratings {
+                        if ratings.count == 0 {
+                            Text("—")
+                                .bold()
+                                .foregroundColor(.secondary)
+                        } else {
+                            RatingStars(score: .constant(user.averageScore), isInteractive: false)
+                        }
                     } else {
-                        RatingStars(score: .constant(user.averageScore), isInteractive: false)
+                        ProgressView()
                     }
                 }
                 
-                if user.ratings.count == 0 {
-                    Button("Dodaj opinię") {
-                        isShowingNewRatingView = true
-                    }
-                } else {
-                    NavigationLink(isActive: $isShowingRatingsList) {
-                        RatingList(relevantUser: user)
-                    } label: {
-                        Text("Pokaż opinie (\(user.ratings.count))")
+                if let ratings = user.ratings {
+                    if ratings.count == 0 {
+                        Button("Dodaj opinię") {
+                            isShowingNewRatingView = true
+                        }
+                    } else {
+                        NavigationLink(isActive: $isShowingRatingsList) {
+                            RatingList(relevantUser: user)
+                        } label: {
+                            Text("Pokaż opinie (\(ratings.count))")
+                        }
                     }
                 }
                 
@@ -144,8 +150,18 @@ struct UserProfile: View {
         .sheet(isPresented: $isShowingNewRatingView) {
             NewRating(relevantUser: user, isShowingRatingsList: $isShowingRatingsList)
         }
-        .task {
-            nearestLocationName = await user.fetchNearestLocationName()
+        .onAppear {
+            Task {
+                nearestLocationName = await user.fetchNearestLocationName()
+                
+                if user.ratings == nil, let ratings = await viewModel.fetchRatings(of: user) {
+                    viewModel.objectWillChange.send()
+                    user.ratings = ratings
+                } else {
+                    viewModel.objectWillChange.send()
+                    user.ratings = []
+                }
+            }
         }
     }
 }

@@ -20,15 +20,15 @@ class User: Hashable, Identifiable {
     var preferences: [FilterOption: FilterAttitude]
     var description: String
     var savedUsers: [User]
-    var ratings: [Rating]
+    var ratings: [Rating]?
     var isSearchable: Bool
     
     var averageScore: Int {
-        guard ratings.count > 0 else { return 0 }
-        return Int(round(Double(ratings.map({ $0.score }).reduce(0, +)) / Double(ratings.count)))
+        guard ratings!.count > 0 else { return 0 }
+        return Int(round(Double(ratings!.map({ $0.score }).reduce(0, +)) / Double(ratings!.count)))
     }
     
-    init(id: String, avatarImage: Image? = nil, name: String, surname: String, email: String? = nil, pointOfInterest: CLLocationCoordinate2D? = nil, targetDistance: Double = ViewModel.defaultTargetDistance, preferences: [FilterOption: FilterAttitude] = ViewModel.defaultPreferences, description: String = "", savedUsers: [User] = [User](), ratings: [Rating] = [Rating](), isSearchable: Bool = false) {
+    init(id: String, avatarImage: Image? = nil, name: String, surname: String, email: String? = nil, pointOfInterest: CLLocationCoordinate2D? = nil, targetDistance: Double = ViewModel.defaultTargetDistance, preferences: [FilterOption: FilterAttitude] = ViewModel.defaultPreferences, description: String = "", savedUsers: [User] = [User](), ratings: [Rating]? = nil, isSearchable: Bool = false) {
         self.id = id
         self.avatarImage = avatarImage
         self.name = name

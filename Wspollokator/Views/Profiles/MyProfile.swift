@@ -104,7 +104,7 @@ struct MyProfile: View {
                         Text("Średnia ocena")
                         Spacer()
                         
-                        if viewModel.currentUser!.ratings.count == 0 {
+                        if viewModel.currentUser!.ratings!.count == 0 {
                             Text("—")
                                 .foregroundColor(.secondary)
                         } else {
@@ -112,8 +112,8 @@ struct MyProfile: View {
                         }
                     }
                     
-                    if viewModel.currentUser!.ratings.count > 0 {
-                        NavigationLink("Opinie o mnie (\(viewModel.currentUser!.ratings.count))") {
+                    if viewModel.currentUser!.ratings!.count > 0 {
+                        NavigationLink("Opinie o mnie (\(viewModel.currentUser!.ratings!.count))") {
                             RatingList(relevantUser: viewModel.currentUser!)
                         }
                     }

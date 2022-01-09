@@ -30,8 +30,8 @@ struct RatingView: View {
 struct RatingView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            RatingView(rating: ViewModel.sampleUsers[0].ratings[1])
-            RatingView(rating: ViewModel.sampleUsers[0].ratings[2])
+            RatingView(rating: ViewModel.sampleUsers[0].ratings![1])
+            RatingView(rating: ViewModel.sampleUsers[0].ratings![2])
         }
         .previewLayout(.sizeThatFits)
     }

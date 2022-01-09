@@ -244,7 +244,7 @@ class Networking {
             var users = [User]()
             
             let body = [
-                "radius": 12
+                "radius": range
             ]
             let request = makeRequest(endpoint: "profile/", method: .get, body: body)
             let (data, response) = try await session.data(for: request)
@@ -309,6 +309,56 @@ class Networking {
             }
             
             return users
+        } catch {
+            return nil
+        }
+    }
+    
+    /// Fetches a list of `user`'s ratings, or nil if the operation failed.
+    ///
+    /// Parameter `userExtension` is an array of locally stored User objects and is used to prevent downloading the same user's data multiple times. Setting it to an empty array causes the function to download every user.
+    static func fetchRatings(of user: User, usingLocalUsersExtension usersExtension: [User]) async -> [Rating]? {
+        do {
+            var ratings = [Rating]()
+            var fetchedUsers = usersExtension
+            
+            let request = makeRequest(endpoint: "opinions/about/\(user.id)/", method: .get)
+            let (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 200 /* Ratings have been downloaded. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
+            else { return nil }
+            
+            for result in json {
+                guard
+                    let ratingID = result["id"] as? String,
+                    let authorID = result["issued_by"] as? String,
+                    let score = result["rate"] as? Int,
+                    let comment = result["text"] as? String,
+                    let timeAddedString = result["created_at"] as? String
+                else { continue }
+                
+                // Match an already downloaded user or fetch a new one.
+                let author: User
+                
+                if let existingUser = fetchedUsers.first(where: { $0.id == authorID }) {
+                    author = existingUser
+                } else if let newUser = await fetchUser(withID: authorID) {
+                    fetchedUsers.append(newUser)
+                    author = newUser
+                } else {
+                    continue
+                }
+                
+                // Decode the time at which the rating was added.
+                let timeAdded = decodeDate(from: timeAddedString)
+                
+                // Create a rating and add it to the list.
+                let rating = Rating(id: ratingID, author: author, score: score, comment: comment, timeAdded: timeAdded)
+                ratings.append(rating)
+            }
+            
+            return ratings
         } catch {
             return nil
         }
@@ -390,10 +440,7 @@ class Networking {
                    let content = result["text"] as? String,
                    let timeSentString = result["created_at"] as? String {
                     // Decode the time at which the message was sent.
-                    let regex = try! NSRegularExpression(pattern: #"(\.[0-9]+)?Z$"#)
-                    let range = NSRange(timeSentString.startIndex..., in: timeSentString)
-                    let newTimeSentString = regex.stringByReplacingMatches(in: timeSentString, range: range, withTemplate: "Z")
-                    let timeSent = ISO8601DateFormatter().date(from: newTimeSentString)!
+                    let timeSent = decodeDate(from: timeSentString)
                     
                     // Download only the messages which we haven't downloaded before.
                     guard timeSent > recentMessageTimeSent else { continue }
@@ -774,10 +821,41 @@ class Networking {
         }
     }
     
-    /// Adds a new rating and returns a tuple with its ID and time of creation, or nil if the operation failed.
-    static func addRating(of rated: User, writtenBy rating: User, withScore score: Int, comment: String) async -> (ratingID: String, timeAdded: Date)? {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return (String(Int.random(in: 6...1000)), Date())
+    /// Adds a new rating written by current user and returns a tuple with its ID and time of creation, or nil if the operation failed.
+    static func addRating(of user: User, withScore score: Int, comment: String) async -> (ratingID: String, timeAdded: Date)? {
+        do {
+            // Fetch current user's ID.
+            var request = makeRequest(endpoint: "auth/user/", method: .get)
+            var (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 200 /* Call was successful. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let userID = json["pk"] as? String
+            else { return nil }
+            
+            // Add a new rating.
+            let body: [String: Any] = [
+                "issued_by": userID,
+                "about": user.id,
+                "rate": score,
+                "text": comment
+            ]
+            request = makeRequest(endpoint: "opinions/", method: .post, body: body, contentType: .json)
+            (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 201 /* The rating has been added. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let ratingID = json["id"] as? String,
+                  let timeAddedString = json["created_at"] as? String
+            else { return nil }
+            
+            // Decode the time at which the rating was added.
+            let timeAdded = decodeDate(from: timeAddedString)
+            
+            return (ratingID, timeAdded)
+        } catch {
+            return nil
+        }
     }
     
     /// Tries to login with given credentials and returns user's ID, or nil if the operation failed.
@@ -800,5 +878,13 @@ class Networking {
         } catch {
             return nil
         }
+    }
+    
+    /// Decodes time, as a `Date` object, from a time string returned by the server.
+    private static func decodeDate(from timeString: String) -> Date {
+        let regex = try! NSRegularExpression(pattern: #"(\.[0-9]+)?Z$"#)
+        let range = NSRange(timeString.startIndex..., in: timeString)
+        let newTimeString = regex.stringByReplacingMatches(in: timeString, range: range, withTemplate: "Z")
+        return ISO8601DateFormatter().date(from: newTimeString)!
     }
 }
