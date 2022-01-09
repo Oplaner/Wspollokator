@@ -114,7 +114,7 @@ import SwiftUI
     }
     
     func changeCurrentUser(avatarImage image: UIImage?) async -> Bool {
-        await Networking.update(avatarImage: image, forUser: currentUser!)
+        await Networking.update(avatarImage: image)
     }
     
     func changeCurrentUser(name: String) async -> Bool {
@@ -163,11 +163,11 @@ import SwiftUI
     }
     
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {
-        guard await Networking.checkPassword(old, forUser: currentUser!) else { throw PasswordChangeError.invalidOldPassword }
+        guard await Networking.checkPassword(old) else { throw PasswordChangeError.invalidOldPassword }
         guard new1 == new2 else { throw PasswordChangeError.unmatchingNewPasswords }
         guard new1 != old else { throw PasswordChangeError.oldAndNewPasswordsEqual }
         
-        if try await Networking.setNewPassword(new1, forUser: currentUser!) {
+        if try await Networking.setNewPassword(new1) {
             KeychainService.updateLoginInformation(email: currentUser!.email, password: new1)
             return true
         }

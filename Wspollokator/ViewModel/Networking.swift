@@ -79,19 +79,20 @@ class Networking {
                             imageData = image.jpegData(compressionQuality: 1)!
                         }
                         
-                        data.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-                        data.append("Content-Disposition: form-data; name=\(key)\r\n".data(using: .utf8)!)
-                        data.append("Content-Type: image/\(format)\r\n\r\n".data(using: .utf8)!)
+                        data.append("--\(boundary)\r\n")
+                        data.append("Content-Disposition: form-data; name=\"\(key)\"; filename=\"avatar.\(format)\"\r\n")
+                        data.append("Content-Type: image/\(format)\r\n\r\n")
                         data.append(imageData)
+                        data.append("\r\n")
                     default:
-                        data.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-                        data.append("Content-Disposition: form-data; name=\(key)\r\n".data(using: .utf8)!)
-                        data.append("Content-Type: text/plain\r\n\r\n".data(using: .utf8)!)
-                        data.append(String(describing: value).data(using: .utf8)!)
+                        data.append("--\(boundary)\r\n")
+                        data.append("Content-Disposition: form-data; name=\"\(key)\"\r\n")
+                        data.append("Content-Type: text/plain\r\n\r\n")
+                        data.append("\(value)\r\n")
                     }
                 }
                 
-                data.append("\r\n--\(boundary)--".data(using: .utf8)!)
+                data.append("--\(boundary)--\r\n")
                 request.httpBody = data
             }
         }
@@ -187,7 +188,6 @@ class Networking {
             
             guard (response as? HTTPURLResponse)?.statusCode == 200 /* Profile details have been downloaded. */,
                   let profileDetails = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                  let avatarURLString = profileDetails["avatar"] as? String,
                   let name = profileDetails["first_name"] as? String,
                   let surname = profileDetails["last_name"] as? String,
                   let pointOfInterestArray = profileDetails["point"] as? [[String: Any]],
@@ -200,7 +200,7 @@ class Networking {
             // Download an avatar image or set a default avatar.
             var avatar: Image? = nil
             
-            if avatarURLString != defaultAvatarURLString {
+            if let avatarURLString = profileDetails["avatar"] as? String, avatarURLString != defaultAvatarURLString {
                 let avatarURL = URL(string: avatarURLString)!
                 let (imageURL, _) = try await session.download(from: avatarURL)
                 let imageData = try Data(contentsOf: imageURL, options: .uncached)
@@ -421,10 +421,33 @@ class Networking {
         }
     }
     
-    /// Updates `user`'s `avatarImage` and returns the operation status.
-    static func update(avatarImage image: UIImage?, forUser user: User) async -> Bool {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
+    /// Updates current user's `avatarImage` and returns the operation status.
+    static func update(avatarImage image: UIImage?) async -> Bool {
+        do {
+            // Fetch current user's ID.
+            var request = makeRequest(endpoint: "auth/user/", method: .get)
+            var (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 200 /* Call was successful. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let userID = json["pk"] as? String
+            else { return false }
+            
+            // Update user's avatar image.
+            let body: [String: Any] = [
+                "avatar": image ?? ""
+            ]
+            request = makeRequest(endpoint: "profile/\(userID)/", method: .patch, body: body, contentType: .multipart)
+            (data, response) = try await session.data(for: request)
+            
+            if (response as? HTTPURLResponse)?.statusCode == 200 /* Update was successful. */ {
+                return true
+            } else {
+                return false
+            }
+        } catch {
+            return false
+        }
     }
     
     /// Updates `user`'s `name` and returns the operation status.
@@ -445,15 +468,25 @@ class Networking {
         return true
     }
     
-    /// Checks if `password` is correct for `user`.
-    static func checkPassword(_ password: String, forUser user: User) async -> Bool {
+    /// Checks if `password` is correct for the current user.
+    static func checkPassword(_ password: String) async -> Bool {
         do {
+            // Fetch current user's email.
+            var request = makeRequest(endpoint: "auth/user/", method: .get)
+            var (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 200 /* Call was successful. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let email = json["email"] as? String
+            else { return false }
+            
+            // Check the password by trying to authorize user.
             let body: [String: String] = [
-                "email": user.email,
+                "email": email,
                 "password": password
             ]
-            let request = makeRequest(endpoint: "auth/login/", method: .post, body: body, contentType: .json)
-            let (_, response) = try await session.data(for: request)
+            request = makeRequest(endpoint: "auth/login/", method: .post, body: body, contentType: .json)
+            (_, response) = try await session.data(for: request)
             
             if (response as? HTTPURLResponse)?.statusCode == 200 /* Password is correct. */ {
                 return true
@@ -465,8 +498,8 @@ class Networking {
         }
     }
     
-    /// Sets a new `password` for `user` and returns the operation status.
-    static func setNewPassword(_ password: String, forUser user: User) async throws -> Bool {
+    /// Updates current user's password and returns the operation status.
+    static func setNewPassword(_ password: String) async throws -> Bool {
         do {
             let body = [
                 "new_password1": password,
