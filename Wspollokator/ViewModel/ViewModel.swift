@@ -125,10 +125,6 @@ import SwiftUI
         await Networking.update(surname: surname)
     }
     
-    func changeCurrentUser(email: String) async throws -> Bool {
-        return await Networking.update(email: email, forUser: currentUser!)
-    }
-    
     func changeCurrentUser(description: String) async -> Bool {
         await Networking.update(description: description)
     }

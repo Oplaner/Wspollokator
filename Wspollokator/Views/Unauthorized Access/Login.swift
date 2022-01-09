@@ -73,6 +73,10 @@ struct Login: View {
                     .submitLabel(.done)
                     .onSubmit {
                         focusedFieldNumber = nil
+                        
+                        Task {
+                            await authenticateUser()
+                        }
                     }
             }
             .textFieldStyle(.roundedBorder)

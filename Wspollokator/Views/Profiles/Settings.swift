@@ -16,19 +16,19 @@ struct Settings: View {
     @State private var inputImage: UIImage?
     @State private var name = ""
     @State private var surname = ""
-    @State private var email = ""
+    @State private var shouldSetInitialUserDetails = true
     @State private var isShowingImagePicker = false
+    @State private var isShowingNameChangeView = false
+    @State private var isShowingSurnameChangeView = false
     @State private var isUpdatingAvatarImage = false
     @State private var isUpdatingName = false
     @State private var isUpdatingSurname = false
-    @State private var isUpdatingEmail = false
     @State private var isUpdatingDescription = false
     @State private var isShowingConfirmationDialog = false
     
     private func formDidAppear() {
         name = viewModel.currentUser!.name
         surname = viewModel.currentUser!.surname
-        email = viewModel.currentUser!.email
     }
     
     private func updateAvatarImage() async {
@@ -91,39 +91,6 @@ struct Settings: View {
         isUpdatingSurname = false
     }
     
-    private func updateEmail() async {
-        isUpdatingEmail = true
-        email = email.trimmingCharacters(in: .whitespaces)
-        
-        if email.isEmpty || email == viewModel.currentUser!.email {
-            email = viewModel.currentUser!.email
-        } else {
-            do {
-                if try await viewModel.changeCurrentUser(email: email) {
-                    viewModel.objectWillChange.send()
-                    viewModel.currentUser!.email = email
-                } else {
-                    email = viewModel.currentUser!.email
-                    alertType = .error
-                    alertMessage = "Wystąpił błąd podczas aktualizacji adresu e-mail. Spróbuj ponownie."
-                    isShowingAlert = true
-                }
-            } catch {
-                email = viewModel.currentUser!.email
-                alertType = .error
-                
-                switch error as! ViewModel.EmailChangeError {
-                case .emailAlreadyTaken:
-                    alertMessage = "Wprowadzony adres e-mail jest już zajęty przez innego użytkownika."
-                }
-                
-                isShowingAlert = true
-            }
-        }
-        
-        isUpdatingEmail = false
-    }
-    
     var body: some View {
         Form {
             Section {
@@ -149,72 +116,36 @@ struct Settings: View {
             }
             
             Section {
-                HStack {
-                    Text("Imię")
-                    Spacer()
-                    TextField("Imię", text: $name)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundColor(.secondary)
-                        .disabled(isUpdatingName)
-                        .onAppear(perform: formDidAppear)
-                        .onSubmit {
-                            Task {
-                                await updateName()
-                            }
-                        }
-                    
-                    if isUpdatingName {
-                        Spacer()
-                        ProgressView()
-                    }
-                }
-                
-                HStack {
-                    Text("Nazwisko")
-                    Spacer()
-                    TextField("Nazwisko", text: $surname)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundColor(.secondary)
-                        .disabled(isUpdatingSurname)
-                        .onAppear(perform: formDidAppear)
-                        .onSubmit {
-                            Task {
-                                await updateSurname()
-                            }
-                        }
-                    
-                    if isUpdatingSurname {
-                        Spacer()
-                        ProgressView()
-                    }
-                }
-                
-                HStack {
-                    Text("E-mail")
-                    Spacer()
-                    TextField("E-mail", text: $email)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundColor(.secondary)
-                        .keyboardType(.emailAddress)
-                        .textInputAutocapitalization(.never)
-                        .disabled(isUpdatingEmail)
-                        .onAppear(perform: formDidAppear)
-                        .onSubmit {
-                            Task {
-                                await updateEmail()
-                            }
-                        }
-                    
-                    if isUpdatingEmail {
-                        Spacer()
-                        ProgressView()
-                    }
-                }
-                
-                NavigationLink {
-                    PasswordChange()
+                NavigationLink(isActive: $isShowingNameChangeView) {
+                    InlineFieldChange(fieldName: "Imię", fieldValue: $name, isPresented: $isShowingNameChangeView)
                 } label: {
-                    Text("Hasło")
+                    HStack {
+                        Text("Imię")
+                        Spacer()
+                        Text(name)
+                            .foregroundColor(.secondary)
+                        
+                        if isUpdatingName {
+                            Spacer()
+                            ProgressView()
+                        }
+                    }
+                }
+                
+                NavigationLink(isActive: $isShowingSurnameChangeView) {
+                    InlineFieldChange(fieldName: "Nazwisko", fieldValue: $surname, isPresented: $isShowingSurnameChangeView)
+                } label: {
+                    HStack {
+                        Text("Nazwisko")
+                        Spacer()
+                        Text(surname)
+                            .foregroundColor(.secondary)
+                        
+                        if isUpdatingSurname {
+                            Spacer()
+                            ProgressView()
+                        }
+                    }
                 }
                 
                 NavigationLink {
@@ -233,6 +164,21 @@ struct Settings: View {
             
             Section {
                 HStack {
+                    Text("E-mail")
+                    Spacer()
+                    Text(viewModel.currentUser!.email)
+                        .foregroundColor(.secondary)
+                }
+                
+                NavigationLink {
+                    PasswordChange()
+                } label: {
+                    Text("Hasło")
+                }
+            }
+            
+            Section {
+                HStack {
                     Spacer()
                     Button("Wyloguj się", role: .destructive) {
                         alertType = .logout
@@ -245,7 +191,6 @@ struct Settings: View {
         }
         .navigationTitle("Ustawienia")
         .navigationBarTitleDisplayMode(.inline)
-        .submitLabel(.done)
         .confirmationDialog("Wybierz akcję", isPresented: $isShowingConfirmationDialog) {
             Button("Wybierz zdjęcie") {
                 isShowingImagePicker = true
@@ -262,10 +207,31 @@ struct Settings: View {
         .sheet(isPresented: $isShowingImagePicker) {
             ImagePicker(image: $inputImage)
         }
+        .onAppear {
+            if shouldSetInitialUserDetails {
+                name = viewModel.currentUser!.name
+                surname = viewModel.currentUser!.surname
+                shouldSetInitialUserDetails = false
+            }
+        }
         .onChange(of: inputImage) { newValue in
             if newValue != nil {
                 Task {
                     await updateAvatarImage()
+                }
+            }
+        }
+        .onChange(of: isShowingNameChangeView) { isShowing in
+            if !isShowing {
+                Task {
+                    await updateName()
+                }
+            }
+        }
+        .onChange(of: isShowingSurnameChangeView) { isShowing in
+            if !isShowing {
+                Task {
+                    await updateSurname()
                 }
             }
         }

@@ -488,12 +488,6 @@ class Networking {
         }
     }
     
-    /// Updates `user`'s `email` and returns the operation status.
-    static func update(email: String, forUser user: User) async -> Bool {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
-    }
-    
     /// Checks if `password` is correct for the current user.
     static func checkPassword(_ password: String) async -> Bool {
         do {

@@ -20,6 +20,7 @@
 		8E17C2CB2745D26F006C2C9C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E17C2CA2745D26F006C2C9C /* ViewModel.swift */; };
 		8E20789B276FDFED00071A34 /* RatingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E20789A276FDFED00071A34 /* RatingList.swift */; };
 		8E2D95F6274B072A00F4FABC /* LocalizableStrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8E2D95F8274B072A00F4FABC /* LocalizableStrings.strings */; };
+		8E3BF414278B60BC00F18614 /* InlineFieldChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3BF413278B60BB00F18614 /* InlineFieldChange.swift */; };
 		8E3EEF54274DBB3100E403C9 /* DescriptionChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3EEF53274DBB3100E403C9 /* DescriptionChange.swift */; };
 		8E502F782726F6FC003227AA /* WspollokatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E502F772726F6FC003227AA /* WspollokatorApp.swift */; };
 		8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E502F792726F6FC003227AA /* ContentView.swift */; };
@@ -69,6 +70,7 @@
 		8E17C2CA2745D26F006C2C9C /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		8E20789A276FDFED00071A34 /* RatingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingList.swift; sourceTree = "<group>"; };
 		8E2D95F7274B072A00F4FABC /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LocalizableStrings.strings; sourceTree = "<group>"; };
+		8E3BF413278B60BB00F18614 /* InlineFieldChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineFieldChange.swift; sourceTree = "<group>"; };
 		8E3EEF53274DBB3100E403C9 /* DescriptionChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionChange.swift; sourceTree = "<group>"; };
 		8E502F742726F6FC003227AA /* Wspollokator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wspollokator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E502F772726F6FC003227AA /* WspollokatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WspollokatorApp.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 			children = (
 				8E3EEF53274DBB3100E403C9 /* DescriptionChange.swift */,
 				8E154795275EE5B400CBDF58 /* ImagePicker.swift */,
+				8E3BF413278B60BB00F18614 /* InlineFieldChange.swift */,
 				1C5071CB2734239E005E5114 /* MyProfile.swift */,
 				8E95D4A4274D13F9003D40DB /* PasswordChange.swift */,
 				1CC36F17273E8A840092056B /* Settings.swift */,
@@ -390,6 +393,7 @@
 				8E7532C92760073400BF66CE /* MapDetails.swift in Sources */,
 				8EC5603B278A416400EB8342 /* DataExtension.swift in Sources */,
 				C25458C227332ED300C5317F /* Filters.swift in Sources */,
+				8E3BF414278B60BC00F18614 /* InlineFieldChange.swift in Sources */,
 				8E502F7A2726F6FC003227AA /* ContentView.swift in Sources */,
 				8ECEB5A7277BCBD30064E2DB /* KeychainService.swift in Sources */,
 				8E7F08D9278516AD0011C787 /* UserDefaultsService.swift in Sources */,
