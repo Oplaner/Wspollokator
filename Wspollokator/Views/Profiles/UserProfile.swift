@@ -154,12 +154,14 @@ struct UserProfile: View {
             Task {
                 nearestLocationName = await user.fetchNearestLocationName()
                 
-                if user.ratings == nil, let ratings = await viewModel.fetchRatings(of: user) {
-                    viewModel.objectWillChange.send()
-                    user.ratings = ratings
-                } else {
-                    viewModel.objectWillChange.send()
-                    user.ratings = []
+                if user.ratings == nil {
+                    if let ratings = await viewModel.fetchRatings(of: user) {
+                        viewModel.objectWillChange.send()
+                        user.ratings = ratings
+                    } else {
+                        viewModel.objectWillChange.send()
+                        user.ratings = []
+                    }
                 }
             }
         }
