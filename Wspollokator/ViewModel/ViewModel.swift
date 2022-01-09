@@ -118,11 +118,11 @@ import SwiftUI
     }
     
     func changeCurrentUser(name: String) async -> Bool {
-        await Networking.update(name: name, forUser: currentUser!)
+        await Networking.update(name: name)
     }
     
     func changeCurrentUser(surname: String) async -> Bool {
-        await Networking.update(surname: surname, forUser: currentUser!)
+        await Networking.update(surname: surname)
     }
     
     func changeCurrentUser(email: String) async throws -> Bool {

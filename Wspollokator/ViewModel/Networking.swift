@@ -438,7 +438,7 @@ class Networking {
                 "avatar": image ?? ""
             ]
             request = makeRequest(endpoint: "profile/\(userID)/", method: .patch, body: body, contentType: .multipart)
-            (data, response) = try await session.data(for: request)
+            (_, response) = try await session.data(for: request)
             
             if (response as? HTTPURLResponse)?.statusCode == 200 /* Update was successful. */ {
                 return true
@@ -450,16 +450,42 @@ class Networking {
         }
     }
     
-    /// Updates `user`'s `name` and returns the operation status.
-    static func update(name: String, forUser user: User) async -> Bool {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
+    /// Updates current user's `name` and returns the operation status.
+    static func update(name: String) async -> Bool {
+        do {
+            let body = [
+                "first_name": name
+            ]
+            let request = makeRequest(endpoint: "auth/user/", method: .patch, body: body, contentType: .json)
+            let (_, response) = try await session.data(for: request)
+            
+            if (response as? HTTPURLResponse)?.statusCode == 200 /* Update was successful. */ {
+                return true
+            } else {
+                return false
+            }
+        } catch {
+            return false
+        }
     }
     
-    /// Updates `user`'s `surname` and returns the operation status.
-    static func update(surname: String, forUser user: User) async -> Bool {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
+    /// Updates current user's `surname` and returns the operation status.
+    static func update(surname: String) async -> Bool {
+        do {
+            let body = [
+                "last_name": surname
+            ]
+            let request = makeRequest(endpoint: "auth/user/", method: .patch, body: body, contentType: .json)
+            let (_, response) = try await session.data(for: request)
+            
+            if (response as? HTTPURLResponse)?.statusCode == 200 /* Update was successful. */ {
+                return true
+            } else {
+                return false
+            }
+        } catch {
+            return false
+        }
     }
     
     /// Updates `user`'s `email` and returns the operation status.
@@ -546,7 +572,7 @@ class Networking {
                 "description": description
             ]
             request = makeRequest(endpoint: "profile/\(userID)/", method: .patch, body: body, contentType: .multipart)
-            (data, response) = try await session.data(for: request)
+            (_, response) = try await session.data(for: request)
             
             if (response as? HTTPURLResponse)?.statusCode == 200 /* Update was successful. */ {
                 return true
@@ -615,7 +641,7 @@ class Networking {
                 "is_searchable": searchableState
             ]
             request = makeRequest(endpoint: "profile/\(userID)/", method: .patch, body: body, contentType: .multipart)
-            (data, response) = try await session.data(for: request)
+            (_, response) = try await session.data(for: request)
             
             if (response as? HTTPURLResponse)?.statusCode == 200 /* Update was successful. */ {
                 return true
@@ -645,7 +671,7 @@ class Networking {
                 "smoking": preferences[.smoking]!.mapToServerValue()
             ]
             request = makeRequest(endpoint: "profile/\(userID)/", method: .patch, body: body, contentType: .multipart)
-            (data, response) = try await session.data(for: request)
+            (_, response) = try await session.data(for: request)
             
             if (response as? HTTPURLResponse)?.statusCode == 200 /* Update was successful. */ {
                 return true
