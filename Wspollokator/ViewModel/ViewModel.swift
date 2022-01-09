@@ -151,7 +151,7 @@ import SwiftUI
     }
     
     func changeCurrentUser(searchableState: Bool) async -> Bool {
-        await Networking.update(searchableState: searchableState, forUser: currentUser!)
+        await Networking.update(searchableState: searchableState)
     }
     
     func changeCurrentUser(targetDistance: Double) async -> Bool {
