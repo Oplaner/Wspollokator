@@ -130,7 +130,7 @@ import SwiftUI
     }
     
     func changeCurrentUser(description: String) async -> Bool {
-        await Networking.update(description: description, forUser: currentUser!)
+        await Networking.update(description: description)
     }
     
     func changeCurrentUser(pointOfInterest: CLLocationCoordinate2D) async -> Bool {
