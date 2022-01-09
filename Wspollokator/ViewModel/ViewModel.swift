@@ -159,7 +159,7 @@ import SwiftUI
     }
     
     func changeCurrentUser(preferences: [FilterOption: FilterAttitude]) async -> Bool {
-        await Networking.update(preferences: preferences, forUser: currentUser!)
+        await Networking.update(preferences: preferences)
     }
     
     func changeCurrentUserPassword(oldPassword old: String, newPassword new1: String, confirmation new2: String) async throws -> Bool {

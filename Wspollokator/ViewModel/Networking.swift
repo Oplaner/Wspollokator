@@ -581,10 +581,34 @@ class Networking {
         return true
     }
     
-    /// Updates `user`'s `preferences` and returns the operation status.
-    static func update(preferences: [FilterOption: FilterAttitude], forUser user: User) async -> Bool {
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return true
+    /// Updates current user's `preferences` and returns the operation status.
+    static func update(preferences: [FilterOption: FilterAttitude]) async -> Bool {
+        do {
+            // Fetch current user's ID.
+            var request = makeRequest(endpoint: "auth/user/", method: .get)
+            var (data, response) = try await session.data(for: request)
+            
+            guard (response as? HTTPURLResponse)?.statusCode == 200 /* Call was successful. */,
+                  let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let userID = json["pk"] as? String
+            else { return false }
+            
+            // Update user's preferences.
+            let body = [
+                "accepts_animals": preferences[.animals]!.mapToServerValue(),
+                "smoking": preferences[.smoking]!.mapToServerValue()
+            ]
+            request = makeRequest(endpoint: "profile/\(userID)/", method: .patch, body: body, contentType: .multipart)
+            (data, response) = try await session.data(for: request)
+            
+            if (response as? HTTPURLResponse)?.statusCode == 200 /* Update was successful. */ {
+                return true
+            } else {
+                return false
+            }
+        } catch {
+            return false
+        }
     }
     
     /// Updates current user's `savedList` by adding `user` and returns the operation status.
