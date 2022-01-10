@@ -147,7 +147,7 @@ import SwiftUI
     }
     
     func changeCurrentUser(targetDistance: Double) async -> Bool {
-        await Networking.update(pointOfInterest: currentUser!.pointOfInterest!, targetDistance: currentUser!.targetDistance)
+        await Networking.update(pointOfInterest: currentUser!.pointOfInterest!, targetDistance: targetDistance)
     }
     
     func changeCurrentUser(preferences: [FilterOption: FilterAttitude]) async -> Bool {
@@ -234,9 +234,7 @@ import SwiftUI
         return (rating, true)
     }
     
-    @discardableResult func refresh() async -> Bool {
-        objectWillChange.send()
-        
+    @discardableResult func refresh() async -> Bool {        
         if await refreshCurrentUser() {
             return await downloadCurrentUserData()
         } else {
@@ -298,16 +296,12 @@ import SwiftUI
             fetchedUsers.insert(user)
         }
         
-        currentUser!.savedUsers = savedUsers
-        
         // Fetch ratings of the current user and their authors.
         guard let ratings = await Networking.fetchRatings(of: currentUser!, usingLocalUsersExtension: Array(fetchedUsers)) else { return false }
         
         for rating in ratings {
             fetchedUsers.insert(rating.author)
         }
-        
-        currentUser!.ratings = ratings
         
         // Fetch conversations, messages and their authors.
         guard let fetchedConversations = await Networking.fetchConversations(usingLocalUsersExtension: Array(fetchedUsers)) else { return false }
@@ -318,13 +312,23 @@ import SwiftUI
             }
         }
         
+        if isUserAuthenticated {
+            objectWillChange.send()
+        }
+        
+        currentUser!.savedUsers = savedUsers
+        currentUser!.ratings = ratings
         users = Array(fetchedUsers)
         conversations = fetchedConversations
+        
         return true
     }
     
     private func refreshCurrentUser() async -> Bool {
         if let updatedUser = await Networking.fetchUser(withID: currentUser!.id, settingEmail: currentUser!.email) {
+            updatedUser.savedUsers = currentUser!.savedUsers
+            updatedUser.ratings = currentUser!.ratings
+            objectWillChange.send()
             currentUser = updatedUser
             return true
         } else {

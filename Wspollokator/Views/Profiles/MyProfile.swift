@@ -100,21 +100,23 @@ struct MyProfile: View {
                     }
                     .padding(.vertical, 10)
                     
-                    HStack {
-                        Text("Średnia ocena")
-                        Spacer()
-                        
-                        if viewModel.currentUser!.ratings!.count == 0 {
-                            Text("—")
-                                .foregroundColor(.secondary)
-                        } else {
-                            RatingStars(score: .constant(viewModel.currentUser!.averageScore), isInteractive: false)
+                    if viewModel.currentUser!.ratings != nil {
+                        HStack {
+                            Text("Średnia ocena")
+                            Spacer()
+                            
+                            if viewModel.currentUser!.ratings!.count == 0 {
+                                Text("—")
+                                    .foregroundColor(.secondary)
+                            } else {
+                                RatingStars(score: .constant(viewModel.currentUser!.averageScore), isInteractive: false)
+                            }
                         }
-                    }
-                    
-                    if viewModel.currentUser!.ratings!.count > 0 {
-                        NavigationLink("Opinie o mnie (\(viewModel.currentUser!.ratings!.count))") {
-                            RatingList(relevantUser: viewModel.currentUser!)
+                        
+                        if viewModel.currentUser!.ratings!.count > 0 {
+                            NavigationLink("Opinie o mnie (\(viewModel.currentUser!.ratings!.count))") {
+                                RatingList(relevantUser: viewModel.currentUser!)
+                            }
                         }
                     }
                 }
