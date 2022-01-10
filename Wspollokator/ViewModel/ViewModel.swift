@@ -234,9 +234,37 @@ import SwiftUI
         return (rating, true)
     }
     
-    func logout() {
-        // TODO: Stop background communication and remove scheduled refresh tasks.
+    @discardableResult func refresh() async -> Bool {
+        objectWillChange.send()
         
+        if await refreshCurrentUser() {
+            return await downloadCurrentUserData()
+        } else {
+            return false
+        }
+    }
+    
+    @discardableResult func refreshConversations() async -> Bool {
+        if let fetchedConversations = await Networking.fetchConversations(usingLocalUsersExtension: users) {
+            objectWillChange.send()
+            conversations = fetchedConversations
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    @discardableResult func refreshMessages(in conversation: Conversation) async -> Bool {
+        if let fetchedMessages = await Networking.fetchMessages(for: conversation) {
+            objectWillChange.send()
+            conversation.messages.append(contentsOf: fetchedMessages)
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func logout() {
         users = []
         conversations = []
         searchTargetDistance = ViewModel.defaultTargetDistance
@@ -248,14 +276,6 @@ import SwiftUI
         // Unsetting the current user must be delayed, otherwise the app will crash, because many views explicitly unwrap this optional and their bodies recompute prior to displaying the login view.
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.currentUser = nil
-        }
-    }
-    
-    func refresh() async -> Bool {
-        if await refreshCurrentUser() {
-            return await downloadCurrentUserData()
-        } else {
-            return false
         }
     }
     
