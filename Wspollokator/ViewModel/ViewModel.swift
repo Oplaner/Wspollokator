@@ -28,7 +28,7 @@ import SwiftUI
     }
     
     static let defaultTargetDistance: Double = 5
-    private static let nearbyUsersDownloadRange: Double = 12
+    private static let nearbyUsersDownloadRange: Double = 20 // To include users whose area of interest (of maximum 10 km radius) is within 10 km of the current user's point of interest.
     
     /// Returns a preferences dictionary with neutral attitude to each filter option.
     nonisolated static var defaultPreferences: [FilterOption: FilterAttitude] {

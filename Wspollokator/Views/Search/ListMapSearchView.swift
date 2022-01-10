@@ -14,6 +14,7 @@ struct ListMapSearchView: View {
     }
     
     @EnvironmentObject var viewModel: ViewModel
+    
     @State private var viewMode: SearchResultsViewMode = .list
     @State private var isShowingFilters = false
     
@@ -26,7 +27,7 @@ struct ListMapSearchView: View {
         var distances = [String: Double]()
         
         return viewModel.users.filter({ user in
-            guard user != currentUser && user.isSearchable, let distance = user.distance(from: currentUser), distance <= viewModel.searchTargetDistance else { return false }
+            guard user != currentUser && user.isSearchable, let distance = user.distance(from: currentUser), distance - user.targetDistance <= viewModel.searchTargetDistance else { return false }
             
             for option in FilterOption.allCases {
                 if viewModel.searchPreferences[option] != .neutral && user.preferences[option] != viewModel.searchPreferences[option] {

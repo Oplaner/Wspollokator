@@ -62,7 +62,7 @@ class User: Hashable, Identifiable {
         hasher.combine(id)
     }
     
-    /// Calculates distance, in kilometers, between the receiver's and other user's `pointOfInterest`.
+    /// Calculates distance, in kilometers, between the receiver's and other `user`'s `pointOfInterest`.
     func distance(from user: User) -> Double? {
         guard pointOfInterest != nil && user.pointOfInterest != nil else { return nil }
         
@@ -70,6 +70,22 @@ class User: Hashable, Identifiable {
         let otherUserPointLocation = CLLocation(latitude: user.pointOfInterest!.latitude, longitude: user.pointOfInterest!.longitude)
         
         return receiverPointLocation.distance(from: otherUserPointLocation) / 1000
+    }
+    
+    /// Returns a string describing the minimum and maximum distance between the receiver's `pointOfInterest` and other `user`'s area of interest.
+    func distanceRange(for user: User) -> String? {
+        guard let distance = distance(from: user) else { return nil }
+        
+        let lowerBound = Float(max(0, distance - user.targetDistance))
+        let upperBound = Float(distance + user.targetDistance)
+        
+        if lowerBound == upperBound {
+            return String.localizedStringWithFormat("%.1f km", 0)
+        } else if lowerBound == 0 {
+            return String.localizedStringWithFormat("≤ %.1f km", upperBound)
+        } else {
+            return String.localizedStringWithFormat("%.1f‐%.1f km", lowerBound, upperBound)
+        }
     }
     
     /// Decodes street or city describing location of the receiver's `pointOfInterest`.

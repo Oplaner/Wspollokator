@@ -120,13 +120,17 @@ struct MyProfile: View {
                         }
                     }
                 }
-                Section {
-                    Toggle("Szukam współlokatora", isOn: $isSearchable)
-                        .tint(Color.accentColor)
-                } footer: {
-                    let negation = isSearchable ? "" : "nie "
-                    Text("Twój profil \(negation)będzie widoczny w wynikach wyszukiwania.")
+                
+                if viewModel.currentUser!.pointOfInterest != nil {
+                    Section {
+                        Toggle("Szukam współlokatora", isOn: $isSearchable)
+                            .tint(Color.accentColor)
+                    } footer: {
+                        let negation = isSearchable ? "" : "nie "
+                        Text("Twój profil \(negation)będzie widoczny w wynikach wyszukiwania.")
+                    }
                 }
+                
                 Section {
                     NavigationLink("Mój punkt") {
                         MapViewContainer(alertType: $alertType, alertMessage: $alertMessage, isShowingAlert: $isShowingAlert, isUpdating: $isUpdating)

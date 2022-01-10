@@ -59,8 +59,7 @@ struct SavedList: View {
                     let sortedUsers = sortedUsers(usingDistances: distances)
                     
                     ForEach(sortedUsers) { user in
-                        let distance = distances[user.id]
-                        let caption = distance != nil ? String.localizedStringWithFormat("%.1f km", distance!) : nil
+                        let caption = viewModel.currentUser!.distanceRange(for: user)
                         
                         NavigationLink(destination: UserProfile(user: user)) {
                             ListRow(images: [user.avatarImage], headline: "\(user.name) \(user.surname)", caption: caption, includesStarButton: false, relevantUser: nil)
