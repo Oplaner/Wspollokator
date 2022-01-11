@@ -1,3 +1,5 @@
+![App Icon](https://user-images.githubusercontent.com/23143311/148995223-420cca42-8cfe-40d9-a2f7-70b3b4fa9654.png)
+
 # Współlokator
 
 🇵🇱
