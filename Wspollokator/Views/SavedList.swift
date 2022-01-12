@@ -11,8 +11,8 @@ struct SavedList: View {
     @EnvironmentObject var viewModel: ViewModel
     
     /// Returns a dictionary, in which keys correspond to users' `id`s and values represent their distances from the current user.
-    private func fetchDistances() -> [Int: Double] {
-        var distances = [Int: Double]()
+    private func fetchDistances() -> [String: Double] {
+        var distances = [String: Double]()
         
         for user in viewModel.currentUser!.savedUsers {
             if let distance = user.distance(from: viewModel.currentUser!) {
@@ -24,7 +24,7 @@ struct SavedList: View {
     }
     
     /// Sorts current user's `savedUsers` array. Users who have their distance from the current user undefined are in the second part of the final array.
-    private func sortedUsers(usingDistances distances: [Int: Double]) -> [User] {
+    private func sortedUsers(usingDistances distances: [String: Double]) -> [User] {
         var usersWithDistanceDefined = [User]()
         var usersWithDistanceUndefined = [User]()
         
@@ -59,8 +59,7 @@ struct SavedList: View {
                     let sortedUsers = sortedUsers(usingDistances: distances)
                     
                     ForEach(sortedUsers) { user in
-                        let distance = distances[user.id]
-                        let caption = distance != nil ? String.localizedStringWithFormat("%.1f km", distance!) : nil
+                        let caption = viewModel.currentUser!.distanceRange(for: user)
                         
                         NavigationLink(destination: UserProfile(user: user)) {
                             ListRow(images: [user.avatarImage], headline: "\(user.name) \(user.surname)", caption: caption, includesStarButton: false, relevantUser: nil)
@@ -69,7 +68,7 @@ struct SavedList: View {
                     .onDelete { indexSet in
                         Task {
                             for index in indexSet {
-                                await viewModel.changeCurrentUserSavedList(removing: sortedUsers[index])
+                                await viewModel.changeCurrentUserSavedList(byRemoving: sortedUsers[index])
                             }
                         }
                     }

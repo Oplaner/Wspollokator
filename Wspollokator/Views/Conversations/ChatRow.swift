@@ -20,12 +20,6 @@ struct ChatRow: View {
     var message: Message
     var isGroupConversation: Bool
     
-    private func formatTimeString(from date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yy, hh:mm"
-        return formatter.string(from: date)
-    }
-    
     var body: some View {
         HStack {
             if message.author == viewModel.currentUser! {
@@ -36,7 +30,7 @@ struct ChatRow: View {
                         .padding(textPadding)
                         .background(Color("FillColor"))
                         .cornerRadius(cornerRadius)
-                    Text(formatTimeString(from: message.timeSent))
+                    Text(message.formattedTimeSent)
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
@@ -48,7 +42,7 @@ struct ChatRow: View {
                             .padding(textPadding)
                             .background(Color(uiColor: .secondarySystemBackground))
                             .cornerRadius(cornerRadius)
-                        Text(formatTimeString(from: message.timeSent))
+                        Text(message.formattedTimeSent)
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }
@@ -59,7 +53,7 @@ struct ChatRow: View {
                             .padding(textPadding)
                             .background(Color(uiColor: .secondarySystemBackground))
                             .cornerRadius(cornerRadius)
-                        Text(formatTimeString(from: message.timeSent))
+                        Text(message.formattedTimeSent)
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     }

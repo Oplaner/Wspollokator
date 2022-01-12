@@ -36,7 +36,7 @@ struct NewRating: View {
         
         if success {
             viewModel.objectWillChange.send()
-            relevantUser.ratings.append(rating!)
+            relevantUser.ratings!.append(rating!)
             dismiss()
             isShowingRatingsList = true
         } else {

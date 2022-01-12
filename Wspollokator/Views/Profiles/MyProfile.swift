@@ -100,38 +100,49 @@ struct MyProfile: View {
                     }
                     .padding(.vertical, 10)
                     
-                    HStack {
-                        Text("Średnia ocena")
-                        Spacer()
+                    if viewModel.currentUser!.ratings != nil {
+                        HStack {
+                            Text("Średnia ocena")
+                            Spacer()
+                            
+                            if viewModel.currentUser!.ratings!.count == 0 {
+                                Text("—")
+                                    .foregroundColor(.secondary)
+                            } else {
+                                RatingStars(score: .constant(viewModel.currentUser!.averageScore), isInteractive: false)
+                            }
+                        }
                         
-                        if viewModel.currentUser!.ratings.count == 0 {
-                            Text("—")
-                                .foregroundColor(.secondary)
-                        } else {
-                            RatingStars(score: .constant(viewModel.currentUser!.averageScore), isInteractive: false)
-                        }
-                    }
-                    
-                    if viewModel.currentUser!.ratings.count > 0 {
-                        NavigationLink("Opinie o mnie (\(viewModel.currentUser!.ratings.count))") {
-                            RatingList(relevantUser: viewModel.currentUser!)
+                        if viewModel.currentUser!.ratings!.count > 0 {
+                            NavigationLink("Opinie o mnie (\(viewModel.currentUser!.ratings!.count))") {
+                                RatingList(relevantUser: viewModel.currentUser!)
+                            }
                         }
                     }
                 }
-                Section {
-                    Toggle("Szukam współlokatora", isOn: $isSearchable)
-                        .tint(Color.accentColor)
-                } footer: {
-                    let negation = isSearchable ? "" : "nie "
-                    Text("Twój profil \(negation)będzie widoczny w wynikach wyszukiwania.")
+                
+                if viewModel.currentUser!.pointOfInterest != nil {
+                    Section {
+                        Toggle("Szukam współlokatora", isOn: $isSearchable)
+                            .tint(Color.accentColor)
+                    } footer: {
+                        let negation = isSearchable ? "" : "nie "
+                        Text("Twój profil \(negation)będzie widoczny w wynikach wyszukiwania.")
+                    }
                 }
+                
                 Section {
                     NavigationLink("Mój punkt") {
                         MapViewContainer(alertType: $alertType, alertMessage: $alertMessage, isShowingAlert: $isShowingAlert, isUpdating: $isUpdating)
                     }
                     FilterView(targetDistance: $targetDistance, isChangingTargetDistance: $isChangingTargetDistance, preferencesSource: $preferences)
+                        .disabled(viewModel.currentUser!.pointOfInterest == nil)
                 } header: {
                     Text("Moje preferencje")
+                } footer: {
+                    if viewModel.currentUser!.pointOfInterest == nil {
+                        Text("Aby móc zmieniać preferencje, ustaw swój punkt.")
+                    }
                 }
             }
             .navigationTitle("Mój profil")

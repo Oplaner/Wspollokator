@@ -8,13 +8,20 @@
 import Foundation
 
 class Rating: Identifiable {
-    let id: Int
+    let id: String
     let author: User
     let score: Int
     let comment: String
     let timeAdded: Date
     
-    init(id: Int, author: User, score: Int, comment: String, timeAdded: Date) {
+    var formattedTimeAdded: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yy, HH:mm"
+        formatter.timeZone = .autoupdatingCurrent
+        return formatter.string(from: timeAdded)
+    }
+    
+    init(id: String, author: User, score: Int, comment: String, timeAdded: Date) {
         self.id = id
         self.author = author
         self.score = score

@@ -22,7 +22,7 @@ struct ListRow: View {
     
     var body: some View {
         HStack(spacing: padding) {
-            if images.count == 2 { // Group conversations.
+            if images.count == 2 /* Group conversations. */ {
                 let avatarSize = 2 * height / 3
                 
                 HStack(spacing: 0) {
@@ -34,10 +34,10 @@ struct ListRow: View {
                 }
                 .padding(.trailing, -0.5 * avatarSize)
                 .padding(.top, 0.5 * avatarSize)
-            } else if images.count == 1 { // Single person avatar.
+            } else if images.count == 1 /* Single person avatar. */ {
                 Avatar(image: images.first!, size: height)
                     .overlay(Circle().stroke(Color(uiColor: .secondarySystemGroupedBackground), lineWidth: outlineWidth))
-            } else { // Default.
+            } else /* Default. */ {
                 Avatar(size: height)
                     .overlay(Circle().stroke(Color(uiColor: .secondarySystemGroupedBackground), lineWidth: outlineWidth))
             }
@@ -60,9 +60,9 @@ struct ListRow: View {
                 Button {
                     Task {
                         if viewModel.currentUser!.savedUsers.contains(relevantUser!) {
-                            await viewModel.changeCurrentUserSavedList(removing: relevantUser!)
+                            await viewModel.changeCurrentUserSavedList(byRemoving: relevantUser!)
                         } else {
-                            await viewModel.changeCurrentUserSavedList(adding: relevantUser!)
+                            await viewModel.changeCurrentUserSavedList(byAdding: relevantUser!)
                         }
                     }
                 } label: {

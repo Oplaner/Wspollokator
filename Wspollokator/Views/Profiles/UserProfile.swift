@@ -23,7 +23,7 @@ struct UserProfile: View {
     
     /// An existing conversation with `user` or a template for a new one.
     private var conversation: Conversation {
-        viewModel.conversations.filter({ $0.participants.count == 2 && $0.participants.contains(user) }).first ?? Conversation(id: 0, participants: [viewModel.currentUser!, user], messages: [])
+        viewModel.conversations.filter({ $0.participants.count == 2 && $0.participants.contains(user) }).first ?? Conversation(id: "0", participants: [viewModel.currentUser!, user], messages: [])
     }
     
     var body: some View {
@@ -40,9 +40,9 @@ struct UserProfile: View {
                         Button {
                             Task {
                                 if viewModel.currentUser!.savedUsers.contains(user) {
-                                    await viewModel.changeCurrentUserSavedList(removing: user)
+                                    await viewModel.changeCurrentUserSavedList(byRemoving: user)
                                 } else {
-                                    await viewModel.changeCurrentUserSavedList(adding: user)
+                                    await viewModel.changeCurrentUserSavedList(byAdding: user)
                                 }
                             }
                         } label: {
@@ -57,13 +57,13 @@ struct UserProfile: View {
                     Text("\(user.name) \(user.surname)")
                         .font(.title)
                     
-                    if let distance = user.distance(from: viewModel.currentUser!) {
+                    if let distanceRange = viewModel.currentUser!.distanceRange(for: user) {
                         if let locationName = nearestLocationName {
-                            Text(String.localizedStringWithFormat("%.1f km, w pobliżu \(locationName)", distance))
+                            Text("\(distanceRange), w pobliżu \(locationName)")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         } else {
-                            Text(String.localizedStringWithFormat("%.1f km", distance))
+                            Text(distanceRange)
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
@@ -95,24 +95,30 @@ struct UserProfile: View {
                         .bold()
                     Spacer()
                     
-                    if user.ratings.count == 0 {
-                        Text("—")
-                            .bold()
-                            .foregroundColor(.secondary)
+                    if let ratings = user.ratings {
+                        if ratings.count == 0 {
+                            Text("—")
+                                .bold()
+                                .foregroundColor(.secondary)
+                        } else {
+                            RatingStars(score: .constant(user.averageScore), isInteractive: false)
+                        }
                     } else {
-                        RatingStars(score: .constant(user.averageScore), isInteractive: false)
+                        ProgressView()
                     }
                 }
                 
-                if user.ratings.count == 0 {
-                    Button("Dodaj opinię") {
-                        isShowingNewRatingView = true
-                    }
-                } else {
-                    NavigationLink(isActive: $isShowingRatingsList) {
-                        RatingList(relevantUser: user)
-                    } label: {
-                        Text("Pokaż opinie (\(user.ratings.count))")
+                if let ratings = user.ratings {
+                    if ratings.count == 0 {
+                        Button("Dodaj opinię") {
+                            isShowingNewRatingView = true
+                        }
+                    } else {
+                        NavigationLink(isActive: $isShowingRatingsList) {
+                            RatingList(relevantUser: user)
+                        } label: {
+                            Text("Pokaż opinie (\(ratings.count))")
+                        }
                     }
                 }
                 
@@ -144,8 +150,20 @@ struct UserProfile: View {
         .sheet(isPresented: $isShowingNewRatingView) {
             NewRating(relevantUser: user, isShowingRatingsList: $isShowingRatingsList)
         }
-        .task {
-            nearestLocationName = await user.fetchNearestLocationName()
+        .onAppear {
+            Task {
+                nearestLocationName = await user.fetchNearestLocationName()
+                
+                if user.ratings == nil {
+                    if let ratings = await viewModel.fetchRatings(of: user) {
+                        viewModel.objectWillChange.send()
+                        user.ratings = ratings
+                    } else {
+                        viewModel.objectWillChange.send()
+                        user.ratings = []
+                    }
+                }
+            }
         }
     }
 }

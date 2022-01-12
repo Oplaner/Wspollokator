@@ -63,7 +63,7 @@ struct MapViewContainer: View {
         guard inputCoordinate != viewModel.currentUser!.pointOfInterest else { return }
         isUpdating = true
         
-        if await viewModel.changeCurrentUser(pointOfInterest: inputCoordinate) {
+        if await viewModel.changeCurrentUser(pointOfInterest: inputCoordinate!) {
             viewModel.objectWillChange.send()
             viewModel.currentUser!.pointOfInterest = inputCoordinate
         } else {
