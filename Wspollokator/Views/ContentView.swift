@@ -43,8 +43,7 @@ struct ContentView: View {
                 }
                 .onReceive(viewModel.userDataTimer) { output in
                     Task {
-                        print("Debug: refreshing current user data")
-                        await viewModel.refreshConversations()
+                        await viewModel.refresh()
                     }
                 }
             } else {
