@@ -30,8 +30,6 @@ import SwiftUI
     static let refreshCurrentUserDataTimeInterval: Double = 60
     static let refreshConversationsTimeInterval: Double = 10
     static let refreshMessagesTimeInterval: Double = 5
-    let userDataTimer = Timer.publish(every: refreshCurrentUserDataTimeInterval, tolerance: 1.0, on: .main, in: .common).autoconnect()
-    
     static let defaultTargetDistance: Double = 5
     private static let nearbyUsersDownloadRange: Double = 20 // To include users whose area of interest (of maximum 10 km radius) is within 10 km of the current user's point of interest.
     
@@ -46,6 +44,8 @@ import SwiftUI
         return preferences
     }
     
+    let userDataTimer = Timer.publish(every: refreshCurrentUserDataTimeInterval, tolerance: 1.0, on: .main, in: .common).autoconnect()
+    
     @Published var isUserAuthenticated: Bool
     @Published var currentUser: User?
     @Published var users: [User]
@@ -54,6 +54,7 @@ import SwiftUI
     @Published var searchPreferences = defaultPreferences
     @Published var isUpdatingSavedList: Bool
     @Published var didReportErrorUpdatingSavedList: Bool
+    @Published var isShowingConversationView: Bool
     
     init(currentUser: User? = nil, users: [User] = [], conversations: [Conversation] = []) {
         isUserAuthenticated = currentUser != nil
@@ -62,6 +63,7 @@ import SwiftUI
         self.conversations = conversations
         isUpdatingSavedList = false
         didReportErrorUpdatingSavedList = false
+        isShowingConversationView = false
     }
     
     static func resizeImage(_ image: UIImage) -> UIImage {
@@ -239,7 +241,7 @@ import SwiftUI
         return (rating, true)
     }
     
-    @discardableResult func refresh() async -> Bool {        
+    @discardableResult func refresh() async -> Bool {
         if await refreshCurrentUser() {
             return await downloadCurrentUserData()
         } else {

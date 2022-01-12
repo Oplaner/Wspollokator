@@ -92,7 +92,9 @@ struct ConversationsList: View {
         .onAppear {
             conversationsListTimer = Timer.scheduledTimer(withTimeInterval: ViewModel.refreshConversationsTimeInterval, repeats: true) { _ in
                 Task {
-                    await viewModel.refreshConversations()
+                    if !viewModel.isShowingConversationView {
+                        await viewModel.refreshConversations()
+                    }
                 }
             }
         }

@@ -92,6 +92,9 @@ struct ConversationView: View {
                 .onChange(of: conversation.messages.count) { _ in
                     scrollToBottom(withReader: reader)
                 }
+                .onChange(of: focusedFieldNumber) { _ in
+                    scrollToBottom(withReader: reader)
+                }
             }
             
             ZStack(alignment: .trailing) {
@@ -117,6 +120,8 @@ struct ConversationView: View {
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
+            viewModel.isShowingConversationView = true
+            
             if shouldFocus {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                     self.focusedFieldNumber = 1
@@ -129,11 +134,14 @@ struct ConversationView: View {
         .task {
             messagesTimer = Timer.scheduledTimer(withTimeInterval: ViewModel.refreshMessagesTimeInterval, repeats: true) { _ in
                 Task {
-                    await viewModel.refreshMessages(in: conversation)
+                    if conversation.id != "0" /* Do not refresh a new (empty) conversation. */ {
+                        await viewModel.refreshMessages(in: conversation)
+                    }
                 }
             }
         }
         .onDisappear {
+            viewModel.isShowingConversationView = false
             messagesTimer?.invalidate()
         }
     }
