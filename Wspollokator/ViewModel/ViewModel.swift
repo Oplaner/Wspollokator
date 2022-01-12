@@ -27,6 +27,11 @@ import SwiftUI
         case invalidNewPasswordFormat
     }
     
+    static let refreshCurrentUserDataTimeInterval: Double = 60
+    static let refreshConversationsTimeInterval: Double = 10
+    static let refreshMessagesTimeInterval: Double = 5
+    let userDataTimer = Timer.publish(every: refreshCurrentUserDataTimeInterval, tolerance: 1.0, on: .main, in: .common).autoconnect()
+    
     static let defaultTargetDistance: Double = 5
     private static let nearbyUsersDownloadRange: Double = 20 // To include users whose area of interest (of maximum 10 km radius) is within 10 km of the current user's point of interest.
     
@@ -263,6 +268,7 @@ import SwiftUI
     }
     
     func logout() {
+        userDataTimer.upstream.connect().cancel()
         users = []
         conversations = []
         searchTargetDistance = ViewModel.defaultTargetDistance

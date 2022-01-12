@@ -10,6 +10,7 @@ import SwiftUI
 struct ConversationsList: View {
     @EnvironmentObject var viewModel: ViewModel
     
+    @State private var conversationsListTimer: Timer?
     @State private var isShowingNewConversationSheet = false
     @State private var isShowingConversationView = false
     @State private var newConversationParticipants = [User]()
@@ -87,6 +88,16 @@ struct ConversationsList: View {
                     NewConversation(isShowingConversationView: $isShowingConversationView, newConversationParticipants: $newConversationParticipants)
                 }
             }
+        }
+        .onAppear {
+            conversationsListTimer = Timer.scheduledTimer(withTimeInterval: ViewModel.refreshConversationsTimeInterval, repeats: true) { _ in
+                Task {
+                    await viewModel.refreshConversations()
+                }
+            }
+        }
+        .onDisappear {
+            conversationsListTimer?.invalidate()
         }
     }
 }

@@ -41,6 +41,12 @@ struct ContentView: View {
                 } message: {
                     Text("Wystąpił błąd podczas aktualizacji listy zapisanych osób. Spróbuj ponownie.")
                 }
+                .onReceive(viewModel.userDataTimer) { output in
+                    Task {
+                        print("Debug: refreshing current user data")
+                        await viewModel.refreshConversations()
+                    }
+                }
             } else {
                 Login()
             }
