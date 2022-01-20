@@ -38,4 +38,16 @@ W karcie _Mój profil_ użytkownik może ustalać swoje preferencje: punkt na ma
 
 In the _My profile_ tab the user can set their preferences: a point on the map and a distance from the point defining a region of the city, in which they are looking for roommates, as well as their attitude (negative, neutral or positive) to matters such as smoking people or pets. Setting the point is done by dropping a pin on the map, either in any place (manually), or in the user's current location (with a button on the bottom of the screen). Before user shares their profile in search results using the master switch, it is recommended to go to the _Settings_ view and set description and avatar visible in the profile. The same view allows user to change their information and log out. The _My profile_ tab also contains an average score and ratings about the user written by other users.
 
-![Screenshots 2](https://user-images.githubusercontent.com/23143311/150385181-80157e0a-b6fd-4a8f-bbea-069fb270811b.png)
+![Screenshots 2](https://user-images.githubusercontent.com/23143311/150391083-d1206ed3-b688-4470-801b-262f2d870d81.png)
+
+## Wyszukiwanie | Search
+
+🇵🇱
+
+Najważniejszą funkcją aplikacji jest wyszukiwanie współlokatorów, dostępne w karcie _Szukaj_. Wyniki wyszukiwania są przedstawiane w formie listy lub punktów na mapie. Wyszukiwani są tacy użytkownicy, których obszar zainteresowania znajduje się w odległości nie większej niż limit ustalony w filtrach od punktu bieżącego użytkownika oraz których preferencje pasują do preferencji ustalonych w filtrach. Kryteria wyszukiwania można jednym przyciskiem ustawić na takie same jak pożądana odległość od punktu oraz preferencje w profilu bieżącego użytkownika.
+
+🇬🇧
+
+The most important feature of the app is searching for roommates, available in the _Search_ tab. Search results are presented as a list or as points on the map. The app searches for users whose region of interest is not farther than the limit specified in filters from the current user's point of interest and whose preferences match the ones specified in filters. The search criteria can be matched to the current user's target distance from their point and their preferences with a tap of a button.
+
+![Screenshots 3](https://user-images.githubusercontent.com/23143311/150392191-3cc22701-afc4-4909-9c58-cfbb00d7abcc.png)
