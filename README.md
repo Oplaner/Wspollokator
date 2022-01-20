@@ -36,7 +36,7 @@ W karcie _Mój profil_ użytkownik może ustalać swoje preferencje: punkt na ma
 
 🇬🇧
 
-In the _My profile_ tab the user can set their preferences: a point on the map and a distance from the point defining a region of the city, in which they are looking for roommates, as well as their attitude (negative, neutral or positive) to matters such as smoking people or pets. Setting the point is done by dropping a pin on the map, either in any place (manually), or in the user's current location (with a button on the bottom of the screen). Before user shares their profile in search results using the master switch, it is recommended to go to the _Settings_ view and set description and avatar visible in the profile. The same view allows user to change their information and log out. The _My profile_ tab also contains an average score and ratings about the user written by other users.
+In the _My profile_ tab the user can set their preferences: a point on the map and a distance from the point defining a region of the city, in which they are looking for roommates, as well as their attitude (negative, neutral or positive) to matters such as smoking people or pets. Setting the point is done by dropping a pin on the map, either in any place (manually), or in the user's current location (with a button at the bottom of the screen). Before user shares their profile in search results using the master switch, it is recommended to go to the _Settings_ view and set description and avatar visible in the profile. The same view allows user to change their information and log out. The _My profile_ tab also contains an average score and ratings about the user written by other users.
 
 ![Screenshots 2](https://user-images.githubusercontent.com/23143311/150391083-d1206ed3-b688-4470-801b-262f2d870d81.png)
 
@@ -94,9 +94,29 @@ If a user seems to be a good candidate for a roommate, we can add them to the sp
 
 Gałąź główna zawiera pełną wersję aplikacji, łączącą się z serwerem. Z czasem serwer przestanie być aktywny, dlatego przygotowano również demonstracyjną wersję offline z przykładowymi danymi. Jest ona dostępna jako gałąź [offline-demo](https://github.com/Oplaner/Wspollokator/tree/offline-demo).
 
+Jest 5 przykładowych użytkowników:
+* John Appleseed
+* Anna Brown
+* Mark Williams
+* Amy Smith
+* Carol Johnson
+
+Login: imię.nazwisko@apple.com
+Hasło: dowolny niepusty ciąg
+
 🇬🇧
 
 The main branch contains a full version of the app, the one which connects with the server. The server is going to become inactive, however. For that reason, an offline demo version with sample data was prepared. It is available as the [offline-demo](https://github.com/Oplaner/Wspollokator/tree/offline-demo) branch.
+
+There are 5 sample users:
+* John Appleseed
+* Anna Brown
+* Mark Williams
+* Amy Smith
+* Carol Johnson
+
+Login: name.surname@apple.com
+Hasło: any non-empty string
 
 # Autorzy | Authors
 
