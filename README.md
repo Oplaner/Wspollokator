@@ -101,8 +101,12 @@ Jest 5 przykładowych użytkowników:
 * Amy Smith
 * Carol Johnson
 
+Dane do logowania:
+
+```
 Login: imię.nazwisko@apple.com
 Hasło: dowolny niepusty ciąg
+```
 
 🇬🇧
 
@@ -115,8 +119,12 @@ There are 5 sample users:
 * Amy Smith
 * Carol Johnson
 
+Log in information:
+
+```
 Login: name.surname@apple.com
-Hasło: any non-empty string
+Password: any non-empty string
+```
 
 # Autorzy | Authors
 
