@@ -75,3 +75,15 @@ Karta _Wiadomości_ zawiera listę konwersacji, w których uczestniczy bieżący
 The _Messages_ tab contains a list of conversations, in which the current user participates. Both conversations with one user and group conversations are supported. A new conversation can be created by choosing one or more users from the saved ones.
 
 ![Screenshots 5](https://user-images.githubusercontent.com/23143311/150415478-5c439ec5-5aa4-4d23-ab57-58ba5a0df264.png)
+
+## Lista zapisanych | Saved Users
+
+🇵🇱
+
+Jeśli jakiś użytkownik jest dobrym kandydatem na współlokatora, możemy go zapisać na specjalnej liście osób zapisanych (karta _Zapisane_).
+
+🇬🇧
+
+If a user seems to be a good candidate for a roommate, we can add them to the special saved users list (the _Saved_ tab).
+
+![Screenshots 6](https://user-images.githubusercontent.com/23143311/150417343-850b0bb0-4ad9-45d5-bace-5a4f31cd9f54.png)
