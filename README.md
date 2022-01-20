@@ -51,3 +51,27 @@ Najważniejszą funkcją aplikacji jest wyszukiwanie współlokatorów, dostępn
 The most important feature of the app is searching for roommates, available in the _Search_ tab. Search results are presented as a list or as points on the map. The app searches for users whose region of interest is not farther than the limit specified in filters from the current user's point of interest and whose preferences match the ones specified in filters. The search criteria can be matched to the current user's target distance from their point and their preferences with a tap of a button.
 
 ![Screenshots 3](https://user-images.githubusercontent.com/23143311/150392191-3cc22701-afc4-4909-9c58-cfbb00d7abcc.png)
+
+## Profil użytkownika i opinie | User Profile & Ratings
+
+🇵🇱
+
+Po stuknięciu w użytkownika przechodzimy do jego profilu, gdzie oprócz informacji o nim znajdziemy średnią ocenę oraz opinie, a także przycisk kierujący do konwersacji z tym użytkownikiem.
+
+🇬🇧
+
+By tapping a user, we go to their profile, where apart from some information about them we can find an average score and ratings, as well as a button redirecting us to a conversation with the user.
+
+![Screenshots 4](https://user-images.githubusercontent.com/23143311/150410496-293b391c-a6d7-4f99-905e-7c0f33cb6c9c.png)
+
+## Wiadomości | Messages
+
+🇵🇱
+
+Karta _Wiadomości_ zawiera listę konwersacji, w których uczestniczy bieżący użytkownik. Wspierane są konwersacje zarówno z jedną osobą, jak i grupowe. Można utworzyć konwersację, wybierając osobę lub osoby spośród zapisanych użytkowników.
+
+🇬🇧
+
+The _Messages_ tab contains a list of conversations, in which the current user participates. Both conversations with one user and group conversations are supported. A new conversation can be created by choosing one or more users from the saved ones.
+
+![Screenshots 5](https://user-images.githubusercontent.com/23143311/150415478-5c439ec5-5aa4-4d23-ab57-58ba5a0df264.png)
