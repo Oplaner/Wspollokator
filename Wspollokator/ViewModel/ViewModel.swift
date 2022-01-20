@@ -273,6 +273,7 @@ import SwiftUI
         
         john.savedUsers = [anna, mark]
         anna.savedUsers = [john]
+        mark.savedUsers = []
         amy.savedUsers = [anna]
         carol.savedUsers = [anna, amy]
         
@@ -317,6 +318,8 @@ import SwiftUI
                 timeAdded: Date(timeIntervalSince1970: 1639848215)
             )
         ]
+        amy.ratings = []
+        carol.ratings = []
         
         return [john, anna, mark, amy, carol]
     }
