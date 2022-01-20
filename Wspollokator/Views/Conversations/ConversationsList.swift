@@ -10,13 +10,12 @@ import SwiftUI
 struct ConversationsList: View {
     @EnvironmentObject var viewModel: ViewModel
     
-    @State private var conversationsListTimer: Timer?
     @State private var isShowingNewConversationSheet = false
     @State private var isShowingConversationView = false
     @State private var newConversationParticipants = [User]()
     
     private var sortedConversations: [Conversation] {
-        viewModel.conversations.sorted { $0.recentMessage.timeSent > $1.recentMessage.timeSent }
+        viewModel.conversations.filter({ $0.participants.contains(viewModel.currentUser!) }).sorted { $0.recentMessage.timeSent > $1.recentMessage.timeSent }
     }
     
     private func formatConversationRow(_ conversation: Conversation) -> (images: [Image?], headline: String, caption: String, includesStarButton: Bool, relevantUser: User?) {
@@ -56,7 +55,7 @@ struct ConversationsList: View {
                 } label: {}
                 
                 List {
-                    if viewModel.conversations.isEmpty {
+                    if sortedConversations.isEmpty {
                         Text("Brak wiadomości.")
                             .foregroundColor(.secondary)
                     } else {
@@ -88,18 +87,6 @@ struct ConversationsList: View {
                     NewConversation(isShowingConversationView: $isShowingConversationView, newConversationParticipants: $newConversationParticipants)
                 }
             }
-        }
-        .onAppear {
-            conversationsListTimer = Timer.scheduledTimer(withTimeInterval: ViewModel.refreshConversationsTimeInterval, repeats: true) { _ in
-                Task {
-                    if !viewModel.isShowingConversationView {
-                        await viewModel.refreshConversations()
-                    }
-                }
-            }
-        }
-        .onDisappear {
-            conversationsListTimer?.invalidate()
         }
     }
 }

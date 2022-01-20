@@ -95,16 +95,12 @@ struct UserProfile: View {
                         .bold()
                     Spacer()
                     
-                    if let ratings = user.ratings {
-                        if ratings.count == 0 {
-                            Text("—")
-                                .bold()
-                                .foregroundColor(.secondary)
-                        } else {
-                            RatingStars(score: .constant(user.averageScore), isInteractive: false)
-                        }
+                    if user.ratings!.count == 0 {
+                        Text("—")
+                            .bold()
+                            .foregroundColor(.secondary)
                     } else {
-                        ProgressView()
+                        RatingStars(score: .constant(user.averageScore), isInteractive: false)
                     }
                 }
                 
@@ -153,16 +149,6 @@ struct UserProfile: View {
         .onAppear {
             Task {
                 nearestLocationName = await user.fetchNearestLocationName()
-                
-                if user.ratings == nil {
-                    if let ratings = await viewModel.fetchRatings(of: user) {
-                        viewModel.objectWillChange.send()
-                        user.ratings = ratings
-                    } else {
-                        viewModel.objectWillChange.send()
-                        user.ratings = []
-                    }
-                }
             }
         }
     }

@@ -8,11 +8,10 @@
 import SwiftUI
 
 @main struct WspollokatorApp: App {
-    @StateObject private var viewModel = ViewModel()
+    @StateObject private var viewModel = ViewModel.sample
     
     init() {
         UIView.appearance().tintColor = UIColor(named: "AccentColor")!
-        Networking.makeSession()
     }
     
     var body: some Scene {

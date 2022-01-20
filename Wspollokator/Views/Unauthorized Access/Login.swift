@@ -112,15 +112,6 @@ struct Login: View {
             }
             .disabled(didAuthenticate || isAuthenticating)
         }
-        .onAppear {
-            Task {
-                if !viewModel.isUserAuthenticated, let (email, password) = KeychainService.fetchLoginInformation() {
-                    self.email = email
-                    self.password = password
-                    await authenticateUser()
-                }
-            }
-        }
         .alert("Błąd", isPresented: $isShowingAlert) {
             Button("OK") {
                 focusedFieldNumber = 1

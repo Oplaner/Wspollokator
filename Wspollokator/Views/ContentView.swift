@@ -41,11 +41,6 @@ struct ContentView: View {
                 } message: {
                     Text("Wystąpił błąd podczas aktualizacji listy zapisanych osób. Spróbuj ponownie.")
                 }
-                .onReceive(viewModel.userDataTimer) { _ in
-                    Task {
-                        await viewModel.refresh()
-                    }
-                }
             } else {
                 Login()
             }

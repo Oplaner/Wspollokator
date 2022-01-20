@@ -74,7 +74,6 @@ struct FilterViewContainer: View {
                     Button {
                         targetDistance = inputTargetDistance
                         preferencesSource = inputPreferences
-                        UserDefaultsService.saveSearchSettings(targetDistance: targetDistance, preferences: preferencesSource)
                         dismiss()
                     } label: {
                         Text("Gotowe")

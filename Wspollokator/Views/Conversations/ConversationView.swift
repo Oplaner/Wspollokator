@@ -13,7 +13,6 @@ struct ConversationView: View {
     
     let scrollViewPadding: CGFloat = 15
     
-    @State private var messagesTimer: Timer?
     @State private var conversation: Conversation
     private var shouldFocus: Bool
     @State private var text: String = ""
@@ -120,8 +119,6 @@ struct ConversationView: View {
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            viewModel.isShowingConversationView = true
-            
             if shouldFocus {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                     self.focusedFieldNumber = 1
@@ -130,19 +127,6 @@ struct ConversationView: View {
         }
         .alert("Błąd", isPresented: $isShowingAlert, actions: {}) {
             Text("Wystąpił błąd podczas wysyłania wiadomości. Spróbuj ponownie.")
-        }
-        .task {
-            messagesTimer = Timer.scheduledTimer(withTimeInterval: ViewModel.refreshMessagesTimeInterval, repeats: true) { _ in
-                Task {
-                    if conversation.id != "0" /* Do not refresh a new (empty) conversation. */ {
-                        await viewModel.refreshMessages(in: conversation)
-                    }
-                }
-            }
-        }
-        .onDisappear {
-            viewModel.isShowingConversationView = false
-            messagesTimer?.invalidate()
         }
     }
 }
