@@ -87,3 +87,19 @@ Jeśli jakiś użytkownik jest dobrym kandydatem na współlokatora, możemy go 
 If a user seems to be a good candidate for a roommate, we can add them to the special saved users list (the _Saved_ tab).
 
 ![Screenshots 6](https://user-images.githubusercontent.com/23143311/150417343-850b0bb0-4ad9-45d5-bace-5a4f31cd9f54.png)
+
+# Demo
+
+🇵🇱
+
+Gałąź główna zawiera pełną wersję aplikacji, łączącą się z serwerem. Z czasem serwer przestanie być aktywny, dlatego przygotowano również demonstracyjną wersję offline z przykładowymi danymi. Jest ona dostępna jako gałąź [offline-demo](https://github.com/Oplaner/Wspollokator/tree/offline-demo).
+
+🇬🇧
+
+The main branch contains a full version of the app, the one which connects with the server. The server is going to become inactive, however. For that reason, an offline demo version with sample data was prepared. It is available as the [offline-demo](https://github.com/Oplaner/Wspollokator/tree/offline-demo) branch.
+
+# Autorzy | Authors
+
+* [Oplaner](https://github.com/Oplaner)
+* [szytambsky](https://github.com/szytambsky)
+* [Piotr Czajkowski](https://github.com/piotrczajkowski1)
