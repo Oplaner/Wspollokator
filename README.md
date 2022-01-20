@@ -1,4 +1,4 @@
-![App Icon](https://user-images.githubusercontent.com/23143311/148995223-420cca42-8cfe-40d9-a2f7-70b3b4fa9654.png)
+![App Icon](https://user-images.githubusercontent.com/23143311/150419106-b00026aa-9f7f-46e3-979f-712cad95f564.png)
 
 # Współlokator
 
