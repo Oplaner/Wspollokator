@@ -136,6 +136,7 @@ Twórcy aplikacji:
 * [Piotr Czajkowski](https://github.com/piotrczajkowski1)
 
 Oryginalna ikona aplikacji: [Javier Cabezas](https://thenounproject.com/Xavi%20Caps/)
+
 Redesign ikony i dobór kolorów: [Adrian Kut](https://github.com/AdrianKut), [Jerzy Chrupek](https://github.com/jerzychrupek)
 
 🇬🇧
@@ -146,4 +147,5 @@ App makers:
 * [Piotr Czajkowski](https://github.com/piotrczajkowski1)
 
 Original app icon: [Javier Cabezas](https://thenounproject.com/Xavi%20Caps/)
+
 Icon redesign & color selection: [Adrian Kut](https://github.com/AdrianKut), [Jerzy Chrupek](https://github.com/jerzychrupek)
