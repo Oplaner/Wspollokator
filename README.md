@@ -148,4 +148,4 @@ App makers:
 
 Original app icon: [Javier Cabezas](https://thenounproject.com/Xavi%20Caps/)
 
-Icon redesign & color selection: [Adrian Kut](https://github.com/AdrianKut), [Jerzy Chrupek](https://github.com/jerzychrupek)
+Icon redesign and color selection: [Adrian Kut](https://github.com/AdrianKut), [Jerzy Chrupek](https://github.com/jerzychrupek)
