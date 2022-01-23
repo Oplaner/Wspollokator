@@ -128,6 +128,24 @@ Password: any non-empty string
 
 # Autorzy | Authors
 
-* [Oplaner](https://github.com/Oplaner)
-* [szytambsky](https://github.com/szytambsky)
+🇵🇱
+
+Twórcy aplikacji:
+* [Kamil Chmielewski](https://github.com/Oplaner)
+* [Szymon Tamborski](https://github.com/szytambsky)
 * [Piotr Czajkowski](https://github.com/piotrczajkowski1)
+
+Oryginalna ikona aplikacji: [Javier Cabezas](https://thenounproject.com/Xavi%20Caps/)
+
+Redesign ikony i dobór kolorów: [Adrian Kut](https://github.com/AdrianKut), [Jerzy Chrupek](https://github.com/jerzychrupek)
+
+🇬🇧
+
+App makers:
+* [Kamil Chmielewski](https://github.com/Oplaner)
+* [Szymon Tamborski](https://github.com/szytambsky)
+* [Piotr Czajkowski](https://github.com/piotrczajkowski1)
+
+Original app icon: [Javier Cabezas](https://thenounproject.com/Xavi%20Caps/)
+
+Icon redesign and color selection: [Adrian Kut](https://github.com/AdrianKut), [Jerzy Chrupek](https://github.com/jerzychrupek)
